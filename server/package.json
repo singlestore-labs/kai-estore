@@ -29,7 +29,7 @@
     "pluralize": "^8.0.0",
     "random-int": "^3.0.0",
     "socket.io": "^4.6.1",
-    "zod": "^3.21.4"
+    "zod": "^3.22.3"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
