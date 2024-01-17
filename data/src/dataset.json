@@ -1,0 +1,164 @@
+{
+  "products": [
+    {
+      "name": "Run",
+      "description": "Run is the perfect shoe for runners who demand comfort and performance. With its lightweight design and responsive cushioning, you'll be able to run for miles without any fatigue or discomfort. The breathable upper ensures that your feet stay cool and dry, even on hot days.",
+      "price": 110,
+      "category": "Running",
+      "createdAt": "2022-06-17",
+      "tags": ["Breathable", "Lightweight", "Comfortable"]
+    },
+    {
+      "name": "Stride",
+      "description": "Stride is the ultimate jogging shoe, designed to provide maximum cushioning and support for your feet. The breathable upper allows for air flow to keep your feet cool and dry, while the soft midsole helps to absorb shock and reduce impact on your joints. Whether you're a seasoned jogger or just starting out, Stride is the perfect shoe for you.",
+      "price": 150,
+      "category": "Walking",
+      "createdAt": "2022-08-04",
+      "tags": ["Energy-returning", "Cushioning", "Breathable"]
+    },
+    {
+      "name": "Sprint",
+      "description": "Sprint is the shoe for those who demand speed and responsiveness. With its supportive and lightweight design, you'll be able to sprint faster and farther than ever before. The responsive midsole provides excellent energy return, giving you an extra boost with every step.",
+      "price": 120,
+      "category": "Running",
+      "createdAt": "2022-04-23",
+      "tags": ["High-Performance", "Responsive", "Supportive"]
+    },
+    {
+      "name": "Boost",
+      "description": "Boost is a high-performance shoe that is designed to give you the energy and support you need to go the extra mile. With its energy-returning midsole and durable outsole, you'll be able to run longer and faster than ever before. The sleek design and vibrant colors make Boost a must-have for any serious runner.",
+      "price": 180,
+      "category": "Running",
+      "createdAt": "2022-09-09",
+      "tags": ["High-performance", "Energy-returning", "Durable"]
+    },
+    {
+      "name": "Flex",
+      "description": "Flex is a versatile and minimalist shoe that can be worn for a variety of activities. Whether you're going for a run or running errands, Flex will provide the comfort and flexibility you need. The breathable upper and lightweight design make Flex the perfect shoe for any occasion.",
+      "price": 95,
+      "category": "Everyday",
+      "createdAt": "2022-03-08",
+      "tags": ["Flexible", "Versatile", "Minimalist"]
+    },
+    {
+      "name": "Venture",
+      "description": "Venture is the ultimate hiking and trail-running shoe. With its rugged design and all-terrain outsole, you'll be able to tackle any trail with ease. The cushioned midsole provides excellent shock absorption, while the breathable upper keeps your feet cool and dry.",
+      "price": 175,
+      "category": "Outdoors",
+      "createdAt": "2022-11-01",
+      "tags": ["Off-road", "Durable", "All-terrain"]
+    },
+    {
+      "name": "Track",
+      "description": "Track is the perfect shoe for off-road running and trail adventures. Its aggressive outsole and durable upper provide excellent traction and protection against rough terrain. The lightweight design ensures you can move quickly and efficiently through any trail.",
+      "price": 130,
+      "category": "Running",
+      "createdAt": "2022-12-17",
+      "tags": ["Off-road", "Durable", "Aggressive"]
+    },
+    {
+      "name": "Glide",
+      "description": "Glide is the perfect shoe for long-distance runners. With its soft and comfortable midsole, you'll be able to run for miles without any pain or discomfort. The breathable upper ensures your feet stay cool and dry, while the lightweight design allows for maximum efficiency.",
+      "price": 140,
+      "category": "Running",
+      "createdAt": "2022-07-21",
+      "tags": ["Long-distance", "Comfortable", "Breathable"]
+    },
+    {
+      "name": "Pace",
+      "description": "Pace is the perfect shoe for runners who demand speed and agility. With its low-profile design and lightweight construction, you'll be able to move quickly and easily through any course. The responsive midsole and durable outsole provide excellent support and energy return.",
+      "price": 125,
+      "category": "Running",
+      "createdAt": "2022-05-12",
+      "tags": ["High-performance", "Energy-returning", "Responsive"]
+    },
+    {
+      "name": "Active",
+      "description": "Active is the perfect shoe for cross-training and all-around fitness. With its flexible and supportive design, you'll be able to move freely and comfortably through any exercise. The breathable upper and cushioned midsole provide excellent comfort and ventilation.",
+      "price": 100,
+      "category": "Fitness",
+      "createdAt": "2022-02-03",
+      "tags": ["Cross-training", "Multi-sport", "Flexible"]
+    },
+    {
+      "name": "Flow",
+      "description": "Flow is the perfect shoe for yoga, pilates, and other low-impact exercises. With its minimalist design and flexible construction, you'll be able to move freely and comfortably through any pose. The breathable upper and cushioned midsole provide excellent comfort and ventilation.",
+      "price": 90,
+      "category": "Fitness",
+      "createdAt": "2022-01-14",
+      "tags": ["Lightweight", "Stylish", "Minimalist"]
+    },
+    {
+      "name": "Endure",
+      "description": "Endure is the shoe for long-distance runners who need a shoe that can keep up with them. With its durable design and responsive cushioning, you'll be able to go the distance without any discomfort or fatigue. The breathable upper ensures that your feet stay cool and dry, even on the longest runs.",
+      "price": 160,
+      "category": "Running",
+      "createdAt": "2023-02-15",
+      "tags": ["Long-distance", "Durable", "Responsive"]
+    },
+    {
+      "name": "Swift",
+      "description": "Swift is the shoe for sprinters and track athletes who demand speed and performance. With its lightweight design and energy-returning midsole, you'll be able to run faster and jump higher than ever before. The supportive upper ensures a snug fit, allowing for maximum control and precision.",
+      "price": 130,
+      "category": "Running",
+      "createdAt": "2023-01-05",
+      "tags": ["Flexible", "Track", "Lightweight"]
+    },
+    {
+      "name": "Move",
+      "description": "Move is the ultimate cross-training shoe, designed to help you move in any direction with ease. With its flexible sole and supportive upper, you'll be able to tackle any workout with confidence. The breathable upper ensures that your feet stay cool and dry, no matter how intense your workout.",
+      "price": 110,
+      "category": "Fitness",
+      "createdAt": "2023-03-28",
+      "tags": ["Cross-training", "Flexible", "Supportive"]
+    },
+    {
+      "name": "Fit",
+      "description": "Fit is the perfect shoe for fitness enthusiasts who demand style and functionality. With its sleek design and comfortable fit, you'll be able to tackle any workout in style. The responsive midsole provides excellent energy return, while the breathable upper ensures that your feet stay cool and dry.",
+      "price": 120,
+      "category": "Fitness",
+      "createdAt": "2023-02-10",
+      "tags": ["Breathable", "Stylish", "Cushioning"]
+    },
+    {
+      "name": "Shift",
+      "description": "Shift is the shoe for runners who demand versatility and performance. With its responsive midsole and breathable upper, you'll be able to run on any surface with ease. The durable outsole provides excellent traction, while the lightweight design ensures that you can run for miles without any fatigue.",
+      "price": 140,
+      "category": "Running",
+      "createdAt": "2023-01-25",
+      "tags": ["Versatile", "High-Performance", "Breathable"]
+    },
+    {
+      "name": "Sport",
+      "description": "Sport is the ultimate multi-sport shoe, designed to help you tackle any activity with ease. Whether you're playing basketball, soccer, or tennis, Sport will provide the support and cushioning you need to perform at your best. The breathable upper ensures that your feet stay cool and dry, no matter how intense the game gets.",
+      "price": 170,
+      "category": "Multi-Purpose",
+      "createdAt": "2023-03-15",
+      "tags": ["Multi-sport", "Supportive", "Cushioning"]
+    },
+    {
+      "name": "Energy",
+      "description": "Energy is a shoe designed to keep you going through the toughest workouts. The responsive midsole provides excellent energy return, while the breathable upper keeps your feet cool and dry. Whether you're hitting the gym or going for a run, Energy is the perfect shoe for high-intensity workouts.",
+      "price": 135,
+      "category": "Fitness",
+      "createdAt": "2023-01-15",
+      "tags": ["High-intensity", "Energy-returning", "Breathable"]
+    },
+    {
+      "name": "Rush",
+      "description": "Rush is a shoe designed for speed and agility. With its lightweight design and responsive cushioning, you'll be able to move quickly and easily. The sleek design and vibrant colors make Rush a must-have for any athlete looking to improve their performance.",
+      "price": 125,
+      "category": "Running",
+      "createdAt": "2023-02-20",
+      "tags": ["Speed", "Agility", "Lightweight"]
+    },
+    {
+      "name": "Hustle",
+      "description": "Hustle is a shoe designed for the hardest workers on the field or court. With its durable outsole and supportive design, you'll be able to hustle harder and longer than ever before. The breathable upper keeps your feet cool and dry, even during intense workouts.",
+      "price": 145,
+      "category": "Fitness",
+      "createdAt": "2023-03-25",
+      "tags": ["Cross-training", "Durable", "Multi-sport"]
+    }
+  ]
+}

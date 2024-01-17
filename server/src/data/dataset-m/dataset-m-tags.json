@@ -1,0 +1,146 @@
+[
+{
+  "id": "65a6e86533ac61e333fb46bc",
+  "createdAt": "2023-09-08T02:57:51.017Z",
+  "updatedAt": "2024-01-13T06:47:13.414Z",
+  "name": "Breathable"
+},
+{
+  "id": "65a6e86533ac61e333fb46bd",
+  "createdAt": "2023-12-18T06:58:27.596Z",
+  "updatedAt": "2023-12-31T20:43:07.369Z",
+  "name": "Lightweight"
+},
+{
+  "id": "65a6e86533ac61e333fb46be",
+  "createdAt": "2023-09-18T00:11:25.236Z",
+  "updatedAt": "2023-11-16T10:37:10.792Z",
+  "name": "Comfortable"
+},
+{
+  "id": "65a6e86533ac61e333fb46bf",
+  "createdAt": "2023-12-14T09:35:07.559Z",
+  "updatedAt": "2023-12-17T03:58:09.071Z",
+  "name": "Energy-returning"
+},
+{
+  "id": "65a6e86533ac61e333fb46c0",
+  "createdAt": "2023-12-16T16:51:55.315Z",
+  "updatedAt": "2024-01-16T18:10:42.408Z",
+  "name": "Cushioning"
+},
+{
+  "id": "65a6e86533ac61e333fb46c1",
+  "createdAt": "2023-07-19T10:05:19.258Z",
+  "updatedAt": "2023-10-14T04:58:34.397Z",
+  "name": "High-Performance"
+},
+{
+  "id": "65a6e86533ac61e333fb46c2",
+  "createdAt": "2023-10-09T21:25:15.314Z",
+  "updatedAt": "2023-10-27T05:12:57.622Z",
+  "name": "Responsive"
+},
+{
+  "id": "65a6e86533ac61e333fb46c3",
+  "createdAt": "2024-01-07T16:07:33.098Z",
+  "updatedAt": "2024-01-16T20:11:09.709Z",
+  "name": "Supportive"
+},
+{
+  "id": "65a6e86533ac61e333fb46c4",
+  "createdAt": "2023-10-11T16:46:06.233Z",
+  "updatedAt": "2023-12-11T12:33:56.360Z",
+  "name": "High-performance"
+},
+{
+  "id": "65a6e86533ac61e333fb46c5",
+  "createdAt": "2024-01-12T07:22:48.574Z",
+  "updatedAt": "2024-01-16T20:07:05.275Z",
+  "name": "Durable"
+},
+{
+  "id": "65a6e86533ac61e333fb46c6",
+  "createdAt": "2023-12-08T14:04:28.030Z",
+  "updatedAt": "2023-12-25T14:46:43.544Z",
+  "name": "Flexible"
+},
+{
+  "id": "65a6e86533ac61e333fb46c7",
+  "createdAt": "2024-01-08T09:37:40.872Z",
+  "updatedAt": "2024-01-14T11:03:53.593Z",
+  "name": "Versatile"
+},
+{
+  "id": "65a6e86533ac61e333fb46c8",
+  "createdAt": "2023-11-14T15:49:20.351Z",
+  "updatedAt": "2024-01-01T21:45:21.010Z",
+  "name": "Minimalist"
+},
+{
+  "id": "65a6e86533ac61e333fb46c9",
+  "createdAt": "2023-10-06T18:14:28.860Z",
+  "updatedAt": "2023-10-13T03:25:19.685Z",
+  "name": "Off-road"
+},
+{
+  "id": "65a6e86533ac61e333fb46ca",
+  "createdAt": "2023-08-05T01:00:27.905Z",
+  "updatedAt": "2023-10-15T13:11:10.321Z",
+  "name": "All-terrain"
+},
+{
+  "id": "65a6e86533ac61e333fb46cb",
+  "createdAt": "2023-07-20T18:55:55.497Z",
+  "updatedAt": "2023-10-17T06:51:25.397Z",
+  "name": "Aggressive"
+},
+{
+  "id": "65a6e86533ac61e333fb46cc",
+  "createdAt": "2023-10-26T01:32:32.886Z",
+  "updatedAt": "2023-11-09T23:20:43.516Z",
+  "name": "Long-distance"
+},
+{
+  "id": "65a6e86533ac61e333fb46cd",
+  "createdAt": "2023-10-30T16:18:12.585Z",
+  "updatedAt": "2023-11-22T05:00:07.079Z",
+  "name": "Cross-training"
+},
+{
+  "id": "65a6e86533ac61e333fb46ce",
+  "createdAt": "2023-07-18T23:50:04.237Z",
+  "updatedAt": "2023-12-28T02:09:13.361Z",
+  "name": "Multi-sport"
+},
+{
+  "id": "65a6e86533ac61e333fb46cf",
+  "createdAt": "2023-08-06T08:45:55.265Z",
+  "updatedAt": "2023-12-11T00:46:14.885Z",
+  "name": "Stylish"
+},
+{
+  "id": "65a6e86533ac61e333fb46d0",
+  "createdAt": "2023-11-06T11:58:54.338Z",
+  "updatedAt": "2023-11-30T09:21:57.642Z",
+  "name": "Track"
+},
+{
+  "id": "65a6e86533ac61e333fb46d1",
+  "createdAt": "2023-11-19T00:05:54.927Z",
+  "updatedAt": "2023-12-09T20:34:02.878Z",
+  "name": "High-intensity"
+},
+{
+  "id": "65a6e86533ac61e333fb46d2",
+  "createdAt": "2024-01-02T21:26:51.473Z",
+  "updatedAt": "2024-01-15T00:44:06.519Z",
+  "name": "Speed"
+},
+{
+  "id": "65a6e86533ac61e333fb46d3",
+  "createdAt": "2023-11-21T23:19:15.628Z",
+  "updatedAt": "2023-12-20T05:36:40.913Z",
+  "name": "Agility"
+}
+]

@@ -1,0 +1,57 @@
+async function getProductsQuery(db, filter) {
+  const perPage = filter.perPage ?? 12;
+  const page = Number(filter.page ?? 1);
+  const pipeline = [];
+  const $and = [];
+  if (filter.category?.length) {
+    $and.push({ categoryId: { $in: filter.category } });
+  }
+  if (filter.tag?.length) {
+    $and.push({ tagId: { $in: filter.tag } });
+  }
+  if (filter.price?.length) {
+    const _$or = [];
+    for (const range of filter.price) {
+      const [from, to] = range.split("-").map(Number);
+      _$or.push({ price: { $gte: from, $lte: to } });
+    }
+    if (_$or.length) {
+      $and.push({ $or: _$or });
+    }
+  }
+  if (filter.rating?.length) {
+    $and.push({ rating: { $in: filter.rating.map(Number) } });
+  }
+  if ($and.length) {
+    pipeline.push({ $match: { $and } });
+  }
+  const { total } =
+    (
+      await db
+        .collection("products")
+        .aggregate([...pipeline, { $count: "total" }])
+        .toArray()
+    )[0] ?? {};
+  if (filter.sort) {
+    const [field, direction] = filter.sort.split(":");
+    pipeline.push({ $sort: { [field]: Number(direction) } });
+  }
+  if (total > perPage) {
+    pipeline.push({ $skip: (page - 1) * perPage });
+  }
+  pipeline.push({ $limit: perPage });
+  pipeline.push({
+    $lookup: {
+      from: "categories",
+      localField: "categoryId",
+      foreignField: "id",
+      as: "category",
+    },
+  });
+  pipeline.push({ $unwind: "$category" });
+  const products = await db
+    .collection("products")
+    .aggregate(pipeline)
+    .toArray();
+  return { products, total };
+}

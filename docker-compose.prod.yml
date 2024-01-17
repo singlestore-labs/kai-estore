@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  server:
+    container_name: server
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    env_file:
+      - ./.env
+    volumes:
+      - ./server/src:/app/src
+    restart: always
+    ports:
+      - 4000:4000
+
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+      args:
+        NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+    restart: always
+    ports:
+      - 3000:3000

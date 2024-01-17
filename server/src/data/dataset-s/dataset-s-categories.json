@@ -1,0 +1,38 @@
+[
+{
+  "id": "65a6e850270fc192323cf6a4",
+  "createdAt": "2023-11-03T09:50:37.240Z",
+  "updatedAt": "2024-01-13T02:19:08.131Z",
+  "name": "Running"
+},
+{
+  "id": "65a6e850270fc192323cf6a5",
+  "createdAt": "2023-11-23T15:55:35.662Z",
+  "updatedAt": "2023-12-11T09:47:12.728Z",
+  "name": "Walking"
+},
+{
+  "id": "65a6e850270fc192323cf6a6",
+  "createdAt": "2023-11-08T12:00:26.875Z",
+  "updatedAt": "2023-11-16T10:05:16.663Z",
+  "name": "Everyday"
+},
+{
+  "id": "65a6e850270fc192323cf6a7",
+  "createdAt": "2023-08-20T18:26:42.334Z",
+  "updatedAt": "2023-10-04T13:49:27.964Z",
+  "name": "Outdoors"
+},
+{
+  "id": "65a6e850270fc192323cf6a8",
+  "createdAt": "2023-08-14T00:02:44.878Z",
+  "updatedAt": "2023-10-24T02:52:30.044Z",
+  "name": "Fitness"
+},
+{
+  "id": "65a6e850270fc192323cf6a9",
+  "createdAt": "2023-10-20T23:20:03.182Z",
+  "updatedAt": "2024-01-11T20:36:57.765Z",
+  "name": "Multi-Purpose"
+}
+]
