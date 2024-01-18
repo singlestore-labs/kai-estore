@@ -9,13 +9,19 @@ import { Field, FieldProps } from "./common/Field";
 
 export type ConfigurationFormProps = ComponentProps<
   Omit<FormProps, "children" | "initialValues">,
-  { children?: ReactNode; variant?: "light" | "dark"; initialValues?: ConnectionConfig; isDisabled?: boolean }
+  {
+    children?: ReactNode;
+    variant?: "light" | "dark";
+    initialValues?: ConnectionConfig;
+    isDisabled?: boolean;
+  }
 >;
 
 const defaultInitialValues: ConnectionConfig = {
   mongoURI: "",
   dbName: "",
   dataSize: "s",
+  shouldGenerateData: false,
 };
 
 const labelProps: FieldProps["labelProps"] = {
@@ -28,6 +34,7 @@ const formValidationSchema = Yup.object({
   mongoURI: Yup.string().label("Mongo URI").required(),
   dbName: Yup.string().label("Database name").required(),
   dataSize: Yup.string().label("Dataset size").required(),
+  shouldGenerateData: Yup.bool(),
 });
 
 export function ConfigurationForm({
@@ -71,25 +78,34 @@ export function ConfigurationForm({
             onChange={formik.handleChange}
             isDisabled={isDisabled}
           />
+
           <Field
-            name="dataSize"
-            element="select"
-            label="Size"
-            value={formik.values.dataSize}
-            error={formik.touched.dataSize && (formik.errors.dataSize as string)}
-            labelProps={labelProps}
-            controlProps={{
-              options: [
-                { label: "Select size", value: "" },
-                { label: "Small", value: "s" },
-                { label: "Medium", value: "m" },
-                { label: "Large", value: "l" },
-              ],
-              variant: variant === "light" ? "filled" : "outline",
-            }}
-            onChange={formik.handleChange}
-            isDisabled={isDisabled}
+            element="checkbox"
+            controlProps={{ children: "Generate data", isChecked: formik.values.shouldGenerateData }}
+            onChange={(e: any) => formik.setFieldValue("shouldGenerateData", e.target.checked)}
           />
+
+          {formik.values.shouldGenerateData && (
+            <Field
+              name="dataSize"
+              element="select"
+              label="Size"
+              value={formik.values.dataSize}
+              error={formik.touched.dataSize && (formik.errors.dataSize as string)}
+              labelProps={labelProps}
+              controlProps={{
+                options: [
+                  { label: "Select size", value: "" },
+                  { label: "Small", value: "s" },
+                  { label: "Medium", value: "m" },
+                  { label: "Large", value: "l" },
+                ],
+                variant: variant === "light" ? "filled" : "outline",
+              }}
+              onChange={formik.handleChange}
+              isDisabled={isDisabled}
+            />
+          )}
           {children}
         </VStack>
       )}

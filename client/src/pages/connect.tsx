@@ -58,13 +58,13 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
       title: "Success",
       message: "You will be redirected to the product catalog.",
     }));
+
     window.location.replace(ROUTES.root);
   }, []);
 
   const handleFormSubmit = useCallback<Defined<FormProps["onSubmit"]>>(async (values) => {
     try {
       await createConnection(values);
-
       const isDataValid = await validateData();
       if (!isDataValid.data) await setData();
 

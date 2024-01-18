@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "tsx src/index.ts",
+    "build": "rm -rf dist && tsup",
+    "start": "rm -rf dist && tsup && node dist/index.cjs",
     "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "prettify": "prettier --write src"
@@ -49,6 +50,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.7",
+    "tsup": "^8.0.1",
     "tsx": "^4.7.0"
   }
 }

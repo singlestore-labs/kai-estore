@@ -10,7 +10,7 @@ import { processEnv } from "@/utils/env";
 
 export const connectionRouter = express.Router();
 
-const { MONGO_URI, DB_NAME, DATA_SIZE, IS_SINGLE_DB } = processEnv();
+const { DB_URI, DB_NAME, DATA_SIZE, IS_SINGLE_DB } = processEnv();
 
 const validationSchema = IS_SINGLE_DB
   ? undefined
@@ -28,11 +28,21 @@ connectionRouter.post("/connection", validateRoute(validationSchema), async (req
 
     if (IS_SINGLE_DB) {
       config = {
-        mongoURI: MONGO_URI,
+        mongoURI: DB_URI,
         dbName: DB_NAME,
         dataSize: DATA_SIZE as ConnectionConfig["dataSize"],
         userId: "",
       };
+    }
+
+    if (!config.shouldGenerateData) {
+      const { client } = await createDBConnection(config);
+      const db = client.db(config.dbName);
+      const meta = await db.collection("meta").findOne();
+
+      if (meta) {
+        config.dataSize = meta.dataSize ?? config.dataSize;
+      }
     }
 
     setResponseConnectionConfigCookie(res, config);
@@ -59,13 +69,16 @@ connectionRouter.put(
       const { connectionConfig } = req;
       const { client } = await createDBConnection(req.body);
       const db = client.db(req.body.dbName);
+      const meta = await db.collection("meta").findOne();
       let dataSize: ConnectionConfig["dataSize"] = req.body.dataSize;
 
-      if (connectionConfig.dbName !== req.body.dbName) {
-        const meta = await db.collection("meta").findOne();
+      if (meta) {
+        if (connectionConfig.dbName !== req.body.dbName) {
+          dataSize = meta.dataSize !== req.body.dataSize ? req.body.dataSize : meta.dataSize;
+        }
 
-        if (meta) {
-          dataSize = meta.dataSize != req.body.dataSize ? req.body.dataSize : meta.dataSize;
+        if (!req.body.shouldGenerateData) {
+          dataSize = meta.dataSize;
         }
       }
 

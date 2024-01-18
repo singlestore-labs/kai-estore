@@ -3,7 +3,6 @@ import { chakra, forwardRef } from "@chakra-ui/react";
 import { FormikConfig, useFormik } from "formik";
 
 import { ComponentProps } from "@/types/common";
-import { ConnectionConfig } from "@/types/api";
 
 type UseFormik = typeof useFormik;
 type UseFormikReturn = ReturnType<UseFormik>;
@@ -16,7 +15,7 @@ export type FormProps = ComponentProps<
     id?: string;
     children: ReactNode | ((formik: UseFormikReturn) => ReactNode);
     onChange?: (values: UseFormikReturn["values"], isValid: UseFormikReturn["isValid"]) => void;
-    onSubmit?: FormikConfig<ConnectionConfig>["onSubmit"];
+    onSubmit?: FormikConfig<any>["onSubmit"];
     formProps?: Omit<ReactComponentProps<(typeof chakra)["form"]>, keyof FormPropsDefault | "as" | "ref">;
   }
 >;

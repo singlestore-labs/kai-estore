@@ -43,7 +43,11 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
       let shouldRedirectToConnect = !hasConnectionConfig;
 
       if (hasConnectionConfig) {
-        shouldRedirectToConnect = !(await api.data.validate()).data;
+        try {
+          shouldRedirectToConnect = !(await api.data.validate()).data;
+        } catch (error) {
+          shouldRedirectToConnect = true;
+        }
       }
 
       if (shouldRedirectToConnect) {
