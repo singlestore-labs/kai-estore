@@ -2,6 +2,7 @@ export type ConnectionConfig = {
   mongoURI: string;
   dbName: string;
   dataSize: string;
+  shouldGenerateData?: boolean;
 };
 
 type Schema<T extends object = object> = T & {

@@ -3,7 +3,7 @@ import express from "express";
 import { createUser } from "@/utils/data";
 import { withDuration } from "@/utils/helpers";
 import { getUserRecommProductsQuery } from "@/queries/getUserRecommProducts";
-import { setResponseConnectionConfigCookie } from "@/utils/connection";
+import { setResponseConnectionConfigHeader } from "@/utils/connection";
 
 export const userRouter = express.Router();
 
@@ -21,7 +21,7 @@ userRouter.post("/user", async (req, res, next) => {
       const user = createUser();
       await db.collection("users").insertOne(user);
       userId = user.id;
-      setResponseConnectionConfigCookie(res, { ...connectionConfig, userId });
+      setResponseConnectionConfigHeader(res, { ...connectionConfig, userId });
     }
 
     return res.status(201).json({ id: userId });

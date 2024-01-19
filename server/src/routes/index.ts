@@ -12,6 +12,7 @@ import { infoRouter } from "./info";
 import { ratingRouter } from "./rating";
 import { productRouter } from "./product";
 import { orderRouter } from "./order";
+import { configRouter } from "@/routes/config";
 
 const withConnectionRouter = express.Router();
 withConnectionRouter.use(connectionConfig);
@@ -29,4 +30,4 @@ withConnectionRouter.use(dbConnection);
 ].forEach((route) => withConnectionRouter.use(route));
 
 export const apiRouter = express.Router();
-[connectionRouter, withConnectionRouter].forEach((route) => apiRouter.use(route));
+[configRouter, connectionRouter, withConnectionRouter].forEach((route) => apiRouter.use(route));

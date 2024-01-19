@@ -13,13 +13,13 @@ import { apiRouter } from "./routes";
 import { initSocket } from "./services/socket";
 import { socketEventsHandler } from "./events";
 
-const { ORIGINS, PORT } = processEnv();
+const { PORT } = processEnv();
 
 const app = express();
 const server = http.createServer(app);
 
 app.use(morgan("dev"));
-app.use(cors({ origin: ORIGINS, credentials: true }));
+app.use(cors({ origin: "*" }));
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());

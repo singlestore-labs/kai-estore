@@ -81,7 +81,7 @@ export default function Configure() {
         setIsInitialValuesLoading(true);
         const response = await api.connection.get();
         delete (response.data as any).userId;
-        setInitialValues(response.data);
+        setInitialValues({ ...response.data, shouldGenerateData: false });
       } catch (error) {
         setInitialValues(undefined);
       } finally {

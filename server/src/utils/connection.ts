@@ -1,28 +1,18 @@
-import { Response } from "express";
-import { parse } from "cookie";
+import { Request, Response } from "express";
 
 import { ConnectionConfig } from "@/types/connection";
 import { decrypt, encrypt } from "./crypto";
 
-export function setResponseConnectionConfigCookie(res: Response, config: ConnectionConfig) {
-  res.cookie("connectionConfig", encrypt(config), { maxAge: 259200000, httpOnly: true });
+export function setResponseConnectionConfigHeader(res: Response, config: ConnectionConfig) {
+  res.setHeader("Access-Control-Expose-Headers", "x-connection-config");
+  res.setHeader("x-connection-config", encrypt(config));
 }
 
-export function parseConnectionConfigCookie(cookies?: string | object): ConnectionConfig {
-  if (!cookies) {
-    throw new Error("Cookies undefined");
-  }
-
-  let _cookies = cookies;
-
-  if (typeof _cookies === "string") {
-    _cookies = parse(_cookies);
-  }
-
-  const { connectionConfig } = _cookies as { connectionConfig: string } & { [K: PropertyKey]: any };
+export function parseConnectionConfigHeader(req: Request): ConnectionConfig {
+  const connectionConfig = req.headers["x-connection-config"] as string | undefined;
 
   if (!connectionConfig) {
-    throw new Error("Connection config cookie is undefined", { cause: "CONNECTION_CONFIG" });
+    throw new Error("Connection config header is undefined", { cause: "CONNECTION_CONFIG" });
   }
 
   const config = JSON.parse(decrypt(connectionConfig));

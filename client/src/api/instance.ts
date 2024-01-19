@@ -3,10 +3,29 @@ import axios, { AxiosError } from "axios";
 import { BASE_API } from "@/constants/env";
 import { ROUTES } from "@/constants/routes";
 import { errorToast } from "@/utils/toast";
+import { cookies } from "@/utils/cookies";
 
-export const apiInstance = axios.create({ baseURL: BASE_API, withCredentials: true });
+export const apiInstance = axios.create({ baseURL: BASE_API });
 
-apiInstance.interceptors.response.use((response) => response, proccessError);
+apiInstance.interceptors.request.use((request) => {
+  const connectionConfig = cookies.get("connectionConfig");
+
+  if (connectionConfig) {
+    request.headers["x-connection-config"] = connectionConfig;
+  }
+
+  return request;
+});
+
+apiInstance.interceptors.response.use((response) => {
+  const connectionConfig = response.headers["x-connection-config"];
+
+  if (connectionConfig) {
+    cookies.set("connectionConfig", connectionConfig);
+  }
+
+  return response;
+}, proccessError);
 
 export function apiRequestToken() {
   return axios.CancelToken.source();

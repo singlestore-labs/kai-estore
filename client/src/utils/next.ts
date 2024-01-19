@@ -34,16 +34,17 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
 
       let props = { rootState: {} as RootStateValues };
 
-      apiInstance.defaults.headers.cookie = Object.entries(req.cookies).reduce(
-        (serialized, [key, value = ""]) => `${serialized} ${cookies.serialize(key, value)};`.trim(),
-        "",
-      );
-
       const hasConnectionConfig = COOKIE_KEYS.connectionConfig in req.cookies;
       let shouldRedirectToConnect = !hasConnectionConfig;
 
       if (hasConnectionConfig) {
-        shouldRedirectToConnect = !(await api.data.validate()).data;
+        apiInstance.defaults.headers["x-connection-config"] = req.cookies.connectionConfig as string;
+
+        try {
+          shouldRedirectToConnect = !(await api.data.validate()).data;
+        } catch (error) {
+          shouldRedirectToConnect = true;
+        }
       }
 
       if (shouldRedirectToConnect) {

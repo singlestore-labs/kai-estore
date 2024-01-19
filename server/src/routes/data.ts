@@ -14,6 +14,10 @@ dataRouter.get("/data/validate", async (req, res, next) => {
     const { db, connectionConfig } = req;
     const isValid = await validateData(db, connectionConfig.dataSize);
 
+    if (!isValid && !connectionConfig.shouldGenerateData) {
+      return res.status(200).send(true);
+    }
+
     return res.status(200).send(isValid);
   } catch (error) {
     return next(error);
