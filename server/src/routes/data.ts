@@ -11,13 +11,13 @@ export const dataRouter = express.Router();
 
 dataRouter.get("/data/validate", async (req, res, next) => {
   try {
-    const { db, connectionConfig } = req;
+    const { dbClient, db, connectionConfig } = req;
     const isValid = await validateData(db, connectionConfig.dataSize);
 
     if (!isValid && !connectionConfig.shouldGenerateData) {
       return res.status(200).send(true);
     }
-
+    dbClient.close();
     return res.status(200).send(isValid);
   } catch (error) {
     return next(error);
@@ -29,7 +29,7 @@ dataRouter.post(
   validateRoute(zod.object({ query: zod.object({ force: zod.string().optional() }) })),
   async (req, res, next) => {
     try {
-      const { db, connectionConfig, query } = req;
+      const { dbClient, db, connectionConfig, query } = req;
       const isForced = query.force === "true" || query.force;
       const collectionNames: DatasetCollectionNames[] = [
         "users",
@@ -57,7 +57,7 @@ dataRouter.post(
       }
 
       await db.collection("meta").insertOne({ dataSize: connectionConfig.dataSize });
-
+      dbClient.close();
       return res.status(201).json({ message: "Data set" });
     } catch (error) {
       console.error(error);
