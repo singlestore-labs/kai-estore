@@ -39,11 +39,11 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
       if (hasConnectionConfig) {
         apiInstance.defaults.headers["x-connection-config"] = req.cookies.connectionConfig as string;
 
-        try {
-          shouldRedirectToConnect = !(await api.data.validate()).data;
-        } catch (error) {
-          shouldRedirectToConnect = true;
-        }
+        // try {
+        //   shouldRedirectToConnect = !(await api.data.validate()).data;
+        // } catch (error) {
+        //   shouldRedirectToConnect = true;
+        // }
       }
 
       if (shouldRedirectToConnect) {

@@ -7,12 +7,13 @@ const { DB_URI, DB_NAME } = processEnv();
 
 export const dbConnection: RequestHandler = async (req, res, next) => {
   try {
-    if (req.query?.connection !== "config") {
-      req.connectionConfig.mongoURI = DB_URI;
-      req.connectionConfig.dbName = DB_NAME;
-    }
+    const isConfig = req.query?.connection === "config";
 
-    const { client, db } = await createDBConnection(req.connectionConfig);
+    const { client, db } = await createDBConnection({
+      ...req.connectionConfig,
+      mongoURI: isConfig ? req.connectionConfig.mongoURI : DB_URI,
+      dbName: isConfig ? req.connectionConfig.dbName : DB_NAME,
+    });
 
     req.dbClient = client;
     req.db = db;

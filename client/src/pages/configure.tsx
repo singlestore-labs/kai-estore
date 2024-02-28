@@ -29,7 +29,7 @@ export default function Configure() {
       await api.connection.update(values, { connection: "config" });
 
       // setLoaderSate((state) => ({ ...state, title: "Data validation" }));
-      // const isDataValidRes = await api.data.validate({ connection: "config" });
+      // const isDataValidRes = await api.data.validate();
 
       // if (!isDataValidRes.data) {
       //   setLoaderSate((state) => ({
@@ -37,7 +37,7 @@ export default function Configure() {
       //     title: "Data inserting",
       //     message: `It will take a while. Do not close the browser tab.`,
       //   }));
-      //   await api.data.set({ connection: "config" });
+      //   await api.data.set();
       // }
 
       setLoaderSate((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
@@ -62,7 +62,7 @@ export default function Configure() {
         isOpen: true,
       }));
 
-      await api.data.reset({ connection: "config" });
+      // await api.data.reset();
 
       setLoaderSate((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
 

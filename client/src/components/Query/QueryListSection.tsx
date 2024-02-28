@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Flex } from "@chakra-ui/react";
 
 import { ComponentProps } from "@/types/common";
@@ -12,15 +12,27 @@ import { queriesList } from "@/data";
 export type QueryListSectionProps = ComponentProps<SectionProps>;
 
 export function QueryListSection({ ...props }: QueryListSectionProps) {
+  const [activeQueryIndex, setActiveQueryIndex] = useState(0);
+
   const _queriesList = useMemo(() => {
-    const list = queriesList.map((query) => <QuerySection key={query.title} query={query} runOnMount />);
+    const list = queriesList.map((query, i) => (
+      <QuerySection
+        key={query.title}
+        query={query}
+        runOnMount
+        canRun={i === activeQueryIndex}
+        afterRun={() => {
+          setActiveQueryIndex((i) => i + 1);
+        }}
+      />
+    ));
 
     return (
       <Flex flexDirection="column" rowGap="6">
         {list}
       </Flex>
     );
-  }, []);
+  }, [activeQueryIndex]);
 
   return (
     <Section

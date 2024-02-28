@@ -38,10 +38,10 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     await api.user.create();
   }, []);
 
-  const validateData = useCallback(() => {
-    setLoaderSate((state) => ({ ...state, title: "Data validation" }));
-    return api.data.validate();
-  }, []);
+  // const validateData = useCallback(() => {
+  //   setLoaderSate((state) => ({ ...state, title: "Data validation" }));
+  //   return api.data.validate();
+  // }, []);
 
   const setData = useCallback(() => {
     setLoaderSate((state) => ({
@@ -223,11 +223,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       apiInstance.defaults.headers.cookie = userSetCookie;
       context.res.setHeader("set-cookie", userSetCookie ?? "");
 
-      const isDataValidRes = await api.data.validate();
+      // const isDataValidRes = await api.data.validate();
 
-      if (!isDataValidRes.data) {
-        return { props: { shouldSetData: true } };
-      }
+      // if (!isDataValidRes.data) {
+      //   return { props: { shouldSetData: true } };
+      // }
 
       return {
         props: {},

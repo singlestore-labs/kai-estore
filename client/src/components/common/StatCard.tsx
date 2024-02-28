@@ -47,8 +47,8 @@ const variantsProps = createVariantsProps<StatCardVariants>((props) => ({
 
     content: {
       flexDirection: "column",
-      alignItems: "flex-start",
-      justifyContent: "flex-start",
+      alignItems: "center",
+      justifyContent: "center",
     },
 
     title: {
