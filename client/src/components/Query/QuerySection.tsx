@@ -54,12 +54,12 @@ const defaultState: State = {
   title: "Connection",
   value: undefined,
   displayValue: "0",
-  data: [],
+  data: undefined,
   isLoading: false,
 };
 
 const defaultConnectionStates: Record<string, State> = {
-  s2: { ...defaultState, title: "SingleStore" },
+  s2: { ...defaultState, title: "SingleStore", color: "s2.indigo.300" },
   mongo: { ...defaultState, title: "MongoDB® Atlas", color: "green.300" },
 };
 
@@ -81,7 +81,6 @@ export function QuerySection({
   const statCardSubtitle = "Query Time";
   const hasParams = !!Object.keys(query.params?.fields ?? {}).length;
   const isLoading = stateEntires.some(([, { isLoading }]) => isLoading);
-  const hasData = stateEntires.some(([, { data }]) => (Array.isArray(data) ? !!data.length : data));
   const isRunButtonDisabled = isLoading || (hasParams && !paramsState.isValid);
   const topOneProductItemId = useTopOneProductStateItemdId();
 
@@ -211,18 +210,28 @@ export function QuerySection({
         </Box>
       </Flex>
 
-      {codeBlock && (
-        <Box mt="6">
-          <Typography as="h4" fontSize="sm" lineHeight="5" fontWeight="semibold">
-            Query
-          </Typography>
-          <Textarea variant="outline.code" size="s2.md" rows={16} value={codeBlock} readOnly mt="2" />
-        </Box>
-      )}
+      <Box mt="6" display="flex" alignItems="stretch" gap="6">
+        {stateEntires.map(([key, state]) => {
+          let results = <Box h="full" backgroundColor="s2.gray.900" />;
 
-      {hasData && (
-        <Box mt="6" display="flex" alignItems="stretch" gap="6">
-          {stateEntires.map(([key, state], i) => (
+          if (state.data) {
+            results = (
+              <Textarea
+                variant="outline.code"
+                h="full"
+                size="s2.md"
+                border="none"
+                value={JSON.stringify(state.data, null, 2)}
+                readOnly
+              />
+            );
+          }
+
+          if (state.isLoading) {
+            results = <Loader isOpen color={state.color} isDark />;
+          }
+
+          return (
             <Box key={key} flex="1 0 calc(50% - 1.5rem)">
               <Typography as="h4" fontSize="sm" lineHeight="5" fontWeight="semibold">
                 {`${state.title} Result`}
@@ -237,21 +246,19 @@ export function QuerySection({
                 overflow="hidden"
                 mt="2"
               >
-                {state.isLoading ? (
-                  <Loader isOpen color={state.color} isDark />
-                ) : (
-                  <Textarea
-                    variant="outline.code"
-                    h="full"
-                    size="s2.md"
-                    border="none"
-                    value={JSON.stringify(state.data, null, 2)}
-                    readOnly
-                  />
-                )}
+                {results}
               </Box>
             </Box>
-          ))}
+          );
+        })}
+      </Box>
+
+      {codeBlock && (
+        <Box mt="6">
+          <Typography as="h4" fontSize="sm" lineHeight="5" fontWeight="semibold">
+            Query
+          </Typography>
+          <Textarea variant="outline.code" size="s2.md" rows={16} value={codeBlock} readOnly mt="2" />
         </Box>
       )}
 
