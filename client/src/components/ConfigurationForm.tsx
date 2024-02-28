@@ -80,11 +80,11 @@ export function ConfigurationForm({
             isDisabled={isDisabled}
           />
 
-          <Field
+          {/* <Field
             element="checkbox"
             controlProps={{ children: "Generate data", isChecked: formik.values.shouldGenerateData }}
             onChange={(e: any) => formik.setFieldValue("shouldGenerateData", e.target.checked)}
-          />
+          /> */}
 
           {formik.values.shouldGenerateData && (
             <Field
