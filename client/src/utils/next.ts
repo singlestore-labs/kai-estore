@@ -14,7 +14,6 @@ import { userOrdersState } from "@/state/userOrders";
 import { userRatingsState } from "@/state/userRatings";
 import { apiInstance } from "@/api/instance";
 import { api } from "@/api";
-import { cookies } from "./cookies";
 
 export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = {}) => {
   return (async (context) => {
@@ -72,9 +71,11 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
         [userRatingsState.name, () => userRatingsState.getValue()],
       ];
 
-      for await (const [name, query] of stateSetters) {
-        props.rootState = Object.assign(props.rootState, { [name]: await query() });
-      }
+      await Promise.all(
+        stateSetters.map(async ([name, query]) => {
+          props.rootState = Object.assign(props.rootState, { [name]: await query() });
+        }),
+      );
 
       props.rootState.productsState = await productsState.getValue([
         urlParamsToProductParams(context.query, props.rootState.categoriesState, props.rootState.tagsState),
