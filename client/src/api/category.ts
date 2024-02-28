@@ -1,9 +1,9 @@
-import { Category } from "@/types/api";
+import { ApiParams, Category } from "@/types/api";
 
 import { apiInstance } from "./instance";
 
-function getMany() {
-  return apiInstance.get<Category[]>("/categories");
+function getMany(params?: ApiParams) {
+  return apiInstance.get<Category[]>("/categories", { params });
 }
 
 export const category = { getMany };

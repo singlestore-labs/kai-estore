@@ -74,7 +74,7 @@ export function QuerySection({ query, runOnMount = true, ...props }: QuerySectio
 
       const [data, ms, value, unit] = (
         await query.request(
-          { id: topOneProductItemId, ...params },
+          { id: topOneProductItemId, ...params, connection: "config" },
           { cancelToken: requestTokenRef.current?.token },
         )
       ).data;

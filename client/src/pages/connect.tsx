@@ -65,8 +65,8 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   const handleFormSubmit = useCallback<Defined<FormProps["onSubmit"]>>(async (values) => {
     try {
       await createConnection(values);
-      const isDataValid = await validateData();
-      if (!isDataValid.data) await setData();
+      // const isDataValid = await validateData();
+      // if (!isDataValid.data) await setData();
 
       handleDataSuccess();
     } catch (error) {
@@ -74,22 +74,22 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     }
   }, []);
 
-  useEffect(() => {
-    if (!shouldSetData) return;
+  // useEffect(() => {
+  //   if (!shouldSetData) return;
 
-    (async () => {
-      try {
-        await setData();
-        handleDataSuccess();
-      } catch (error) {
-        handleError(error);
-      }
-    })();
-  }, [shouldSetData, setData, handleDataSuccess, handleError]);
+  //   (async () => {
+  //     try {
+  //       await setData();
+  //       handleDataSuccess();
+  //     } catch (error) {
+  //       handleError(error);
+  //     }
+  //   })();
+  // }, [shouldSetData, setData, handleDataSuccess, handleError]);
 
   const loader = <ConnectLoader {...loaderSate} />;
 
-  if (shouldSetData) return loader;
+  // if (shouldSetData) return loader;
 
   return (
     <Page
