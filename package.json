@@ -1,0 +1,32 @@
+{
+  "name": "kai-estore",
+  "private": true,
+  "scripts": {
+    "build": "dotenv -- turbo build",
+    "build:client": "dotenv -- turbo build --filter='./apps/client'",
+    "build:server": "dotenv -- turbo build --filter='./apps/server'",
+    "start": "dotenv -- turbo start",
+    "start:client": "dotenv -- turbo start --filter='./apps/client'",
+    "start:server": "dotenv -- turbo start --filter='./apps/server'",
+    "dev": "dotenv -- turbo dev",
+    "dev:client": "dotenv -- turbo dev --filter='./apps/client'",
+    "dev:server": "dotenv -- turbo dev --filter='./apps/server'",
+    "prettify": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+  },
+  "devDependencies": {
+    "dotenv-cli": "^7.3.0",
+    "prettier": "^3.1.1",
+    "turbo": "^1.12.1"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@10.2.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "prisma": {
+    "schema": "./packages/features/db/prisma/schema.prisma"
+  }
+}

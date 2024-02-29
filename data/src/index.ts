@@ -13,7 +13,7 @@ import {
   getRandomDate,
   getUniqueFieldValues,
   processAsChunks,
-  unwindObjects,
+  unwindObjects
 } from "./helpers";
 
 let USERS_NUMBER = 1;
@@ -83,7 +83,7 @@ function generateProducts(categories: Category[], tags: Tag[], length = 1): Prod
       price: generatePrice(),
       image: bindImage(product.name),
       categoryId: categories.find((category) => category.name === product.category)?.id ?? "",
-      tagIds: product.tags.map((name) => tags.find((tag) => tag.name === name)?.id ?? ""),
+      tagIds: product.tags.map((name) => tags.find((tag) => tag.name === name)?.id ?? "")
     });
   });
 
@@ -99,7 +99,7 @@ function generateOrders(users: User[], products: Product[], length = 1): Order[]
   })();
 
   const uniqueOrders: Order[] = Array.from({
-    length: uniqueOrdersLength,
+    length: uniqueOrdersLength
   }).map(() => {
     const userId = users[randomInt(0, users.length - 1)].id;
     const getRandomIndex = createRandomIndexClosure(products.length);
@@ -123,13 +123,13 @@ function generateRatings(users: User[], products: Product[]): Rating[] {
           createObject({
             userId: user.id,
             productId: product.id,
-            value: randomInt(0, 5),
-          }),
-        ),
+            value: randomInt(0, 5)
+          })
+        )
       );
 
       process.stdout.write(
-        `\r${ratings.length}/${targetCount} generated${ratings.length === targetCount ? "\n" : ""}`,
+        `\r${ratings.length}/${targetCount} generated${ratings.length === targetCount ? "\n" : ""}`
       );
     }
   }
@@ -186,7 +186,7 @@ async function writeToFile(name: string, data: any[]) {
 async function writeToFileWithChunks(
   name: string,
   data: any[],
-  options?: { maxLength?: number; lastFileIndex?: number },
+  options?: { maxLength?: number; lastFileIndex?: number }
 ) {
   const { maxLength = 250_000, lastFileIndex = 1 } = options ?? {};
 
@@ -201,7 +201,7 @@ async function writeToFileWithChunks(
         await writeToFile(`${name}-${_lastFileIndex}`, chunk);
         _lastFileIndex++;
       },
-      maxLength,
+      maxLength
     );
 
     return _lastFileIndex;
@@ -221,7 +221,7 @@ async function generateData() {
   await Promise.all([
     writeToFileWithChunks("users", users),
     writeToFile("categories", categories),
-    writeToFile("tags", tags),
+    writeToFile("tags", tags)
   ]);
 
   console.log("Generating products");
@@ -261,7 +261,7 @@ async function generateData() {
       lastFileIndex =
         (await writeToFileWithChunks(`orders`, unwoundOrders, { lastFileIndex })) ?? lastFileIndex;
     },
-    250_000,
+    250_000
   );
 }
 
