@@ -43,7 +43,9 @@ export function proccessError(error: unknown) {
     if (error instanceof AxiosError) {
       title = error.message;
 
-      if ("error" in error.response?.data) {
+      console.log(error);
+
+      if (error.response?.data && "error" in error.response.data) {
         title = error.response?.data.error;
       }
 
@@ -63,7 +65,7 @@ export function proccessError(error: unknown) {
         description = "";
       }
 
-      if ("cause" in error.response?.data) {
+      if (error.response?.data && "cause" in error.response.data) {
         if (error.response?.data.cause === "CONNECTION_CONFIG") {
           title = "Connection expired";
           window.location.replace(ROUTES.connect);

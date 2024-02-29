@@ -84,7 +84,7 @@ const variantsProps = createVariantsProps<ProductVariants>(() => ({
     imageDecor: {
       w: "full",
       h: "full",
-      bg: "radial-gradient(50% 50% at 50% 50%, #E8E6F5 74.99%, rgba(192, 183, 235, 0) 75%);",
+      bg: "radial-gradient(50% 50% at 50% 50%, var(--chakra-colors-s2-misc-1) 74.99%, rgba(192, 183, 235, 0) 75%);",
     },
 
     content: {

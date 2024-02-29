@@ -25,7 +25,7 @@ export function ProductSectionRecomm({ ...props }: ProductSectionRecommProps) {
           <Tooltip label={tooltipText} icon="solid.faQuestionCircle" iconWrapperProps={{ ml: "3" }} />
         </Typography>
       }
-      bg="s2.gray.100"
+      // bg="s2.gray.100"
       pb="6"
       {...props}
     >

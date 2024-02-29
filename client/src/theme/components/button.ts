@@ -178,10 +178,10 @@ export const buttonTheme = defineStyleConfig({
         bg: "s2.purple.200",
       },
 
-      _active: {
-        color: "white",
-        bg: "s2.purple.800",
-      },
+      // _active: {
+      //   color: "white",
+      //   bg: "s2.purple.800",
+      // },
 
       "&.isActive": {
         color: "white",

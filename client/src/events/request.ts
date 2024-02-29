@@ -36,6 +36,8 @@ export async function withRequestEvent<T extends () => Promise<AxiosResponse<Wit
   request: T,
   title?: string,
 ) {
+  return (await request()) as ReturnType<T>;
+
   if (!title) {
     return (await request()) as ReturnType<T>;
   }
