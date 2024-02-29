@@ -56,7 +56,7 @@ export function ConfigurationForm({
       {(formik) => (
         <VStack spacing="3">
           <Field
-            type="text"
+            type="password"
             name="mongoURI"
             label="Connection String"
             message="To connect to a database instance using the MongoDB® API, provide the connection string to the client after replacing the username and password."
