@@ -238,7 +238,7 @@ export function QuerySection({
               </Typography>
               <Box
                 position="relative"
-                h="md"
+                h="xs"
                 border="2px"
                 borderColor={isLoading ? "transparent" : state.color}
                 borderRadius="lg"
@@ -258,7 +258,7 @@ export function QuerySection({
           <Typography as="h4" fontSize="sm" lineHeight="5" fontWeight="semibold">
             Query
           </Typography>
-          <Textarea variant="outline.code" size="s2.md" rows={16} value={codeBlock} readOnly mt="2" />
+          <Textarea variant="outline.code" size="s2.md" h="xs" value={codeBlock} readOnly mt="2" />
         </Box>
       )}
 
