@@ -22,15 +22,15 @@ export function Toast({ title, text, icon = "solid.faInfoCircle", ...props }: To
       justifyContent="center"
       color="gray.700"
       maxW="434px"
-      bg="s2.indigo.100"
+      bg="s2.purple.200"
       py="3"
       pr="4"
       pl="1.125rem"
       borderTop="4px solid"
-      borderColor="s2.indigo.600"
+      borderColor="s2.purple.800"
       {...props}
     >
-      <Icon name={icon} flex="0 0 auto" color="s2.indigo.600" w="6" mr="3" />
+      <Icon name={icon} flex="0 0 auto" color="s2.purple.800" w="6" mr="3" />
 
       <Box>
         <Typography as="h4" fontSize="md" lineHeight="6" fontWeight="bold">

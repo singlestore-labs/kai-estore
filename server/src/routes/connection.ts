@@ -43,6 +43,8 @@ connectionRouter.post("/connection", validateRoute(validationSchema), async (req
       if (meta) {
         config.dataSize = meta.dataSize ?? config.dataSize;
       }
+
+      client.close();
     }
 
     setResponseConnectionConfigHeader(res, config);
@@ -83,6 +85,7 @@ connectionRouter.put(
       }
 
       setResponseConnectionConfigHeader(res, { ...connectionConfig, ...req.body, dataSize });
+      client.close();
       return res.status(200).json({ message: "Config updated" });
     } catch (error) {
       return next(error);

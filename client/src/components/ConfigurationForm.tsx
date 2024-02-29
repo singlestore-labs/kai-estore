@@ -4,6 +4,7 @@ import * as Yup from "yup";
 
 import { ComponentProps } from "@/types/common";
 import { ConnectionConfig } from "@/types/api";
+import { WITH_DATA_GENERATION } from "@/constants/env";
 import { Form, FormProps } from "./common/Form";
 import { Field, FieldProps } from "./common/Field";
 
@@ -55,6 +56,7 @@ export function ConfigurationForm({
       {(formik) => (
         <VStack spacing="3">
           <Field
+            type="text"
             name="mongoURI"
             label="Connection String"
             message="To connect to a database instance using the MongoDB® API, provide the connection string to the client after replacing the username and password."
@@ -79,11 +81,13 @@ export function ConfigurationForm({
             isDisabled={isDisabled}
           />
 
-          <Field
-            element="checkbox"
-            controlProps={{ children: "Generate data", isChecked: formik.values.shouldGenerateData }}
-            onChange={(e: any) => formik.setFieldValue("shouldGenerateData", e.target.checked)}
-          />
+          {WITH_DATA_GENERATION && (
+            <Field
+              element="checkbox"
+              controlProps={{ children: "Generate data", isChecked: formik.values.shouldGenerateData }}
+              onChange={(e: any) => formik.setFieldValue("shouldGenerateData", e.target.checked)}
+            />
+          )}
 
           {formik.values.shouldGenerateData && (
             <Field

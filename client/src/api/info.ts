@@ -1,9 +1,9 @@
-import { DbInfo } from "@/types/api";
+import { ApiParams, DbInfo } from "@/types/api";
 
 import { apiInstance } from "./instance";
 
-function get() {
-  return apiInstance.get<DbInfo>("/info");
+function get(params?: ApiParams) {
+  return apiInstance.get<DbInfo>("/info", { params });
 }
 
 export const info = { get };

@@ -5,7 +5,7 @@ import { Image } from "@chakra-ui/next-js";
 
 import { ROUTES } from "@/constants/routes";
 import { COOKIE_KEYS } from "@/constants/cookie";
-import { IS_SINGLE_DB } from "@/constants/env";
+import { WITH_DATA_GENERATION, IS_SINGLE_DB } from "@/constants/env";
 import { ConnectionConfig } from "@/types/api";
 import { Defined } from "@/types/helpers";
 import { api } from "@/api";
@@ -65,8 +65,11 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   const handleFormSubmit = useCallback<Defined<FormProps["onSubmit"]>>(async (values) => {
     try {
       await createConnection(values);
-      const isDataValid = await validateData();
-      if (!isDataValid.data) await setData();
+
+      if (WITH_DATA_GENERATION) {
+        const isDataValid = await validateData();
+        if (!isDataValid.data) await setData();
+      }
 
       handleDataSuccess();
     } catch (error) {
@@ -75,7 +78,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   }, []);
 
   useEffect(() => {
-    if (!shouldSetData) return;
+    if (!shouldSetData || !WITH_DATA_GENERATION) return;
 
     (async () => {
       try {
@@ -89,7 +92,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
 
   const loader = <ConnectLoader {...loaderSate} />;
 
-  if (shouldSetData) return loader;
+  if (shouldSetData && WITH_DATA_GENERATION) return loader;
 
   return (
     <Page
@@ -122,7 +125,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
           <Logo variant="s2.eStore" display="flex" maxW="480px" />
           <Typography as="p" fontSize="xl" mt="5">
             Watch{" "}
-            <Typography as="span" fontWeight="semibold" color="s2.indigo.600" textDecoration="underline">
+            <Typography as="span" fontWeight="semibold" color="s2.purple.800" textDecoration="underline">
               <Link href="https://portal.singlestore.com/">SingleStoreDB</Link>
             </Typography>{" "}
             serve a mix of transactions and aggregates in a retail experience based on a user’s purchases and
@@ -133,7 +136,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
             <Typography
               as="p"
               fontSize="md"
-              color="s2.indigo.600"
+              color="s2.purple.800"
               fontWeight="semibold"
               px="4"
               py="2"
@@ -154,7 +157,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
               variant="link"
               fontWeight="normal"
               fontSize="lg"
-              color="s2.indigo.600"
+              color="s2.purple.800"
               mt="12"
               onClick={modal.onOpen}
             >
@@ -223,10 +226,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       apiInstance.defaults.headers.cookie = userSetCookie;
       context.res.setHeader("set-cookie", userSetCookie ?? "");
 
-      const isDataValidRes = await api.data.validate();
+      if (WITH_DATA_GENERATION) {
+        const isDataValidRes = await api.data.validate();
 
-      if (!isDataValidRes.data) {
-        return { props: { shouldSetData: true } };
+        if (!isDataValidRes.data) {
+          return { props: { shouldSetData: true } };
+        }
       }
 
       return {

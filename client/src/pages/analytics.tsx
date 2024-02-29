@@ -1,7 +1,5 @@
 import { Flex } from "@chakra-ui/react";
 
-import { DbInfo } from "@/types/api";
-
 import { Page } from "@/components/common/Page";
 import { Section } from "@/components/common/Section";
 import { QueryListSection } from "@/components/Query/QueryListSection";
@@ -9,7 +7,7 @@ import { ApplicationParameters } from "@/components/ApplicationParameters";
 
 import { getDefaultServerSideProps } from "@/utils/next";
 
-export default function Analytics({ info }: { info: DbInfo }) {
+export default function Analytics() {
   return (
     <Page mainProps={{ color: "white", bg: "s2.gray.900" }}>
       <Section
@@ -19,7 +17,8 @@ export default function Analytics({ info }: { info: DbInfo }) {
         mt="6"
       >
         <Flex alignItems="stretch" gap="12" rowGap="6" flexWrap="wrap">
-          <ApplicationParameters info={info} flex="1" />
+          <ApplicationParameters title="SingleStore Parameters" flex="1 0 24rem" connection="config" />
+          <ApplicationParameters title="MongoDB® Atlas Parameters" flex="1 0 24rem" />
         </Flex>
       </Section>
 

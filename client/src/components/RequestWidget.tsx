@@ -135,7 +135,7 @@ export function RequestWidget({ ...props }: RequestWidgetProps) {
               <Speedometer
                 value={state.value}
                 displayValue={state.displayValue}
-                color="s2.indigo.300"
+                color="s2.purple.300"
                 position="absolute"
                 top="50%"
                 left="50%"

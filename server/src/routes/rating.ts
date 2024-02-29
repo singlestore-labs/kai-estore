@@ -20,7 +20,7 @@ ratingRouter.post(
   ),
   async (req, res, next) => {
     try {
-      const { db, connectionConfig } = req;
+      const { dbClient, db, connectionConfig } = req;
       const body: Pick<Rating, "productId" | "value"> = req.body;
       const createdAt: Rating["createdAt"] = new Date().toString();
 

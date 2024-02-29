@@ -101,8 +101,8 @@ export function DbSourcesSection({ ...props }: DbSourcesSectionProps) {
             name="s2"
             title="SingleStore"
             logo="s2.small.24"
-            primaryColor="s2.indigo.300"
-            secondaryColor="s2.indigo.600"
+            primaryColor="s2.purple.300"
+            secondaryColor="s2.purple.800"
             {...state}
             minH="inherit"
             loaderProps={{ delay: 0 }}

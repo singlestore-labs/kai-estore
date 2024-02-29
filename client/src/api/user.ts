@@ -1,23 +1,23 @@
 import { AxiosRequestConfig } from "axios";
 
-import { Order, Rating, RecommProduct, User, WithDuration } from "@/types/api";
+import { ApiParams, Order, Rating, RecommProduct, WithDuration } from "@/types/api";
 
 import { apiInstance } from "./instance";
 
-function create() {
-  return apiInstance.post("/user");
+function create(params?: ApiParams) {
+  return apiInstance.post("/user", undefined, { params });
 }
 
-function orders() {
-  return apiInstance.get<Order[]>(`/user/orders`);
+function orders(params?: ApiParams) {
+  return apiInstance.get<Order[]>(`/user/orders`, { params });
 }
 
-function ratings() {
-  return apiInstance.get<Rating[]>(`/user/ratings`);
+function ratings(params?: ApiParams) {
+  return apiInstance.get<Rating[]>(`/user/ratings`, { params });
 }
 
-function recommProducts(config?: AxiosRequestConfig) {
-  return apiInstance.get<WithDuration<RecommProduct[]>>(`/user/recomm-products`, config);
+function recommProducts(config?: AxiosRequestConfig, params?: ApiParams) {
+  return apiInstance.get<WithDuration<RecommProduct[]>>(`/user/recomm-products`, { ...config, params });
 }
 
 export const user = { create, orders, ratings, recommProducts };

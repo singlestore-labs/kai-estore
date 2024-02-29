@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Flex } from "@chakra-ui/react";
 import prettyBytes from "pretty-bytes";
 
-import { DbInfo } from "@/types/api";
+import { ApiParams, DbInfo } from "@/types/api";
 import { ComponentProps } from "@/types/common";
 
 import { Section, SectionProps } from "./common/Section";
@@ -12,26 +12,36 @@ import { Skeleton } from "./common/Skeleton";
 import { api } from "@/api";
 import { useTimeoutLoading } from "@/hooks/useTimeoutLoading";
 
-export type ApplicationParametersProps = ComponentProps<SectionProps, { info: DbInfo }>;
+export type ApplicationParametersProps = ComponentProps<
+  SectionProps,
+  {
+    title?: ReactNode;
+    connection?: ApiParams["connection"];
+  }
+>;
 
 function createParams(info?: DbInfo) {
   return {
-    "Data Size": info?.dbStats?.dataSize ? prettyBytes(info?.dbStats?.dataSize) : "Not ready",
+    // "Data Size": info?.dbStats?.dataSize ? prettyBytes(info?.dbStats?.dataSize) : "Not ready",
     "Order Records": info?.orderRecords ?? 0,
     "Products Number": info?.productsNumber ?? 0,
     "Ratings Number": info?.ratingsNumber ?? 0,
   } as const;
 }
 
-export function ApplicationParameters({ info, ...props }: ApplicationParametersProps) {
-  const [params, setParams] = useState(() => createParams(info));
+export function ApplicationParameters({
+  title = "Application Parameters",
+  connection,
+  ...props
+}: ApplicationParametersProps) {
+  const [params, setParams] = useState<ReturnType<typeof createParams>>(() => createParams());
   const { isLoading, startLoading, stopLoading } = useTimeoutLoading({ delay: 400 });
 
   useEffect(() => {
     (async () => {
       try {
         startLoading();
-        const res = await api.info.get();
+        const res = await api.info.get({ connection });
         setParams(createParams(res.data));
       } catch (error) {
         setParams(createParams());
@@ -69,7 +79,7 @@ export function ApplicationParameters({ info, ...props }: ApplicationParametersP
         key={label}
         alignItems="center"
         justifyContent="space-between"
-        flex="1 0 45%"
+        flex="1 0 16rem"
         flexWrap="wrap"
         py="3"
         px="4"
@@ -90,7 +100,7 @@ export function ApplicationParameters({ info, ...props }: ApplicationParametersP
   return (
     <Section
       variant="3.solid"
-      title="Application Parameters"
+      title={title}
       containerProps={{ display: "flex", flexDirection: "column", h: "full" }}
       bodyProps={{
         flex: "1",

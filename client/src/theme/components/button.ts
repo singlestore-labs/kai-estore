@@ -20,8 +20,8 @@ export const buttonTheme = defineStyleConfig({
   variants: {
     [BUTTON_VARIANT_NAMES.solid]: defineStyle(({ size }) => {
       const _disabled = {
-        color: "s2.indigo.400",
-        bg: "s2.indigo.100",
+        color: "s2.purple.400",
+        bg: "s2.purple.200",
         opacity: "1",
       };
 
@@ -32,7 +32,7 @@ export const buttonTheme = defineStyleConfig({
         color: "white",
         textDecoration: "none",
         fontWeight: "semibold",
-        bg: "s2.indigo.600",
+        bg: "s2.purple.800",
         borderRadius: "full",
         p: "3",
         ...sizeStyles[size],
@@ -43,13 +43,13 @@ export const buttonTheme = defineStyleConfig({
 
         _hover: {
           textDecoration: "none",
-          bg: "s2.indigo.700",
+          bg: "s2.purple.800",
 
           _disabled,
         },
 
         _active: {
-          bg: "s2.indigo.800",
+          bg: "s2.purple.800",
         },
 
         _disabled,
@@ -90,7 +90,7 @@ export const buttonTheme = defineStyleConfig({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      color: "s2.indigo.700",
+      color: "s2.purple.800",
       textDecoration: "none",
       minW: "10",
       minH: "10",
@@ -111,11 +111,11 @@ export const buttonTheme = defineStyleConfig({
 
       _hover: {
         textDecoration: "none",
-        bg: "s2.indigo.100",
+        bg: "s2.purple.200",
       },
 
       _active: {
-        bg: "s2.indigo.200",
+        bg: "s2.purple.200",
       },
     })),
 
@@ -155,7 +155,7 @@ export const buttonTheme = defineStyleConfig({
 
       "&.isActive": {
         color: "white",
-        bg: "s2.indigo.700",
+        bg: "s2.purple.800",
         transition: 0,
       },
     })),
@@ -175,17 +175,17 @@ export const buttonTheme = defineStyleConfig({
 
       _hover: {
         textDecoration: "none",
-        bg: "s2.indigo.100",
+        bg: "s2.purple.200",
       },
 
-      _active: {
-        color: "white",
-        bg: "s2.indigo.600",
-      },
+      // _active: {
+      //   color: "white",
+      //   bg: "s2.purple.800",
+      // },
 
       "&.isActive": {
         color: "white",
-        bg: "s2.indigo.700",
+        bg: "s2.purple.800",
         transition: 0,
       },
 

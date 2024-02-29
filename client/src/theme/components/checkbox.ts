@@ -8,12 +8,12 @@ export const checkboxTheme = defineMultiStyleConfig({
     "1": definePartsStyle({
       control: {
         _checked: {
-          bg: "s2.indigo.600",
-          borderColor: "s2.indigo.600",
+          bg: "s2.purple.800",
+          borderColor: "s2.purple.800",
 
           _hover: {
-            bg: "s2.indigo.600",
-            borderColor: "s2.indigo.600",
+            bg: "s2.purple.800",
+            borderColor: "s2.purple.800",
           },
         },
       },

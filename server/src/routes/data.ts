@@ -11,7 +11,7 @@ export const dataRouter = express.Router();
 
 dataRouter.get("/data/validate", async (req, res, next) => {
   try {
-    const { db, connectionConfig } = req;
+    const { dbClient, db, connectionConfig } = req;
     const isValid = await validateData(db, connectionConfig.dataSize);
 
     if (!isValid && !connectionConfig.shouldGenerateData) {
@@ -29,7 +29,7 @@ dataRouter.post(
   validateRoute(zod.object({ query: zod.object({ force: zod.string().optional() }) })),
   async (req, res, next) => {
     try {
-      const { db, connectionConfig, query } = req;
+      const { dbClient, db, connectionConfig, query } = req;
       const isForced = query.force === "true" || query.force;
       const collectionNames: DatasetCollectionNames[] = [
         "users",

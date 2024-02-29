@@ -27,11 +27,11 @@ export const inputTheme = defineMultiStyleConfig({
 
         _hover: {
           bg: "white",
-          borderColor: "s2.indigo.400",
+          borderColor: "s2.purple.400",
         },
 
         _focus: {
-          borderColor: "s2.indigo.600",
+          borderColor: "s2.purple.800",
         },
       },
     }),
@@ -56,13 +56,13 @@ export const inputTheme = defineMultiStyleConfig({
           },
 
           _hover: {
-            borderColor: "s2.indigo.600",
+            borderColor: "s2.purple.800",
 
             _disabled,
           },
 
           _focus: {
-            borderColor: "s2.indigo.600",
+            borderColor: "s2.purple.800",
             outline: "none",
             boxShadow: "none",
           },

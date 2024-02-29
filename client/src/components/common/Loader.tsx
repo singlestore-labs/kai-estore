@@ -67,7 +67,7 @@ export function Loader({ delay = 300, isOpen = false, isDark = false, ...props }
       w="full"
       h="full"
       borderRadius="inherit"
-      color="s2.indigo.600"
+      color="s2.purple.800"
       transition="visibility 0s, opacity 0.4s ease"
       zIndex="2"
       {...props}

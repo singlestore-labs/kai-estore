@@ -3,7 +3,7 @@ import { Box, Button } from "@chakra-ui/react";
 
 import { ConnectionConfig } from "@/types/api";
 import { ROUTES } from "@/constants/routes";
-import { IS_SINGLE_DB } from "@/constants/env";
+import { WITH_DATA_GENERATION, IS_SINGLE_DB } from "@/constants/env";
 import { api } from "@/api";
 import { getDefaultServerSideProps } from "@/utils/next";
 import { Page } from "@/components/common/Page";
@@ -26,18 +26,20 @@ export default function Configure() {
 
       setLoaderSate((state) => ({ ...state, title: "Updating", isOpen: true }));
 
-      await api.connection.update(values);
+      await api.connection.update(values, { connection: "config" });
 
-      setLoaderSate((state) => ({ ...state, title: "Data validation" }));
-      const isDataValidRes = await api.data.validate();
+      if (WITH_DATA_GENERATION) {
+        setLoaderSate((state) => ({ ...state, title: "Data validation" }));
+        const isDataValidRes = await api.data.validate();
 
-      if (!isDataValidRes.data) {
-        setLoaderSate((state) => ({
-          ...state,
-          title: "Data inserting",
-          message: `It will take a while. Do not close the browser tab.`,
-        }));
-        await api.data.set();
+        if (!isDataValidRes.data) {
+          setLoaderSate((state) => ({
+            ...state,
+            title: "Data inserting",
+            message: `It will take a while. Do not close the browser tab.`,
+          }));
+          await api.data.set();
+        }
       }
 
       setLoaderSate((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
@@ -79,7 +81,7 @@ export default function Configure() {
     (async () => {
       try {
         setIsInitialValuesLoading(true);
-        const response = await api.connection.get();
+        const response = await api.connection.get({ connection: "config" });
         delete (response.data as any).userId;
         setInitialValues({ ...response.data, shouldGenerateData: false });
       } catch (error) {
@@ -123,17 +125,19 @@ export default function Configure() {
                   <Button type="submit" form={formId} variant="solid" isDisabled={isInitialValuesLoading}>
                     Save configuration
                   </Button>
-                  <Button
-                    type="button"
-                    variant="solid"
-                    bg="red.500"
-                    _hover={{ bg: "red.600" }}
-                    _active={{ bg: "red.700" }}
-                    onClick={handleResetClick}
-                    isDisabled={isInitialValuesLoading}
-                  >
-                    Reset data
-                  </Button>
+                  {WITH_DATA_GENERATION && (
+                    <Button
+                      type="button"
+                      variant="solid"
+                      bg="red.500"
+                      _hover={{ bg: "red.600" }}
+                      _active={{ bg: "red.700" }}
+                      onClick={handleResetClick}
+                      isDisabled={isInitialValuesLoading}
+                    >
+                      Reset data
+                    </Button>
+                  )}
                 </Box>
               </Box>
             </Box>

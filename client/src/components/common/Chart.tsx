@@ -12,8 +12,8 @@ export function Chart({ data = [], aspect = 4.875, ...props }: ChartProps) {
   const linearId = useId();
 
   const [colorS2Indigo100, colorS2Indigo600, colorS2Gray200, colorS2Gray900] = useToken("colors", [
-    "s2.indigo.100",
-    "s2.indigo.600",
+    "s2.purple.200",
+    "s2.purple.800",
     "s2.gray.200",
     "s2.gray.900",
   ]);

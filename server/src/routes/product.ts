@@ -28,8 +28,8 @@ async function getRandomProductId(db: Db) {
 }
 
 productRouter.get("/product/:id", validateRoute(validateId), async (req, res, next) => {
+  const { dbClient, db, params } = req;
   try {
-    const { db, params } = req;
     const id = params.id ?? (await getRandomProductId(db));
     const product = await withDuration(() => {
       return db
@@ -56,8 +56,8 @@ productRouter.get("/product/:id", validateRoute(validateId), async (req, res, ne
 });
 
 productRouter.get(`/product/:id/sales`, validateRoute(validateId, validateFrom), async (req, res) => {
+  const { db } = req;
   try {
-    const { db } = req;
     const query: { from?: string } = req.query;
     const id = req.params.id ?? (await getRandomProductId(db));
     const from = query.from ? new Date(query.from) : subDays(new Date(), 90);
@@ -70,8 +70,8 @@ productRouter.get(`/product/:id/sales`, validateRoute(validateId, validateFrom),
 });
 
 productRouter.get(`/product/:id/related-products`, validateRoute(validateId), async (req, res) => {
+  const { db } = req;
   try {
-    const { db } = req;
     const id = req.params.id ?? (await getRandomProductId(db));
     const products = await withDuration(() => getRelatedProductsQuery(db, { productId: id }));
 
@@ -82,8 +82,8 @@ productRouter.get(`/product/:id/related-products`, validateRoute(validateId), as
 });
 
 productRouter.get("/products", async (req, res, next) => {
+  const { db } = req;
   try {
-    const { db } = req;
     const products = await db.collection("products").find().toArray();
 
     return res.status(200).send(products);
@@ -93,8 +93,8 @@ productRouter.get("/products", async (req, res, next) => {
 });
 
 productRouter.get("/products/filter", async (req, res, next) => {
+  const { db } = req;
   try {
-    const { db } = req;
     const products = await withDuration(() => getProductsQuery(db, req.query));
 
     return res.status(200).send(products);
@@ -104,9 +104,8 @@ productRouter.get("/products/filter", async (req, res, next) => {
 });
 
 productRouter.get(`/products/prices`, async (req, res) => {
+  const { db } = req;
   try {
-    const { db } = req;
-
     const prices = await db
       .collection("products")
       .aggregate([{ $group: { _id: null, values: { $addToSet: "$price" } } }])
@@ -119,9 +118,8 @@ productRouter.get(`/products/prices`, async (req, res) => {
 });
 
 productRouter.get(`/products/ratings`, async (req, res) => {
+  const { db } = req;
   try {
-    const { db } = req;
-
     const ratings = await db
       .collection("products")
       .aggregate([{ $group: { _id: null, values: { $addToSet: "$rating" } } }])
@@ -134,8 +132,8 @@ productRouter.get(`/products/ratings`, async (req, res) => {
 });
 
 productRouter.get(`/products/top`, validateRoute(validateNumber), async (req, res) => {
+  const { db } = req;
   try {
-    const { db } = req;
     const query: { number?: string } = req.query;
     const products = await withDuration(() => getTopProductsQuery(db, { number: query.number }));
 
@@ -146,8 +144,8 @@ productRouter.get(`/products/top`, validateRoute(validateNumber), async (req, re
 });
 
 productRouter.get(`/products/trending`, validateRoute(validateNumber, validateFrom), async (req, res) => {
+  const { db } = req;
   try {
-    const { db } = req;
     const query: { from?: string; number?: string } = req.query;
     const from = query.from ? new Date(query.from) : subDays(new Date(), 90);
     const products = await withDuration(() => getTopProductsQuery(db, { from, number: query.number }));

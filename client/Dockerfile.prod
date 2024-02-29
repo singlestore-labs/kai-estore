@@ -19,6 +19,7 @@ COPY . .
 
 ARG NEXT_PUBLIC_SERVER_URL
 ARG NEXT_PUBLIC_IS_SINGLE_DB
+ARG NEXT_PUBLIC_WITH_DATA_GENERATION
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry

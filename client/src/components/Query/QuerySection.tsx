@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useId, useRef, useState } from "react";
 import { Box, Button, Flex, Textarea } from "@chakra-ui/react";
 import pick from "lodash.pick";
 import { AxiosRequestConfig } from "axios";
@@ -15,6 +15,7 @@ import { apiRequestToken } from "@/api/instance";
 import { useTopOneProductStateItemdId } from "@/state/topOneProduct";
 
 import { QueryParams, QueryParamsProps } from "./QueryParams";
+import { Loader } from "@/components/common/Loader";
 
 type QueryRequest = (params: Record<string, any>, config?: AxiosRequestConfig) => any;
 
@@ -31,74 +32,102 @@ export type Query<T extends QueryRequest = QueryRequest> = {
 
 export type QuerySectionProps = ComponentProps<
   Omit<SectionProps, "children">,
-  { query: Query; runOnMount?: boolean }
+  {
+    query: Query;
+    runOnMount?: boolean;
+    canRun?: boolean;
+    afterRun?: () => void;
+  }
 >;
 
 type State = {
   title: string;
-  value: number;
+  value?: number;
   displayValue: string;
   color?: string;
+  titleColor?: string;
   unit?: string;
   data?: any;
   isLoading: boolean;
 };
 
 const defaultState: State = {
-  title: "SingleStore",
-  value: 0,
+  title: "Connection",
+  value: undefined,
   displayValue: "0",
-  data: [],
+  data: undefined,
   isLoading: false,
 };
 
-export function QuerySection({ query, runOnMount = true, ...props }: QuerySectionProps) {
-  const [state, setState] = useState<State>(defaultState);
+const defaultConnectionStates: Record<string, State> = {
+  s2: { ...defaultState, title: "SingleStore", color: "s2.purple.800", titleColor: "currentColor" },
+  mongo: { ...defaultState, title: "MongoDB® Atlas", color: "s2.gray.500" },
+};
+
+const connectionKeys = Object.keys(defaultConnectionStates);
+
+export function QuerySection({
+  query,
+  runOnMount = true,
+  canRun = false,
+  afterRun,
+  ...props
+}: QuerySectionProps) {
+  const [state, setState] = useState<Record<string, State>>(defaultConnectionStates);
   const [paramsState, setParamsState] = useState({ values: {}, isValid: false });
   const [codeBlock, setCodeBlock] = useState("");
+  const stateEntires = Object.entries(state);
 
   const formId = useId();
   const statCardSubtitle = "Query Time";
   const hasParams = !!Object.keys(query.params?.fields ?? {}).length;
-  const isRunButtonDisabled = state.isLoading || (hasParams && !paramsState.isValid);
+  const isLoading = stateEntires.some(([, { isLoading }]) => isLoading);
+  const isRunButtonDisabled = isLoading || (hasParams && !paramsState.isValid);
   const topOneProductItemId = useTopOneProductStateItemdId();
 
-  const requestTokenRef = useRef<ReturnType<typeof apiRequestToken>>();
+  const requestTokenRef = useRef<Record<string, ReturnType<typeof apiRequestToken>>>();
 
   const runQueryRef = useRef(async (params?: typeof paramsState.values) => {
-    let timeout: NodeJS.Timeout | undefined = undefined;
+    let timeouts: Record<string, NodeJS.Timeout | undefined> = {};
 
-    try {
-      requestTokenRef.current = apiRequestToken();
-      timeout = setTimeout(() => setState((state) => ({ ...state, isLoading: true })), 800);
+    await Promise.all(
+      connectionKeys.map(async (key) => {
+        timeouts[key] = setTimeout(
+          () => setState((state) => ({ ...state, [key]: { ...state[key], isLoading: true } })),
+          800,
+        );
 
-      const [data, ms, value, unit] = (
-        await query.request(
-          { id: topOneProductItemId, ...params },
-          { cancelToken: requestTokenRef.current?.token },
-        )
-      ).data;
+        requestTokenRef.current = { ...requestTokenRef.current, [key]: apiRequestToken() };
 
-      setState((state) => {
-        return {
+        const [data, ms, value, unit] = (
+          await query.request(
+            { id: topOneProductItemId, ...params, connection: key === "s2" ? "config" : undefined },
+            { cancelToken: requestTokenRef.current?.[key].token },
+          )
+        ).data;
+
+        setState((state) => ({
           ...state,
-          value: 100 / (2000 / ms),
-          displayValue: `${value}${unit}`,
-          data,
-          isLoading: false,
-        };
-      });
-    } catch (error) {
-      setState(defaultState);
-    } finally {
-      clearTimeout(timeout);
-      timeout = undefined;
-    }
+          [key]: {
+            ...state[key],
+            value: 100 / (2000 / ms),
+            displayValue: `${value}${unit}`,
+            data,
+            isLoading: false,
+          },
+        }));
+
+        clearTimeout(timeouts[key]);
+      }),
+    );
+
+    timeouts = {};
+    afterRun?.();
   });
 
   useEffect(
     () => () => {
-      requestTokenRef.current?.cancel();
+      connectionKeys.forEach((key) => requestTokenRef.current?.[key].cancel());
     },
     [],
   );
@@ -110,10 +139,10 @@ export function QuerySection({ query, runOnMount = true, ...props }: QuerySectio
   const handleRunClick = () => runQueryRef.current(paramsState.values);
 
   useEffect(() => {
-    if (runOnMount) {
+    if (runOnMount && canRun) {
       runQueryRef.current();
     }
-  }, [runOnMount]);
+  }, [runOnMount, canRun]);
 
   let tooltip;
   if (query.description) {
@@ -154,47 +183,84 @@ export function QuerySection({ query, runOnMount = true, ...props }: QuerySectio
             fields={query.params?.fields}
             validationSchema={query.params?.validationSchema}
             formProps={{ id: formId }}
-            isLoading={state.isLoading}
+            isLoading={isLoading}
             onChange={handleParamsChange}
           />
         )}
 
         <Box
-          flex={{ base: "1 0 100%", md: "1 0 23.75rem" }}
-          maxW={{ base: "full", md: "23.75rem" }}
+          flex={{ base: "1 0 100%", md: "1 0 50%" }}
+          maxW={{ base: "full", md: "50%" }}
           display="grid"
           gridTemplateColumns="repeat(auto-fit, minmax(16rem, 1fr))"
           gap="6"
           rowGap="6"
           flexWrap="wrap"
         >
-          <StatCard
-            subtitle={statCardSubtitle}
-            speedometers={[{ ...pick(state, ["value", "displayValue", "unit"]) }]}
-            primaryColor={state.color}
-            isDisabled={!state.value}
-            isLoading={state.isLoading}
-          />
+          {Object.entries(state).map(([key, state]) => (
+            <StatCard
+              key={key}
+              title={state.title}
+              subtitle={statCardSubtitle}
+              speedometers={[{ ...pick(state, ["value", "displayValue", "unit"]) }]}
+              primaryColor={state.color}
+              titleColor={state.titleColor}
+              isDisabled={!state.value}
+              isLoading={state.isLoading}
+            />
+          ))}
         </Box>
       </Flex>
 
-      {codeBlock && (
-        <Textarea variant="outline.code" size="s2.md" rows={16} value={codeBlock} readOnly mt="6" />
-      )}
+      <Box mt="6" display="flex" alignItems="stretch" gap="6">
+        {stateEntires.map(([key, state]) => {
+          let results = <Box h="full" backgroundColor="s2.gray.900" />;
 
-      {(Array.isArray(state.data) ? !!state.data.length : state.data) && (
+          if (state.data) {
+            results = (
+              <Textarea
+                variant="outline.code"
+                h="full"
+                size="s2.md"
+                border="none"
+                value={JSON.stringify(state.data, null, 2)}
+                readOnly
+              />
+            );
+          }
+
+          if (state.isLoading) {
+            results = <Loader isOpen color={state.color} isDark />;
+          }
+
+          return (
+            <Box key={key} flex="1 0 calc(50% - 1.5rem)">
+              <Typography as="h4" fontSize="sm" lineHeight="5" fontWeight="semibold">
+                {`${state.title} Result`}
+              </Typography>
+              <Box
+                position="relative"
+                h="xs"
+                border="2px"
+                borderColor={isLoading ? "transparent" : state.color}
+                borderRadius="lg"
+                transition="0.4s ease"
+                overflow="hidden"
+                mt="2"
+              >
+                {results}
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
+
+      {codeBlock && (
         <Box mt="6">
           <Typography as="h4" fontSize="sm" lineHeight="5" fontWeight="semibold">
-            Result
+            Query
           </Typography>
-          <Textarea
-            variant="outline.code"
-            size="s2.md"
-            rows={16}
-            value={JSON.stringify(state.data, null, 2)}
-            readOnly
-            mt="2"
-          />
+          <Textarea variant="outline.code" size="s2.md" h="xs" value={codeBlock} readOnly mt="2" />
         </Box>
       )}
 

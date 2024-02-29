@@ -25,7 +25,7 @@ export const s2colors = {
     500: "#DB94FF",
     600: "#C550FF",
     700: "#BB29FF",
-    800: "#AA00FF",
+    800: "#820edf",
     900: "#8800CC",
   },
 

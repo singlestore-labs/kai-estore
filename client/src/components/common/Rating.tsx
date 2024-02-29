@@ -14,7 +14,7 @@ export function Rating({ value = 3, ...props }: RatingProps) {
     <Flex alignItems="center" justifyContent="flex-start" {...props}>
       <HStack display="flex" alignItems="center" justifyContent="flex-start" spacing="0.5">
         {Array.from({ length: value > 5 ? 5 : value }).map((_, i) => (
-          <Icon key={i} name="solid.faStar" w="4" color="s2.indigo.600" />
+          <Icon key={i} name="solid.faStar" w="4" color="s2.purple.800" />
         ))}
       </HStack>
       <Typography as="p" fontSize="sm" fontWeight="semibold" ml="2">

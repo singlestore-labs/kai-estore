@@ -57,7 +57,7 @@ export const queriesList: Query[] = [
 
       validationSchema: Yup.object({ number: Yup.number() }),
     },
-    request: (params, config) => api.product.top({ ...params }, config),
+    request: (params, config) => api.product.top(params, config),
     codeBlock: "/data/getTopProductsQuery.txt",
   },
 
@@ -85,7 +85,7 @@ export const queriesList: Query[] = [
         number: Yup.number(),
       }),
     },
-    request: (params, config) => api.product.trending({ ...params }, config),
+    request: (params, config) => api.product.trending(params, config),
     codeBlock: "/data/getTopProductsQuery.txt",
   },
 

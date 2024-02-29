@@ -11,7 +11,7 @@ import { Typography, TypographyProps } from "./Typography";
 export type SpeedometerProps = ComponentProps<
   Omit<BoxProps, "maxW">,
   {
-    value: number;
+    value?: number;
     displayValue?: TypographyProps["children"];
     displayValueProps?: Omit<TypographyProps, "children">;
     unit?: string;
@@ -30,7 +30,7 @@ function calcDisplayValueFontSize(targetWidth: number) {
 }
 
 export function Speedometer({
-  value,
+  value = 0,
   displayValue,
   displayValueProps,
   unit,
@@ -81,7 +81,7 @@ export function Speedometer({
       w="full"
       h="auto"
       overflow="hidden"
-      color="s2.indigo.600"
+      color="s2.purple.800"
       {...props}
       maxW="full"
       ref={rootRef}

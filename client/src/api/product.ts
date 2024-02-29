@@ -9,60 +9,70 @@ import {
   Tag,
   TopProduct,
   TrendingProduct,
+  ApiParams,
 } from "@/types/api";
 
 import { SortParam } from "@/types/common";
 
 import { apiInstance } from "./instance";
 
-function byItemId(id: Product["id"]) {
-  return apiInstance.get<WithDuration<Product>>(`/product/${id}`);
+function byItemId(id: Product["id"], params?: ApiParams) {
+  return apiInstance.get<WithDuration<Product>>(`/product/${id}`, { params });
 }
 
-function filter(params?: {
-  category?: Category["id"][];
-  tag?: Tag["id"][];
-  price?: string[];
-  rating?: string[];
-  page?: string;
-  sort?: SortParam;
-}) {
+function filter(
+  params?: ApiParams<{
+    category?: Category["id"][];
+    tag?: Tag["id"][];
+    price?: string[];
+    rating?: string[];
+    page?: string;
+    sort?: SortParam;
+  }>,
+) {
   return apiInstance.get<WithDuration<{ products: Product[]; total: number }>>("/products/filter", {
     params,
   });
 }
 
-function prices() {
-  return apiInstance.get<Product["price"][]>("/products/prices");
+function prices(params?: ApiParams) {
+  return apiInstance.get<Product["price"][]>("/products/prices", { params });
 }
 
-function ratings() {
-  return apiInstance.get<Product["rating"][]>("/products/ratings");
+function ratings(params?: ApiParams) {
+  return apiInstance.get<Product["rating"][]>("/products/ratings", { params });
 }
 
-function top(params?: { number?: string }, config?: AxiosRequestConfig) {
+function top(params?: ApiParams<{ number?: string }>, config?: AxiosRequestConfig) {
   return apiInstance.get<WithDuration<TopProduct[]>>("/products/top", { ...config, params });
 }
 
-function topOne() {
-  return apiInstance.get<WithDuration<TopProduct[]>>("/products/top?number=1");
+function topOne(params?: ApiParams) {
+  return apiInstance.get<WithDuration<TopProduct[]>>("/products/top?number=1", { params });
 }
 
-function trending(params?: { from?: string | Date; number?: string }, config?: AxiosRequestConfig) {
+function trending(
+  params?: ApiParams<{ from?: string | Date; number?: string }>,
+  config?: AxiosRequestConfig,
+) {
   return apiInstance.get<WithDuration<TrendingProduct[]>>("/products/trending", {
     ...config,
     params,
   });
 }
 
-function sales(id: Product["id"], params?: { sample?: boolean }, config?: AxiosRequestConfig) {
+function sales(id: Product["id"], params?: ApiParams<{ sample?: boolean }>, config?: AxiosRequestConfig) {
   return apiInstance.get<WithDuration<SalesProduct[]>>(`/product/${id}/sales`, {
     ...config,
     params,
   });
 }
 
-function relatedProducts(id: Product["id"], params?: { sample?: boolean }, config?: AxiosRequestConfig) {
+function relatedProducts(
+  id: Product["id"],
+  params?: ApiParams<{ sample?: boolean }>,
+  config?: AxiosRequestConfig,
+) {
   return apiInstance.get<WithDuration<RelatedProduct[]>>(`/product/${id}/related-products`, {
     ...config,
     params,
