@@ -22,6 +22,7 @@ services:
       args:
         NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL}
         NEXT_PUBLIC_IS_SINGLE_DB: ${NEXT_PUBLIC_IS_SINGLE_DB}
+        NEXT_PUBLIC_WITH_DATA_GENERATION: ${NEXT_PUBLIC_WITH_DATA_GENERATION}
     volumes:
       - ./client/src:/app/src
       - ./client/public:/app/public

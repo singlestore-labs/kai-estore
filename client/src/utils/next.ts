@@ -14,6 +14,7 @@ import { userOrdersState } from "@/state/userOrders";
 import { userRatingsState } from "@/state/userRatings";
 import { apiInstance } from "@/api/instance";
 import { api } from "@/api";
+import { WITH_DATA_GENERATION } from "@/constants/env";
 
 export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = {}) => {
   return (async (context) => {
@@ -39,11 +40,13 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
       if (hasConnectionConfig) {
         apiInstance.defaults.headers["x-connection-config"] = req.cookies.connectionConfig as string;
 
-        // try {
-        //   shouldRedirectToConnect = !(await api.data.validate()).data;
-        // } catch (error) {
-        //   shouldRedirectToConnect = true;
-        // }
+        if (WITH_DATA_GENERATION) {
+          try {
+            shouldRedirectToConnect = !(await api.data.validate()).data;
+          } catch (error) {
+            shouldRedirectToConnect = true;
+          }
+        }
       }
 
       if (shouldRedirectToConnect) {

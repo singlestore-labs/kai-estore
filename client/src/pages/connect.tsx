@@ -5,7 +5,7 @@ import { Image } from "@chakra-ui/next-js";
 
 import { ROUTES } from "@/constants/routes";
 import { COOKIE_KEYS } from "@/constants/cookie";
-import { IS_SINGLE_DB } from "@/constants/env";
+import { WITH_DATA_GENERATION, IS_SINGLE_DB } from "@/constants/env";
 import { ConnectionConfig } from "@/types/api";
 import { Defined } from "@/types/helpers";
 import { api } from "@/api";
@@ -38,10 +38,10 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     await api.user.create();
   }, []);
 
-  // const validateData = useCallback(() => {
-  //   setLoaderSate((state) => ({ ...state, title: "Data validation" }));
-  //   return api.data.validate();
-  // }, []);
+  const validateData = useCallback(() => {
+    setLoaderSate((state) => ({ ...state, title: "Data validation" }));
+    return api.data.validate();
+  }, []);
 
   const setData = useCallback(() => {
     setLoaderSate((state) => ({
@@ -65,8 +65,11 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   const handleFormSubmit = useCallback<Defined<FormProps["onSubmit"]>>(async (values) => {
     try {
       await createConnection(values);
-      // const isDataValid = await validateData();
-      // if (!isDataValid.data) await setData();
+
+      if (WITH_DATA_GENERATION) {
+        const isDataValid = await validateData();
+        if (!isDataValid.data) await setData();
+      }
 
       handleDataSuccess();
     } catch (error) {
@@ -74,22 +77,22 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (!shouldSetData) return;
+  useEffect(() => {
+    if (!shouldSetData || !WITH_DATA_GENERATION) return;
 
-  //   (async () => {
-  //     try {
-  //       await setData();
-  //       handleDataSuccess();
-  //     } catch (error) {
-  //       handleError(error);
-  //     }
-  //   })();
-  // }, [shouldSetData, setData, handleDataSuccess, handleError]);
+    (async () => {
+      try {
+        await setData();
+        handleDataSuccess();
+      } catch (error) {
+        handleError(error);
+      }
+    })();
+  }, [shouldSetData, setData, handleDataSuccess, handleError]);
 
   const loader = <ConnectLoader {...loaderSate} />;
 
-  // if (shouldSetData) return loader;
+  if (shouldSetData && WITH_DATA_GENERATION) return loader;
 
   return (
     <Page
@@ -223,11 +226,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       apiInstance.defaults.headers.cookie = userSetCookie;
       context.res.setHeader("set-cookie", userSetCookie ?? "");
 
-      // const isDataValidRes = await api.data.validate();
+      if (WITH_DATA_GENERATION) {
+        const isDataValidRes = await api.data.validate();
 
-      // if (!isDataValidRes.data) {
-      //   return { props: { shouldSetData: true } };
-      // }
+        if (!isDataValidRes.data) {
+          return { props: { shouldSetData: true } };
+        }
+      }
 
       return {
         props: {},
