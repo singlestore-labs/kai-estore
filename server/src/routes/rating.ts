@@ -42,7 +42,6 @@ ratingRouter.post(
       const newProductRating = Math.round(calcAverage(productVotes));
 
       db.collection("products").updateOne({ id: body.productId }, { $set: { rating: newProductRating } });
-      dbClient.close();
     } catch (error) {
       return next(error);
     }

@@ -4,7 +4,7 @@ export const infoRouter = express.Router();
 
 infoRouter.get("/info", async (req, res, next) => {
   try {
-    const { dbClient, db } = req;
+    const { db } = req;
 
     const [dbStats, orderRecords, productsNumber, ratingsNumber] = await Promise.all([
       db.stats(),
@@ -12,8 +12,6 @@ infoRouter.get("/info", async (req, res, next) => {
       db.collection("products").countDocuments(),
       db.collection("ratings").countDocuments(),
     ]);
-
-    dbClient.close();
 
     return res.status(200).json({ dbStats, orderRecords, productsNumber, ratingsNumber });
   } catch (error) {

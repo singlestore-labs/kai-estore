@@ -20,7 +20,7 @@ orderRouter.post(
       const body: { productIds: string[] } = req.body;
       const flatOrders = createFlatOrders(userId, body.productIds);
       await db.collection("orders").insertMany(flatOrders);
-      dbClient.close();
+
       return res.status(201).send(flatOrders);
     } catch (error) {
       return next(error);

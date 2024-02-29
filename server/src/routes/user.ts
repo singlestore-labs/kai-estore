@@ -23,7 +23,7 @@ userRouter.post("/user", async (req, res, next) => {
       userId = user.id;
       setResponseConnectionConfigHeader(res, { ...connectionConfig, userId });
     }
-    dbClient.close();
+
     return res.status(201).json({ id: userId });
   } catch (error) {
     return next(error);
@@ -38,7 +38,7 @@ userRouter.get("/user/orders", async (req, res, next) => {
       connectionConfig: { userId },
     } = req;
     const orders = await db.collection("orders").find({ userId }).toArray();
-    dbClient.close();
+
     return res.status(200).send(orders);
   } catch (error) {
     return next(error);
@@ -53,7 +53,7 @@ userRouter.get("/user/ratings", async (req, res, next) => {
       connectionConfig: { userId },
     } = req;
     const ratings = await db.collection("ratings").find({ userId }).toArray();
-    dbClient.close();
+
     return res.status(200).send(ratings);
   } catch (error) {
     return next(error);

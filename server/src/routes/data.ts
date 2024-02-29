@@ -17,7 +17,7 @@ dataRouter.get("/data/validate", async (req, res, next) => {
     if (!isValid && !connectionConfig.shouldGenerateData) {
       return res.status(200).send(true);
     }
-    dbClient.close();
+
     return res.status(200).send(isValid);
   } catch (error) {
     return next(error);
@@ -57,7 +57,7 @@ dataRouter.post(
       }
 
       await db.collection("meta").insertOne({ dataSize: connectionConfig.dataSize });
-      dbClient.close();
+
       return res.status(201).json({ message: "Data set" });
     } catch (error) {
       console.error(error);

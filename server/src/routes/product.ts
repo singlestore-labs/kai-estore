@@ -28,8 +28,8 @@ async function getRandomProductId(db: Db) {
 }
 
 productRouter.get("/product/:id", validateRoute(validateId), async (req, res, next) => {
+  const { dbClient, db, params } = req;
   try {
-    const { db, params } = req;
     const id = params.id ?? (await getRandomProductId(db));
     const product = await withDuration(() => {
       return db
@@ -56,7 +56,7 @@ productRouter.get("/product/:id", validateRoute(validateId), async (req, res, ne
 });
 
 productRouter.get(`/product/:id/sales`, validateRoute(validateId, validateFrom), async (req, res) => {
-  const { dbClient, db } = req;
+  const { db } = req;
   try {
     const query: { from?: string } = req.query;
     const id = req.params.id ?? (await getRandomProductId(db));
@@ -66,13 +66,11 @@ productRouter.get(`/product/:id/sales`, validateRoute(validateId, validateFrom),
     return res.status(200).send(sales);
   } catch (error) {
     return res.status(200).send([]);
-  } finally {
-    dbClient.close();
   }
 });
 
 productRouter.get(`/product/:id/related-products`, validateRoute(validateId), async (req, res) => {
-  const { dbClient, db } = req;
+  const { db } = req;
   try {
     const id = req.params.id ?? (await getRandomProductId(db));
     const products = await withDuration(() => getRelatedProductsQuery(db, { productId: id }));
@@ -80,16 +78,14 @@ productRouter.get(`/product/:id/related-products`, validateRoute(validateId), as
     return res.status(200).send(products);
   } catch (error) {
     return res.status(200).send([]);
-  } finally {
-    dbClient.close();
   }
 });
 
 productRouter.get("/products", async (req, res, next) => {
+  const { db } = req;
   try {
-    const { dbClient, db } = req;
     const products = await db.collection("products").find().toArray();
-    dbClient.close();
+
     return res.status(200).send(products);
   } catch (error) {
     return next(error);
@@ -97,22 +93,19 @@ productRouter.get("/products", async (req, res, next) => {
 });
 
 productRouter.get("/products/filter", async (req, res, next) => {
-  const { dbClient, db } = req;
+  const { db } = req;
   try {
     const products = await withDuration(() => getProductsQuery(db, req.query));
 
     return res.status(200).send(products);
   } catch (error) {
     return next(error);
-  } finally {
-    dbClient.close();
   }
 });
 
 productRouter.get(`/products/prices`, async (req, res) => {
+  const { db } = req;
   try {
-    const { db } = req;
-
     const prices = await db
       .collection("products")
       .aggregate([{ $group: { _id: null, values: { $addToSet: "$price" } } }])
@@ -125,9 +118,8 @@ productRouter.get(`/products/prices`, async (req, res) => {
 });
 
 productRouter.get(`/products/ratings`, async (req, res) => {
+  const { db } = req;
   try {
-    const { db } = req;
-
     const ratings = await db
       .collection("products")
       .aggregate([{ $group: { _id: null, values: { $addToSet: "$rating" } } }])
@@ -140,8 +132,8 @@ productRouter.get(`/products/ratings`, async (req, res) => {
 });
 
 productRouter.get(`/products/top`, validateRoute(validateNumber), async (req, res) => {
+  const { db } = req;
   try {
-    const { db } = req;
     const query: { number?: string } = req.query;
     const products = await withDuration(() => getTopProductsQuery(db, { number: query.number }));
 
@@ -152,7 +144,7 @@ productRouter.get(`/products/top`, validateRoute(validateNumber), async (req, re
 });
 
 productRouter.get(`/products/trending`, validateRoute(validateNumber, validateFrom), async (req, res) => {
-  const { dbClient, db } = req;
+  const { db } = req;
   try {
     const query: { from?: string; number?: string } = req.query;
     const from = query.from ? new Date(query.from) : subDays(new Date(), 90);
@@ -161,7 +153,5 @@ productRouter.get(`/products/trending`, validateRoute(validateNumber, validateFr
     return res.status(200).send(products);
   } catch (error) {
     return res.status(200).send([]);
-  } finally {
-    dbClient.close();
   }
 });
