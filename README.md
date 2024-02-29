@@ -2,33 +2,30 @@
 
 ## Requirements
 
-- `Node.js` version is at least `v18.15.0`
-- `Docker` and `docker-compose`
+- `Node.js` at least `v18.15.0`
 
-## Run the dev environment in Docker
+## Getting started
 
-1. Create a `.env` file in the `root` of the project based on the `.env.sample` file once
-2. Run `make dev-build` once
-3. Run `make dev-start`
-4. Open [http://localhost:3000](http://localhost:3000)
+1. Create a `.env` file based on the `.env.sample` file
+2. Install dependencies by running: `npm i`
 
-To stop the `dev` environment in Docker run `make dev-down`
+## Run the dev environment
 
-## Build the prod environment in Docker
+1. Run `npm run dev`
+2. Open [http://localhost:3000](http://localhost:3000)
 
-1. Create a `.env` file in the `root` of the project based on the `.env.sample` file once
-2. Run `make prod-build` once
-3. Run `make prod-start`
-4. Open [http://localhost:3000](http://localhost:3000)
+## Build the prod environment
 
-To stop the `prod` environment in Docker run `make prod-down`
+1. Run `npm run build`
+2. Run `npm run start`
+3. Open [http://localhost:3000](http://localhost:3000)
 
 ## Generate data
 
 1. Change the directory to the `./data` directory
 2. Run `npm i` once
 3. Run `npm run generate -- --name dataset-s|m|l --users NUMBER --products NUMBER --orders NUMBER`
-4. Copy the generated data from the `./data/export` directory to the `./server/src/data` directory
+4. Copy the generated data from the `./data/export` directory to the `./apps/server/src/data` directory
 
 ## Reset data
 

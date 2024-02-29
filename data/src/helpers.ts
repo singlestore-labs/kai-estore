@@ -21,7 +21,7 @@ export function getUniqueFieldValues<T extends Array<object>, _V = T[number]>(ob
       const _value = !Array.isArray(value) ? [value] : value;
       return {
         ...innerValues,
-        [key]: getUniqueArrayValues([...(innerValues[key as keyof typeof innerValues] || []), ..._value]),
+        [key]: getUniqueArrayValues([...(innerValues[key as keyof typeof innerValues] || []), ..._value])
       };
     }, values);
   }, {}) as { [K in keyof _V]: _V[K] extends Array<any> ? _V[K] : Array<_V[K]> };
@@ -45,7 +45,7 @@ export function createRandomIndexClosure(length: number, lastIndex?: number): ()
 export function generateDuplicates<T extends Array<any>>(
   objects: T,
   length: number,
-  customizer?: (object: T[number], i: number) => T[number],
+  customizer?: (object: T[number], i: number) => T[number]
 ) {
   const randomIndex = createRandomIndexClosure(objects.length);
   const result = [];
@@ -85,7 +85,7 @@ function unwind<T extends Record<any, any>[], K extends keyof T[number]>(array: 
 export function unwindObjects<T extends Array<Record<any, any>>, K extends Array<keyof T[number]>>(
   objects: T,
   customizer?: (object: T[number]) => T[number],
-  skipKeys?: K,
+  skipKeys?: K
 ) {
   const arrayKeys = Object.entries(objects[0]).reduce((keys, [key, value]) => {
     return Array.isArray(value) ? [...keys, key] : keys;
@@ -112,7 +112,7 @@ export function unwindObjects<T extends Array<Record<any, any>>, K extends Array
 export async function processAsChunks<T extends any[]>(
   array: T,
   onChunk: (chunk: T) => Promise<void>,
-  chunkSize = 100_000,
+  chunkSize = 100_000
 ) {
   const total = array.length;
   for (let i = 0; i < total; i += chunkSize) {
