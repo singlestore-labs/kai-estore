@@ -19,12 +19,12 @@ const outline = defineStyle(() => {
     },
 
     _hover: {
-      borderColor: "s2.indigo.600",
+      borderColor: "s2.purple.800",
       _disabled,
     },
 
     _focus: {
-      borderColor: "s2.indigo.600",
+      borderColor: "s2.purple.800",
       outline: "none",
       boxShadow: "none",
     },

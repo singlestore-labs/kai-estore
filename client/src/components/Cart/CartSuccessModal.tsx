@@ -22,7 +22,7 @@ export function CartSuccessModal({ onClose, ...props }: CartSuccessModalProps) {
         mx="auto"
         maxW="500px"
       >
-        <Icon name="solid.faCheckCircle" color="s2.indigo.600" w="14" />
+        <Icon name="solid.faCheckCircle" color="s2.purple.800" w="14" />
 
         <Typography as="h2" fontSize="2xl" lineHeight="8" fontWeight="semibold" mt="3">
           Your order is complete!

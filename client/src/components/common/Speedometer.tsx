@@ -81,7 +81,7 @@ export function Speedometer({
       w="full"
       h="auto"
       overflow="hidden"
-      color="s2.indigo.600"
+      color="s2.purple.800"
       {...props}
       maxW="full"
       ref={rootRef}

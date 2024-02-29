@@ -53,7 +53,7 @@ export function WelcomeModal({ ...props }: WelcomeModalProps) {
           variant="unstyled"
           size="none"
           display="block"
-          bg={tabIndex === i ? "s2.indigo.600" : "s2.gray.200"}
+          bg={tabIndex === i ? "s2.purple.800" : "s2.gray.200"}
           w="3"
           h="3"
           borderRadius="full"

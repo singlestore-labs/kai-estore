@@ -125,7 +125,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
           <Logo variant="s2.eStore" display="flex" maxW="480px" />
           <Typography as="p" fontSize="xl" mt="5">
             Watch{" "}
-            <Typography as="span" fontWeight="semibold" color="s2.indigo.600" textDecoration="underline">
+            <Typography as="span" fontWeight="semibold" color="s2.purple.800" textDecoration="underline">
               <Link href="https://portal.singlestore.com/">SingleStoreDB</Link>
             </Typography>{" "}
             serve a mix of transactions and aggregates in a retail experience based on a user’s purchases and
@@ -136,7 +136,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
             <Typography
               as="p"
               fontSize="md"
-              color="s2.indigo.600"
+              color="s2.purple.800"
               fontWeight="semibold"
               px="4"
               py="2"
@@ -157,7 +157,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
               variant="link"
               fontWeight="normal"
               fontSize="lg"
-              color="s2.indigo.600"
+              color="s2.purple.800"
               mt="12"
               onClick={modal.onOpen}
             >

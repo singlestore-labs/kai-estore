@@ -24,6 +24,7 @@ export type StatCardProps = ComponentProps<
     })[];
     primaryColor?: ChakraProps["color"];
     secondaryColor?: ChakraProps["color"];
+    titleColor?: ChakraProps["color"];
     variant?: StatCardVariants;
     headerProps?: Omit<BoxProps, "children">;
     headerChildren?: BoxProps["children"];
@@ -55,7 +56,7 @@ const variantsProps = createVariantsProps<StatCardVariants>((props) => ({
       fontSize: "sm",
       fontWeight: "medium",
       lineHeight: "5",
-      color: props.isDisabled ? props.bg : props.secondaryColor,
+      color: props.isDisabled ? props.bg : props.titleColor || props.secondaryColor,
       bg: props.primaryColor,
       borderRadius: "md",
       py: "0.5",
@@ -153,8 +154,9 @@ export function StatCard({
   subtitleProps,
   speedometers,
   color: initialColor = "white",
-  primaryColor: initialPrimaryColor = "s2.indigo.300",
+  primaryColor: initialPrimaryColor = "s2.gray.500",
   secondaryColor = "s2.gray.800",
+  titleColor,
   bg = "s2.gray.900",
   variant = "1",
   headerProps,
@@ -180,6 +182,7 @@ export function StatCard({
     initialPrimaryColor,
     primaryColor,
     secondaryColor,
+    titleColor: titleColor || secondaryColor,
     bg,
     subtitle,
     isLoading,

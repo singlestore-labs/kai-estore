@@ -153,7 +153,7 @@ export function ProductCard({
         fontSize="md"
         lineHeight="6"
         fontWeight="semibold"
-        _hover={{ color: "s2.indigo.600" }}
+        _hover={{ color: "s2.purple.800" }}
       >
         {name}
       </Typography>
@@ -167,7 +167,7 @@ export function ProductCard({
       shallow
       chakra={{
         color: "s2.gray.600",
-        _hover: { color: "s2.indigo.600" },
+        _hover: { color: "s2.purple.800" },
         ...variantProps?.linkCategory,
       }}
     >

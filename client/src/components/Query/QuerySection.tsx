@@ -45,6 +45,7 @@ type State = {
   value?: number;
   displayValue: string;
   color?: string;
+  titleColor?: string;
   unit?: string;
   data?: any;
   isLoading: boolean;
@@ -59,8 +60,8 @@ const defaultState: State = {
 };
 
 const defaultConnectionStates: Record<string, State> = {
-  s2: { ...defaultState, title: "SingleStore", color: "s2.indigo.300" },
-  mongo: { ...defaultState, title: "MongoDB® Atlas", color: "green.300" },
+  s2: { ...defaultState, title: "SingleStore", color: "s2.purple.800", titleColor: "currentColor" },
+  mongo: { ...defaultState, title: "MongoDB® Atlas", color: "s2.gray.500" },
 };
 
 const connectionKeys = Object.keys(defaultConnectionStates);
@@ -203,6 +204,7 @@ export function QuerySection({
               subtitle={statCardSubtitle}
               speedometers={[{ ...pick(state, ["value", "displayValue", "unit"]) }]}
               primaryColor={state.color}
+              titleColor={state.titleColor}
               isDisabled={!state.value}
               isLoading={state.isLoading}
             />
