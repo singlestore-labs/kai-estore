@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Flex } from "@chakra-ui/react";
-import prettyBytes from "pretty-bytes";
 
 import { ApiParams, DbInfo } from "@/types/api";
 import { ComponentProps } from "@/types/common";
@@ -49,7 +48,7 @@ export function ApplicationParameters({
         stopLoading();
       }
     })();
-  }, [startLoading, stopLoading]);
+  }, [connection, startLoading, stopLoading]);
 
   const content = Object.entries(params).map(([label, value]) => {
     let _value = (

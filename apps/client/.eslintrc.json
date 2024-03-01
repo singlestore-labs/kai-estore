@@ -3,12 +3,11 @@
     "next",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:@typescript-eslint/recommended"
   ],
 
   "rules": {
-    "@typescript-eslint/no-explicit-any": "off"
-    // "react-hooks/rules-of-hooks": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "react-hooks/rules-of-hooks": "off"
   }
 }

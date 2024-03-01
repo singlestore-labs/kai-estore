@@ -12,11 +12,10 @@ import "@fontsource/inconsolata/400.css";
 import { theme } from "@/theme";
 import { initializeRecoilState } from "@/state";
 import { ToastContainer } from "@/utils/toast";
-import { StateDataProvider } from "@/state/DataProvider";
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
-export default function App({ Component, pageProps, router }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   const initializeState = useMemo(() => {
     return pageProps.rootState ? initializeRecoilState(pageProps.rootState) : undefined;
   }, [pageProps.rootState]);
@@ -24,7 +23,6 @@ export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <RecoilRoot initializeState={initializeState}>
       <ChakraProvider theme={theme}>
-        <StateDataProvider key={router.pathname} />
         <Component {...pageProps} />
         <ToastContainer />
       </ChakraProvider>

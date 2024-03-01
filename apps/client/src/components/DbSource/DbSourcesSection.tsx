@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import humanNumber from "human-number";
 
 import { RecommProduct, WithDuration } from "@/types/api";

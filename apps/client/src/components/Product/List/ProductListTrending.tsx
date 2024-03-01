@@ -26,7 +26,7 @@ export function ProductListTrending({ ...props }: ProductListTrendingProps) {
         setState((i) => ({ ...i, products: [], isLoading: false }));
       }
     })();
-  }, []);
+  }, [setState]);
 
   useEffect(
     () => () => {

@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Box, Button, Flex, Textarea } from "@chakra-ui/react";
 import pick from "lodash.pick";
 import { AxiosRequestConfig } from "axios";
@@ -138,7 +138,7 @@ export function QuerySection({
     if (runOnMount && canRun && topOneProductItemId) {
       handleRunClick();
     }
-  }, [runOnMount, canRun, topOneProductItemId]);
+  }, [runOnMount, canRun, topOneProductItemId, handleRunClick]);
 
   useEffect(
     () => () => {

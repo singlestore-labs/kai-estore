@@ -1,8 +1,5 @@
 import { selector, useRecoilValue } from "recoil";
 
-import { User } from "@/types/api";
-
-import { api } from "@/api";
 import { createState } from "@/utils/state";
 
 import { userOrdersState } from "./userOrders";

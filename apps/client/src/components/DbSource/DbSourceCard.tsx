@@ -1,4 +1,4 @@
-import { Box, ChakraProps } from "@chakra-ui/react";
+import { ChakraProps } from "@chakra-ui/react";
 
 import { ComponentProps } from "@/types/common";
 import { Defined } from "@/types/helpers";

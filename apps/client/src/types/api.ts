@@ -5,7 +5,7 @@ export type ConnectionConfig = {
   shouldGenerateData?: boolean;
 };
 
-export type ApiParams<T extends object = {}> = T & { connection?: "config" };
+export type ApiParams<T extends object = object> = T & { connection?: "config" };
 
 type Schema<T extends object = object> = T & {
   id: string;

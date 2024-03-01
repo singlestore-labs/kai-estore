@@ -27,10 +27,13 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     setLoaderSate({ title: "", message: "", isOpen: false });
   }, []);
 
-  const handleError = useCallback((error: unknown) => {
-    console.error(error);
-    resetLoaderState();
-  }, []);
+  const handleError = useCallback(
+    (error: unknown) => {
+      console.error(error);
+      resetLoaderState();
+    },
+    [resetLoaderState]
+  );
 
   const createConnection = useCallback(async (values: ConnectionConfig) => {
     setLoaderSate((state) => ({ ...state, title: "Connection", isOpen: true }));
@@ -62,20 +65,23 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     window.location.replace(ROUTES.root);
   }, []);
 
-  const handleFormSubmit = useCallback<Defined<FormProps["onSubmit"]>>(async (values) => {
-    try {
-      await createConnection(values);
+  const handleFormSubmit = useCallback<Defined<FormProps["onSubmit"]>>(
+    async (values) => {
+      try {
+        await createConnection(values);
 
-      if (WITH_DATA_GENERATION) {
-        const isDataValid = await validateData();
-        if (!isDataValid.data) await setData();
+        if (WITH_DATA_GENERATION) {
+          const isDataValid = await validateData();
+          if (!isDataValid.data) await setData();
+        }
+
+        handleDataSuccess();
+      } catch (error) {
+        handleError(error);
       }
-
-      handleDataSuccess();
-    } catch (error) {
-      handleError(error);
-    }
-  }, []);
+    },
+    [createConnection, handleDataSuccess, handleError, setData, validateData]
+  );
 
   useEffect(() => {
     if (!shouldSetData || !WITH_DATA_GENERATION) return;

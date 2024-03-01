@@ -6,6 +6,7 @@ import { Header, HeaderProps } from "@/components/Header/Header";
 import { Footer, FooterProps } from "@/components/Footer";
 
 import { Head, HeadProps } from "./Head";
+import { StateDataProvider } from "@/state/DataProvider";
 
 export type PageProps = ComponentProps<
   BoxProps,
@@ -51,6 +52,7 @@ export function Page({
   return (
     <>
       <Head {...headProps} />
+      <StateDataProvider />
 
       <Box
         display="flex"
