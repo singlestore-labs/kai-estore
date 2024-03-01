@@ -87,7 +87,7 @@ export function QuerySection({
 
   const requestTokenRef = useRef<Record<string, ReturnType<typeof apiRequestToken>>>();
 
-  const runQueryRef = useRef(async (params?: typeof paramsState.values) => {
+  const runQueryRef = useRef(async (topOneProductItemId?: string, params?: typeof paramsState.values) => {
     let timeouts: Record<string, NodeJS.Timeout | undefined> = {};
 
     await Promise.all(
@@ -125,6 +125,21 @@ export function QuerySection({
     afterRun?.();
   });
 
+  const handleParamsChange = useCallback<Defined<QueryParamsProps["onChange"]>>((values, isValid) => {
+    setParamsState({ values, isValid });
+  }, []);
+
+  const handleRunClick = useCallback(
+    () => runQueryRef.current(topOneProductItemId, paramsState.values),
+    [topOneProductItemId, paramsState.values]
+  );
+
+  useEffect(() => {
+    if (runOnMount && canRun && topOneProductItemId) {
+      handleRunClick();
+    }
+  }, [runOnMount, canRun, topOneProductItemId]);
+
   useEffect(
     () => () => {
       connectionKeys.forEach((key) => requestTokenRef.current?.[key].cancel());
@@ -132,17 +147,17 @@ export function QuerySection({
     []
   );
 
-  const handleParamsChange = useCallback<Defined<QueryParamsProps["onChange"]>>((values, isValid) => {
-    setParamsState({ values, isValid });
-  }, []);
-
-  const handleRunClick = () => runQueryRef.current(paramsState.values);
-
   useEffect(() => {
-    if (runOnMount && canRun) {
-      runQueryRef.current();
-    }
-  }, [runOnMount, canRun]);
+    (async () => {
+      try {
+        if (!query.codeBlock) return;
+        const res = await fetch(query.codeBlock);
+        setCodeBlock(await res.text());
+      } catch (error) {
+        setCodeBlock("");
+      }
+    })();
+  }, [query.codeBlock]);
 
   let tooltip;
   if (query.description) {
@@ -168,18 +183,6 @@ export function QuerySection({
       </Typography>
     );
   }
-
-  useEffect(() => {
-    (async () => {
-      try {
-        if (!query.codeBlock) return;
-        const res = await fetch(query.codeBlock);
-        setCodeBlock(await res.text());
-      } catch (error) {
-        setCodeBlock("");
-      }
-    })();
-  }, [query.codeBlock]);
 
   return (
     <Section
@@ -285,7 +288,7 @@ export function QuerySection({
                 position="relative"
                 h="xs"
                 border="2px"
-                borderColor={isLoading ? "transparent" : state.color}
+                borderColor={isLoading ? "transparent" : state.data ? state.color : "s2.gray.800"}
                 borderRadius="lg"
                 transition="0.4s ease"
                 overflow="hidden"

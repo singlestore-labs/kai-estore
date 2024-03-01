@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box, BoxProps, Divider, Flex } from "@chakra-ui/react";
 import { diff } from "deep-object-diff";
 import pick from "lodash.pick";
@@ -16,6 +16,7 @@ import { tagsState } from "@/state/tags";
 import { productsState, urlParamsToProductParams } from "@/state/products";
 import { useTimeoutLoading } from "@/hooks/useTimeoutLoading";
 import { withRequestEvent } from "@/events/request";
+import { apiRequestToken } from "@/api/instance";
 
 export type CatalogProductsProps = ComponentProps<BoxProps>;
 
@@ -39,35 +40,53 @@ export function CatalogProducts({ ...props }: CatalogProductsProps) {
   const prevParamsObject = useRef(paramsObject);
   const pagesNumber = Math.ceil(total / 12);
   const { isLoading, startLoading, stopLoading } = useTimeoutLoading({ delay: 400 });
+  const shouldGetProdcuts = useRef(!products.length);
+  const requestTokenRef = useRef<ReturnType<typeof apiRequestToken>>();
 
   const changedParam = useMemo(() => {
     const param = Object.keys(pick(diff(prevParamsObject.current, paramsObject), catalogParams))[0];
     return param as CatalogParamKeys;
   }, [paramsObject]);
 
-  const fetchProductsDebounced = useDebounce(async () => {
-    try {
-      startLoading();
+  const fetchProductsDebounced = useDebounce(
+    async () => {
+      try {
+        startLoading();
 
-      const res = await withRequestEvent(
-        () => api.product.filter(urlParamsToProductParams(paramsObject, categories, tags)),
-        "Filter products"
-      );
+        requestTokenRef.current = apiRequestToken();
 
-      if (res?.data[0].total) setProducts(res.data[0]);
-    } catch (error) {
-      setProducts({ products: [], total: 0 });
-    } finally {
-      stopLoading();
-    }
-  }, getDelay(changedParam));
+        const res = await withRequestEvent(
+          () =>
+            api.product.filter(urlParamsToProductParams(paramsObject, categories, tags), {
+              cancelToken: requestTokenRef.current?.token
+            }),
+          "Filter products"
+        );
+
+        if (res?.data[0].total) setProducts(res.data[0]);
+      } catch (error) {
+        setProducts({ products: [], total: 0 });
+      } finally {
+        stopLoading();
+      }
+    },
+    shouldGetProdcuts.current ? 0 : getDelay(changedParam)
+  );
 
   useEffect(() => {
-    if (changedParam) {
+    if (changedParam || shouldGetProdcuts.current) {
       fetchProductsDebounced();
       prevParamsObject.current = paramsObject;
+      shouldGetProdcuts.current = false;
     }
   }, [changedParam, paramsObject, fetchProductsDebounced]);
+
+  useEffect(
+    () => () => {
+      requestTokenRef.current?.cancel();
+    },
+    []
+  );
 
   return (
     <Box

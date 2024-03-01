@@ -67,11 +67,11 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
         [categoriesState.name, () => categoriesState.getValue()],
         [productPricesState.name, () => productPricesState.getValue()],
         [productRatingsState.name, () => productRatingsState.getValue()],
-        [tagsState.name, () => tagsState.getValue()],
-        [trendingProductsState.name, () => trendingProductsState.getValue({ number: 5 })],
-        [topOneProductState.name, () => topOneProductState.getValue()],
-        [userOrdersState.name, () => userOrdersState.getValue()],
-        [userRatingsState.name, () => userRatingsState.getValue()]
+        [tagsState.name, () => tagsState.getValue()]
+        // [trendingProductsState.name, () => trendingProductsState.getValue({ number: 5 })],
+        // [topOneProductState.name, () => topOneProductState.getValue()],
+        // [userOrdersState.name, () => userOrdersState.getValue()],
+        // [userRatingsState.name, () => userRatingsState.getValue()]
       ];
 
       await Promise.all(
@@ -80,9 +80,9 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
         })
       );
 
-      props.rootState.productsState = await productsState.getValue([
-        urlParamsToProductParams(context.query, props.rootState.categoriesState, props.rootState.tagsState)
-      ]);
+      // props.rootState.productsState = await productsState.getValue([
+      //   urlParamsToProductParams(context.query, props.rootState.categoriesState, props.rootState.tagsState)
+      // ]);
 
       return { props };
     } catch (error) {

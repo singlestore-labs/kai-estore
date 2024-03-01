@@ -28,9 +28,11 @@ function filter(
     rating?: string[];
     page?: string;
     sort?: SortParam;
-  }>
+  }>,
+  config?: AxiosRequestConfig
 ) {
   return apiInstance.get<WithDuration<{ products: Product[]; total: number }>>("/products/filter", {
+    ...config,
     params
   });
 }
@@ -47,8 +49,8 @@ function top(params?: ApiParams<{ number?: string }>, config?: AxiosRequestConfi
   return apiInstance.get<WithDuration<TopProduct[]>>("/products/top", { ...config, params });
 }
 
-function topOne(params?: ApiParams) {
-  return apiInstance.get<WithDuration<TopProduct[]>>("/products/top?number=1", { params });
+function topOne(params?: ApiParams, config?: AxiosRequestConfig) {
+  return apiInstance.get<WithDuration<TopProduct[]>>("/products/top?number=1", { ...config, params });
 }
 
 function trending(params?: ApiParams<{ from?: string | Date; number?: string }>, config?: AxiosRequestConfig) {
