@@ -1,9 +1,5 @@
 import { ChakraProps } from "@chakra-ui/react";
 import mergeWith from "lodash.mergewith";
-import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
-import humanizeDuration from "humanize-duration";
-
-import { AnyFunction } from "@/types/helpers";
 
 type VariantStyle<T extends string = string> = Record<T, ChakraProps>;
 
@@ -54,25 +50,4 @@ export function isInViewport<T extends Element | null>(element?: T) {
 
 export async function sleep(millis: number) {
   return new Promise((resolve) => setTimeout(resolve, millis));
-}
-
-export const durationHumanizer = humanizeDuration.humanizer({
-  spacer: "",
-  language: "short",
-  languages: {
-    short: {
-      m: () => "m",
-      s: (count) => (count?.toString()[0] === "0" ? "ms" : "s"),
-      ms: () => "ms"
-    }
-  }
-});
-
-export async function withDuration<T extends AnyFunction>(callback: T) {
-  const startTime = performance.now();
-  const result = await callback();
-  const diff = differenceInMilliseconds(startTime, performance.now());
-  let duration = durationHumanizer(diff);
-  duration = duration.match(/^0./) ? duration.split(/^0./)[1] : duration;
-  return [result, duration] as [ReturnType<T>, string];
 }
