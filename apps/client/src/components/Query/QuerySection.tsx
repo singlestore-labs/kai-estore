@@ -42,19 +42,24 @@ export type QuerySectionProps = ComponentProps<
 
 type State = {
   title: string;
-  value?: number;
+  value: number;
   displayValue: string;
   color?: string;
   titleColor?: string;
+  ms: number;
+  x: number;
   unit?: string;
   data?: any;
+  isFaster?: boolean;
   isLoading: boolean;
 };
 
 const defaultState: State = {
   title: "Connection",
-  value: undefined,
-  displayValue: "0",
+  value: 0,
+  displayValue: "0ms",
+  ms: 0,
+  x: 0,
   data: undefined,
   isLoading: false
 };
@@ -110,9 +115,9 @@ export function QuerySection({
           ...state,
           [key]: {
             ...state[key],
-            value: 100 / (2000 / ms),
-            displayValue: `${value}${unit}`,
+            ms,
             data,
+            displayValue: `${value}${unit}`,
             isLoading: false
           }
         }));
@@ -158,6 +163,30 @@ export function QuerySection({
       }
     })();
   }, [query.codeBlock]);
+
+  useEffect(() => {
+    if (isLoading) return;
+    setState((state) => {
+      let maxMs = -Infinity;
+
+      Object.values(state).forEach((item) => {
+        if (item.ms > maxMs) {
+          maxMs = item.ms;
+        }
+      });
+
+      const [s2, mongo] = [state.s2.ms, state.mongo.ms].map((i) => {
+        const ratio = maxMs / i;
+        return {
+          value: 100 / (maxMs / i),
+          x: ratio < 2 ? 0 : Math.round(ratio),
+          isFaster: i < maxMs
+        };
+      });
+
+      return { ...state, s2: { ...state.s2, ...s2 }, mongo: { ...state.mongo, ...mongo } };
+    });
+  }, [isLoading]);
 
   let tooltip;
   if (query.description) {
@@ -224,10 +253,15 @@ export function QuerySection({
               key={key}
               title={state.title}
               subtitle={statCardSubtitle}
-              speedometers={[{ ...pick(state, ["value", "displayValue", "unit"]) }]}
+              speedometers={[
+                {
+                  ...pick(state, ["value", "displayValue", "unit"]),
+                  title: state.isFaster && state.x ? `x${state.x}` : undefined
+                }
+              ]}
               primaryColor={state.color}
               titleColor={state.titleColor}
-              isDisabled={!state.value}
+              isDisabled={state.displayValue === "0ms"}
               isLoading={state.isLoading}
             />
           ))}
