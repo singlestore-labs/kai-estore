@@ -57,7 +57,7 @@ export const queriesList: Query[] = [
 
       validationSchema: Yup.object({ number: Yup.number() })
     },
-    request: (params, config) => api.product.top(params, config),
+    request: (...args: Parameters<typeof api.product.top>) => api.product.top(...args),
     codeBlock: "getTopProductsQuery"
   },
 
@@ -85,14 +85,14 @@ export const queriesList: Query[] = [
         number: Yup.number()
       })
     },
-    request: (params, config) => api.product.trending(params, config),
+    request: (...args: Parameters<typeof api.product.trending>) => api.product.trending(...args),
     codeBlock: "getTopProductsQuery"
   },
 
   {
     title: "3. Get top product sales history",
     params: {},
-    request: (config) => api.product.topOneSales(config),
+    request: (...args: Parameters<typeof api.product.topOneSales>) => api.product.topOneSales(...args),
     codeBlock: "getTopProductSalesQuery"
   }
 ];
