@@ -76,6 +76,7 @@ export function QuerySection({
   const [state, setState] = useState<Record<string, State>>(defaultConnectionStates);
   const [paramsState, setParamsState] = useState({ values: {}, isValid: false });
   const [codeBlock, setCodeBlock] = useState("");
+  const [_runOnMount, setRunOnMount] = useState(runOnMount);
   const stateEntires = Object.entries(state);
 
   const formId = useId();
@@ -128,13 +129,16 @@ export function QuerySection({
     setParamsState({ values, isValid });
   }, []);
 
-  const handleRunClick = useCallback(() => runQueryRef.current(paramsState.values), [paramsState.values]);
+  const handleRunClick = useCallback(() => {
+    runQueryRef.current(paramsState.values);
+    setRunOnMount(false);
+  }, [paramsState.values]);
 
   useEffect(() => {
-    if (runOnMount && canRun) {
+    if (_runOnMount && canRun) {
       handleRunClick();
     }
-  }, [runOnMount, canRun, handleRunClick]);
+  }, [_runOnMount, canRun, handleRunClick]);
 
   useEffect(
     () => () => {
