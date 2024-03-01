@@ -3,19 +3,15 @@ import path from "path";
 import prettier from "prettier";
 
 import { getProductsQuery } from "./src/queries/getProducts";
-import { getProductSalesQuery } from "./src/queries/getProductSales";
-import { getRelatedProductsQuery } from "./src/queries/getRelatedProducts";
 import { getTopProductsQuery } from "./src/queries/getTopProducts";
-import { getUserRecommProductsQuery } from "./src/queries/getUserRecommProducts";
+import { getTopProductSalesQuery } from "./src/queries/getTopProductSales";
 import { fileURLToPath } from "url";
 
 (async () => {
   const queries = {
     getProductsQuery,
-    getProductSalesQuery,
-    getRelatedProductsQuery,
     getTopProductsQuery,
-    getUserRecommProductsQuery
+    getTopProductSalesQuery
   };
 
   for (const key in queries) {
@@ -24,7 +20,7 @@ import { fileURLToPath } from "url";
 
     const outputPath = path.relative(
       path.dirname(fileURLToPath(import.meta.url)),
-      `../client/public/data/${key}.txt`
+      `./src/data/code-blocks/${key}.txt`
     );
 
     await fs.promises.writeFile(outputPath, fnString);

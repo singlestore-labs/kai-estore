@@ -9,6 +9,7 @@ import { getProductSalesQuery } from "@/queries/getProductSales";
 import { getRelatedProductsQuery } from "@/queries/getRelatedProducts";
 import { withDuration } from "@/utils/helpers";
 import { getProductsQuery } from "@/queries/getProducts";
+import { getTopProductSalesQuery } from "@/queries/getTopProductSales";
 
 export const productRouter = express.Router();
 
@@ -138,6 +139,16 @@ productRouter.get(`/products/top`, validateRoute(validateNumber), async (req, re
     const products = await withDuration(() => getTopProductsQuery(db, { number: query.number }));
 
     return res.status(200).send(products);
+  } catch (error) {
+    return res.status(200).send([]);
+  }
+});
+
+productRouter.get(`/products/top/sales`, async (req, res) => {
+  const { db } = req;
+  try {
+    const sales = await withDuration(() => getTopProductSalesQuery(db));
+    return res.status(200).send(sales);
   } catch (error) {
     return res.status(200).send([]);
   }

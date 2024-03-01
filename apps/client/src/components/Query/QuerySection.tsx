@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Box, Button, Flex, Textarea } from "@chakra-ui/react";
 import pick from "lodash.pick";
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 import { ComponentProps } from "@/types/common";
 import { Defined } from "@/types/helpers";
@@ -12,10 +12,10 @@ import { Typography } from "@/components/common/Typography";
 import { StatCard } from "@/components/common/StatCard";
 
 import { apiRequestToken } from "@/api/instance";
-import { useTopOneProductStateItemdId } from "@/state/topOneProduct";
 
 import { QueryParams, QueryParamsProps } from "./QueryParams";
 import { Loader } from "@/components/common/Loader";
+import { SERVER_URL } from "@/constants/env";
 
 type QueryRequest = (params: Record<string, any>, config?: AxiosRequestConfig) => any;
 
@@ -83,11 +83,10 @@ export function QuerySection({
   const hasParams = !!Object.keys(query.params?.fields ?? {}).length;
   const isLoading = stateEntires.some(([, { isLoading }]) => isLoading);
   const isRunButtonDisabled = isLoading || (hasParams && !paramsState.isValid);
-  const topOneProductItemId = useTopOneProductStateItemdId();
 
   const requestTokenRef = useRef<Record<string, ReturnType<typeof apiRequestToken>>>();
 
-  const runQueryRef = useRef(async (topOneProductItemId?: string, params?: typeof paramsState.values) => {
+  const runQueryRef = useRef(async (params?: typeof paramsState.values) => {
     let timeouts: Record<string, NodeJS.Timeout | undefined> = {};
 
     await Promise.all(
@@ -101,7 +100,7 @@ export function QuerySection({
 
         const [data, ms, value, unit] = (
           await query.request(
-            { id: topOneProductItemId, ...params, connection: key === "s2" ? "config" : undefined },
+            { ...params, connection: key === "s2" ? "config" : undefined },
             { cancelToken: requestTokenRef.current?.[key].token }
           )
         ).data;
@@ -129,16 +128,13 @@ export function QuerySection({
     setParamsState({ values, isValid });
   }, []);
 
-  const handleRunClick = useCallback(
-    () => runQueryRef.current(topOneProductItemId, paramsState.values),
-    [topOneProductItemId, paramsState.values]
-  );
+  const handleRunClick = useCallback(() => runQueryRef.current(paramsState.values), [paramsState.values]);
 
   useEffect(() => {
-    if (runOnMount && canRun && topOneProductItemId) {
+    if (runOnMount && canRun) {
       handleRunClick();
     }
-  }, [runOnMount, canRun, topOneProductItemId, handleRunClick]);
+  }, [runOnMount, canRun, handleRunClick]);
 
   useEffect(
     () => () => {
@@ -151,8 +147,8 @@ export function QuerySection({
     (async () => {
       try {
         if (!query.codeBlock) return;
-        const res = await fetch(query.codeBlock);
-        setCodeBlock(await res.text());
+        const res = await axios.get(`${SERVER_URL}/code-blocks/${query.codeBlock}.txt`);
+        setCodeBlock(res.data);
       } catch (error) {
         setCodeBlock("");
       }
@@ -193,7 +189,7 @@ export function QuerySection({
       <Flex
         w="full"
         alignItems="flex-start"
-        justifyContent="flex-end"
+        justifyContent="center"
         flexWrap="wrap"
         gap="12"
         rowGap="6"
@@ -236,8 +232,8 @@ export function QuerySection({
 
       <Box
         mt="6"
-        display="flex"
-        alignItems="stretch"
+        display="grid"
+        gridTemplateColumns="repeat(auto-fit, minmax(16rem, 1fr))"
         gap="6"
       >
         {stateEntires.map(([key, state]) => {
@@ -272,10 +268,7 @@ export function QuerySection({
           }
 
           return (
-            <Box
-              key={key}
-              flex="1 0 calc(50% - 1.5rem)"
-            >
+            <Box key={key}>
               <Typography
                 as="h4"
                 fontSize="sm"

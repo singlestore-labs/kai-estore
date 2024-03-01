@@ -24,6 +24,7 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 app.use("/images", express.static(path.join(getDirname(import.meta.url), "data/images")));
+app.use(express.static(path.join(getDirname(import.meta.url), "data")));
 app.use("/api", apiRouter);
 
 initSocket(

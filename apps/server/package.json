@@ -5,8 +5,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "npm i && npm run code-blocks:generate",
     "start": "tsx src/index.ts",
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "code-blocks:generate": "tsx generateQueryCodeBlocks.ts"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",

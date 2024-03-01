@@ -58,7 +58,7 @@ export const queriesList: Query[] = [
       validationSchema: Yup.object({ number: Yup.number() })
     },
     request: (params, config) => api.product.top(params, config),
-    codeBlock: "/data/getTopProductsQuery.txt"
+    codeBlock: "getTopProductsQuery"
   },
 
   {
@@ -86,24 +86,13 @@ export const queriesList: Query[] = [
       })
     },
     request: (params, config) => api.product.trending(params, config),
-    codeBlock: "/data/getTopProductsQuery.txt"
+    codeBlock: "getTopProductsQuery"
   },
 
   {
-    title: "3. Get product sales history",
-    params: {
-      fields: {
-        from: {
-          element: "input",
-          label: "From",
-          value: dateFns.format(dateFns.subDays(new Date(), 90), "yyyy/MM/dd"),
-          placeholder: "Start date yyyy/mm/dd"
-        }
-      },
-
-      validationSchema: Yup.object({ from: Yup.date().required() })
-    },
-    request: ({ id, ...params }, config) => api.product.sales(id, params, config),
-    codeBlock: "/data/getProductSalesQuery.txt"
+    title: "3. Get top product sales history",
+    params: {},
+    request: (config) => api.product.topOneSales(config),
+    codeBlock: "getTopProductSalesQuery"
   }
 ];

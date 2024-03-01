@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   experimental: { newNextLinkBehavior: false },
 
   images: {
@@ -31,5 +31,3 @@ const nextConfig = {
     return config;
   }
 };
-
-module.exports = nextConfig;

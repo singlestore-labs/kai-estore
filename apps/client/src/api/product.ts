@@ -53,6 +53,10 @@ function topOne(params?: ApiParams, config?: AxiosRequestConfig) {
   return apiInstance.get<WithDuration<TopProduct[]>>("/products/top?number=1", { ...config, params });
 }
 
+function topOneSales(config?: AxiosRequestConfig) {
+  return apiInstance.get<WithDuration<SalesProduct[]>>(`/products/top/sales`, config);
+}
+
 function trending(params?: ApiParams<{ from?: string | Date; number?: string }>, config?: AxiosRequestConfig) {
   return apiInstance.get<WithDuration<TrendingProduct[]>>("/products/trending", {
     ...config,
@@ -85,6 +89,7 @@ export const product = {
   ratings,
   top,
   topOne,
+  topOneSales,
   trending,
   sales,
   relatedProducts
