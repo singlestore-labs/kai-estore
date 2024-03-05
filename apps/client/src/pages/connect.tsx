@@ -17,7 +17,7 @@ import { Typography } from "@/components/common/Typography";
 import { ConnectModal } from "@/components/Connect/ConnectModal";
 import { ConnectLoader } from "@/components/Connect/ConnectLoader";
 import { Link } from "@/components/common/Link";
-import { ConfigurationForm } from "@/components/ConfigurationForm";
+import { ConfigurationForm } from "@/components/Configuration/ConfigurationForm";
 
 export default function Connect({ shouldSetData = false }: { shouldSetData?: boolean }) {
   const [loaderSate, setLoaderSate] = useState({ title: "", message: "", isOpen: shouldSetData });

@@ -5,8 +5,8 @@ import * as Yup from "yup";
 import { ComponentProps } from "@/types/common";
 import { ConnectionConfig } from "@/types/api";
 import { WITH_DATA_GENERATION } from "@/constants/env";
-import { Form, FormProps } from "./common/Form";
-import { Field, FieldProps } from "./common/Field";
+import { Form, FormProps } from "../common/Form";
+import { Field, FieldProps } from "../common/Field";
 
 export type ConfigurationFormProps = ComponentProps<
   Omit<FormProps, "children" | "initialValues">,

@@ -16,6 +16,7 @@ export type ApplicationParametersProps = ComponentProps<
   {
     title?: ReactNode;
     connection?: ApiParams["connection"];
+    isPlaceholder?: boolean;
   }
 >;
 
@@ -29,14 +30,18 @@ function createParams(info?: DbInfo) {
 }
 
 export function ApplicationParameters({
+  children,
   title = "Application Parameters",
   connection,
+  isPlaceholder = false,
   ...props
 }: ApplicationParametersProps) {
   const [params, setParams] = useState<ReturnType<typeof createParams>>(() => createParams());
   const { isLoading, startLoading, stopLoading } = useTimeoutLoading({ delay: 400 });
 
   useEffect(() => {
+    if (isPlaceholder) return;
+
     (async () => {
       try {
         startLoading();
@@ -48,7 +53,7 @@ export function ApplicationParameters({
         stopLoading();
       }
     })();
-  }, [connection, startLoading, stopLoading]);
+  }, [connection, startLoading, stopLoading, isPlaceholder]);
 
   const content = Object.entries(params).map(([label, value]) => {
     let _value = (
@@ -69,7 +74,7 @@ export function ApplicationParameters({
       </Typography>
     );
 
-    if (!value || isLoading) {
+    if (!value || isLoading || isPlaceholder) {
       _value = (
         <Skeleton
           w="20"
@@ -111,6 +116,7 @@ export function ApplicationParameters({
     <Section
       variant="3.solid"
       title={title}
+      extraChildren={children}
       containerProps={{ display: "flex", flexDirection: "column", h: "full" }}
       bodyProps={{
         flex: "1",

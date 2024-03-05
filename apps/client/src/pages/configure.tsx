@@ -10,7 +10,7 @@ import { Page } from "@/components/common/Page";
 import { Section } from "@/components/common/Section";
 import { Typography } from "@/components/common/Typography";
 import { FormProps } from "@/components/common/Form";
-import { ConfigurationForm } from "@/components/ConfigurationForm";
+import { ConfigurationForm } from "@/components/Configuration/ConfigurationForm";
 import { ConnectLoader } from "@/components/Connect/ConnectLoader";
 
 const formId = "configuration";

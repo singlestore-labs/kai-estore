@@ -16,6 +16,7 @@ import { apiRequestToken } from "@/api/instance";
 import { QueryParams, QueryParamsProps } from "./QueryParams";
 import { Loader } from "@/components/common/Loader";
 import { SERVER_URL } from "@/constants/env";
+import { connectionState } from "@/state/connection";
 
 type QueryRequest = (params: Record<string, any>, config?: AxiosRequestConfig) => any;
 
@@ -82,7 +83,11 @@ export function QuerySection({
   const [paramsState, setParamsState] = useState({ values: {}, isValid: false });
   const [codeBlock, setCodeBlock] = useState("");
   const [_runOnMount, setRunOnMount] = useState(runOnMount);
-  const stateEntires = Object.entries(state);
+  const connestionStateValue = connectionState.useValue();
+  const stateEntires = Object.entries(state).filter(([key]) => {
+    if (key === "s2" && !connestionStateValue.isExist) return false;
+    return true;
+  });
   const formId = useId();
   const statCardSubtitle = "Query Time";
   const hasParams = !!Object.keys(query.params?.fields ?? {}).length;
@@ -90,11 +95,12 @@ export function QuerySection({
   const isRunButtonDisabled = isLoading || (hasParams && !paramsState.isValid);
   const requestTokenRef = useRef<Record<string, ReturnType<typeof apiRequestToken>>>();
 
-  const runQueryRef = useRef(async (params?: typeof paramsState.values) => {
+  const runQueryRef = useRef(async (isConnectionExist?: boolean, params?: typeof paramsState.values) => {
     let timeouts: Record<string, NodeJS.Timeout | undefined> = {};
 
     await Promise.all(
       connectionKeys.map(async (key) => {
+        if (key === "s2" && !isConnectionExist) return;
         timeouts[key] = setTimeout(
           () => setState((state) => ({ ...state, [key]: { ...state[key], isLoading: true } })),
           800
@@ -133,9 +139,9 @@ export function QuerySection({
   }, []);
 
   const handleRunClick = useCallback(() => {
-    runQueryRef.current(paramsState.values);
+    runQueryRef.current(connestionStateValue.isExist, paramsState.values);
     setRunOnMount(false);
-  }, [paramsState.values]);
+  }, [connestionStateValue.isExist, paramsState.values]);
 
   useEffect(() => {
     if (_runOnMount && canRun) {
@@ -145,7 +151,7 @@ export function QuerySection({
 
   useEffect(
     () => () => {
-      connectionKeys.forEach((key) => requestTokenRef.current?.[key].cancel());
+      connectionKeys.forEach((key) => requestTokenRef.current?.[key]?.cancel());
     },
     []
   );
@@ -245,7 +251,7 @@ export function QuerySection({
           gap="6"
           flexWrap="wrap"
         >
-          {Object.entries(state).map(([key, state]) => (
+          {stateEntires.map(([key, state]) => (
             <StatCard
               key={key}
               title={state.title}
