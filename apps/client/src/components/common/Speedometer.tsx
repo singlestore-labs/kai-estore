@@ -49,6 +49,7 @@ export function Speedometer({
   });
 
   let arcDashOffset = arcDashArray - (arcDashArray / 100) * (arcLimit / 100) * value;
+  if (isNaN(arcDashOffset)) arcDashOffset = 0;
 
   if (arcDashOffset > arcDashArray) {
     arcDashOffset = arcDashArray;
