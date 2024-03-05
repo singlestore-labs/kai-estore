@@ -9,7 +9,7 @@ export const userRouter = express.Router();
 
 userRouter.post("/user", async (req, res, next) => {
   try {
-    const { dbClient, db, connectionConfig } = req;
+    const { db, connectionConfig } = req;
 
     if (!connectionConfig) {
       throw new Error("Connection config is undefined");

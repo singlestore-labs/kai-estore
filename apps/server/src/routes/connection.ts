@@ -16,9 +16,9 @@ const validationSchema = IS_SINGLE_DB
   ? undefined
   : zod.object({
       body: zod.object({
-        mongoURI: zod.string({ required_error: "MongoURI is required" }).nonempty(),
-        dbName: zod.string({ required_error: "Database name is required" }).nonempty(),
-        dataSize: zod.string({ required_error: "Dataset size is required" }).nonempty()
+        mongoURI: zod.string({ required_error: "MongoURI is required" }).optional(),
+        dbName: zod.string({ required_error: "Database name is required" }).optional(),
+        dataSize: zod.string({ required_error: "Dataset size is required" }).optional()
       })
     });
 
@@ -36,15 +36,12 @@ connectionRouter.post("/connection", validateRoute(validationSchema), async (req
     }
 
     if (!config.shouldGenerateData) {
-      const { client } = await createDBConnection(config);
-      const db = client.db(config.dbName);
+      const { db } = await createDBConnection(config);
       const meta = await db.collection("meta").findOne();
 
       if (meta) {
         config.dataSize = meta.dataSize ?? config.dataSize;
       }
-
-      client.close();
     }
 
     setResponseConnectionConfigHeader(res, config);

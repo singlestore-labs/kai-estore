@@ -29,8 +29,18 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
 
       const props = { rootState: {} as RootStateValues };
 
+      if (!WITH_DATA_GENERATION) {
+        const connection = await api.connection.create({ mongoURI: "", dbName: "", dataSize: "" });
+        apiInstance.defaults.headers["x-connection-config"] = connection.headers["x-connection-config"];
+
+        const user = await api.user.create();
+        const config = user.headers["x-connection-config"];
+        apiInstance.defaults.headers["x-connection-config"] = config;
+        res.setHeader("Set-Cookie", `${COOKIE_KEYS.connectionConfig}=${config}; path=/`);
+      }
+
       const hasConnectionConfig = COOKIE_KEYS.connectionConfig in req.cookies;
-      let shouldRedirectToConnect = !hasConnectionConfig;
+      let shouldRedirectToConnect = WITH_DATA_GENERATION ? !hasConnectionConfig : false;
 
       if (hasConnectionConfig) {
         apiInstance.defaults.headers["x-connection-config"] = req.cookies.connectionConfig as string;

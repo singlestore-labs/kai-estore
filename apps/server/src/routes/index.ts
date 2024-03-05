@@ -1,5 +1,6 @@
 import express from "express";
 
+import { isConnectionConfigRequest } from "@/middlewares/isConnectionConfigRequest";
 import { connectionConfig } from "@/middlewares/connectionConfig";
 import { dbConnection } from "@/middlewares/dbConnection";
 
@@ -15,6 +16,7 @@ import { orderRouter } from "./order";
 import { configRouter } from "@/routes/config";
 
 const withConnectionRouter = express.Router();
+withConnectionRouter.use(isConnectionConfigRequest);
 withConnectionRouter.use(connectionConfig);
 withConnectionRouter.use(dbConnection);
 
