@@ -1,4 +1,4 @@
-import { ReactNode, forwardRef } from "react";
+import { ReactNode, forwardRef, useMemo } from "react";
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
 import { useRouter } from "next/router";
 import { Link as ChakraLink, LinkProps as ChakraLinkProps } from "@chakra-ui/react";
@@ -12,7 +12,7 @@ import { BUTTON_VARIANT_NAMES } from "@/constants/theme";
 export type LinkProps = ComponentProps<
   NextLinkProps,
   {
-    children?: ReactNode;
+    children?: ((props: { isActive?: boolean }) => ReactNode) | ReactNode;
     disabled?: boolean;
     chakra?: Override<ChakraLinkProps, { variant?: keyof typeof BUTTON_VARIANT_NAMES }>;
   }
@@ -35,13 +35,17 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
       };
     }
 
+    const _children = useMemo(() => {
+      return typeof children === "function" ? children({ isActive }) : children;
+    }, [children, isActive]);
+
     const link = (
       <ChakraLink
         {...chakra}
         {...propsExternal}
         className={cn(chakra.className, { isActive, isDisabled: disabled })}
       >
-        {children}
+        {_children}
       </ChakraLink>
     );
 
