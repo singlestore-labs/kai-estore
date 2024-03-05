@@ -83,13 +83,11 @@ export function QuerySection({
   const [codeBlock, setCodeBlock] = useState("");
   const [_runOnMount, setRunOnMount] = useState(runOnMount);
   const stateEntires = Object.entries(state);
-
   const formId = useId();
   const statCardSubtitle = "Query Time";
   const hasParams = !!Object.keys(query.params?.fields ?? {}).length;
   const isLoading = stateEntires.some(([, { isLoading }]) => isLoading);
   const isRunButtonDisabled = isLoading || (hasParams && !paramsState.isValid);
-
   const requestTokenRef = useRef<Record<string, ReturnType<typeof apiRequestToken>>>();
 
   const runQueryRef = useRef(async (params?: typeof paramsState.values) => {

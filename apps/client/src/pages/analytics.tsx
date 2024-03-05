@@ -6,8 +6,11 @@ import { QueryListSection } from "@/components/Query/QueryListSection";
 import { ApplicationParameters } from "@/components/ApplicationParameters";
 
 import { getDefaultServerSideProps } from "@/utils/next";
+import { connectionState } from "@/state/connection";
 
 export default function Analytics() {
+  const _connectionState = connectionState.useValue();
+
   return (
     <Page mainProps={{ color: "white", bg: "s2.gray.900" }}>
       <Section
@@ -22,11 +25,13 @@ export default function Analytics() {
           rowGap="6"
           flexWrap="wrap"
         >
-          <ApplicationParameters
-            title="SingleStore Parameters"
-            flex="1 0 24rem"
-            connection="config"
-          />
+          {_connectionState.isExist && (
+            <ApplicationParameters
+              title="SingleStore Parameters"
+              flex="1 0 24rem"
+              connection="config"
+            />
+          )}
           <ApplicationParameters
             title="MongoDB® Atlas Parameters"
             flex="1 0 24rem"
@@ -34,7 +39,7 @@ export default function Analytics() {
         </Flex>
       </Section>
 
-      <QueryListSection mt="12" />
+      {/* <QueryListSection mt="12" /> */}
     </Page>
   );
 }

@@ -10,6 +10,7 @@ import { tagsState } from "@/state/tags";
 import { apiInstance } from "@/api/instance";
 import { api } from "@/api";
 import { WITH_DATA_GENERATION } from "@/constants/env";
+import { connectionState } from "@/state/connection";
 
 export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = {}) => {
   return (async (context) => {
@@ -28,16 +29,6 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
       if (context.req.url?.startsWith("/_next")) return { props: {} };
 
       const props = { rootState: {} as RootStateValues };
-
-      if (!WITH_DATA_GENERATION) {
-        const connection = await api.connection.create({ mongoURI: "", dbName: "", dataSize: "" });
-        apiInstance.defaults.headers["x-connection-config"] = connection.headers["x-connection-config"];
-
-        const user = await api.user.create();
-        const config = user.headers["x-connection-config"];
-        apiInstance.defaults.headers["x-connection-config"] = config;
-        res.setHeader("Set-Cookie", `${COOKIE_KEYS.connectionConfig}=${config}; path=/`);
-      }
 
       const hasConnectionConfig = COOKIE_KEYS.connectionConfig in req.cookies;
       let shouldRedirectToConnect = WITH_DATA_GENERATION ? !hasConnectionConfig : false;
@@ -72,7 +63,8 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
         [categoriesState.name, () => categoriesState.getValue()],
         [productPricesState.name, () => productPricesState.getValue()],
         [productRatingsState.name, () => productRatingsState.getValue()],
-        [tagsState.name, () => tagsState.getValue()]
+        [tagsState.name, () => tagsState.getValue()],
+        [connectionState.name, () => connectionState.getValue({ isExist: !!req.cookies.connectionConfig })]
       ];
 
       await Promise.all(

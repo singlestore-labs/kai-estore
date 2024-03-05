@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { ConnectionConfig } from "@/types/connection";
 import { decrypt, encrypt } from "./crypto";
+import { DatasetSizes } from "@/types/data";
 
 export function setResponseConnectionConfigHeader(res: Response, config: ConnectionConfig) {
   res.setHeader("Access-Control-Expose-Headers", "x-connection-config");
@@ -9,6 +10,10 @@ export function setResponseConnectionConfigHeader(res: Response, config: Connect
 }
 
 export function parseConnectionConfigHeader(req: Request): ConnectionConfig {
+  if (!req.isConnectionConfigRequest) {
+    return { mongoURI: "", dbName: "", userId: "", dataSize: "" as DatasetSizes };
+  }
+
   const connectionConfig = req.headers["x-connection-config"] as string | undefined;
 
   if (!connectionConfig) {
