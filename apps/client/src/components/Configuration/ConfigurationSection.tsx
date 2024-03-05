@@ -2,9 +2,11 @@ import { ComponentProps } from "@/types/common";
 
 import { connectionState } from "@/state/connection";
 
-import { Section, SectionProps } from "../common/Section";
+import { SectionProps } from "../common/Section";
 import { ApplicationParameters } from "@/components/ApplicationParameters";
-import { Box, Button, keyframes } from "@chakra-ui/react";
+import { Box, Button, keyframes, useDisclosure } from "@chakra-ui/react";
+import { Typography } from "@/components/common/Typography";
+import { ConfigurationModal } from "@/components/Configuration/ConfigurationModal";
 
 export type ConfigurationSectionProps = ComponentProps<SectionProps>;
 
@@ -24,10 +26,12 @@ const pulseAnimation = keyframes({
 
 export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
   const [_connectionState, setConnectionState] = connectionState.useState();
+  const modal = useDisclosure();
 
   const handleUnlockClick = () => {
     console.log("Unlock the power");
-    setConnectionState((state) => ({ ...state, isExist: !state.isExist }));
+    modal.onOpen();
+    // setConnectionState((state) => ({ ...state, isExist: !state.isExist }));
   };
 
   return (
@@ -38,37 +42,48 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
       position="relative"
       isPlaceholder={!_connectionState.isExist}
     >
-      <Box
-        position="absolute"
-        top={0}
-        left={0}
-        w="100%"
-        h="100%"
-        bg="rgba(0, 0, 0, 0.15);"
-        backdropFilter="auto"
-        backdropBlur="8px"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Button
-          type="button"
-          onClick={handleUnlockClick}
-          variant="solid"
-          size="s2.md"
-          animation={`${pulseAnimation} 1.8s ease-out infinite`}
-          _hover={{ animationPlayState: "paused" }}
+      {!_connectionState.isExist && (
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          w="100%"
+          h="100%"
+          bg="rgba(0, 0, 0, 0.15);"
+          backdropFilter="auto"
+          backdropBlur="8px"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          gap="4"
         >
-          Unlock the power
-          <Box
-            as="span"
-            fontSize="larger"
-            ml="0.25em"
+          <Typography as="p">Get 100x faster analytics with SingleStore Kai™</Typography>
+          <Button
+            type="button"
+            onClick={handleUnlockClick}
+            variant="solid"
+            size="s2.md"
+            mb="4"
+            animation={`${pulseAnimation} 1.8s ease-out infinite`}
+            _hover={{ animationPlayState: "paused" }}
           >
-            ✨
-          </Box>
-        </Button>
-      </Box>
+            Unlock the power
+            <Box
+              as="span"
+              fontSize="larger"
+              ml="0.25em"
+            >
+              ✨
+            </Box>
+          </Button>
+
+          <ConfigurationModal
+            isOpen={modal.isOpen}
+            onClose={modal.onClose}
+          />
+        </Box>
+      )}
     </ApplicationParameters>
   );
 }

@@ -5,7 +5,7 @@ import { ComponentProps } from "@/types/common";
 import { Modal, ModalProps } from "@/components/common/Modal";
 import { Typography } from "../common/Typography";
 
-export type ConnectModalProps = ComponentProps<ModalProps>;
+export type ConnectHelpModalProps = ComponentProps<ModalProps>;
 
 const steps = [
   {
@@ -25,7 +25,7 @@ const steps = [
   }
 ];
 
-export function ConnectModal({ onClose, ...props }: ConnectModalProps) {
+export function ConnectHelpModal({ onClose, ...props }: ConnectHelpModalProps) {
   return (
     <Modal
       size="s2.md"
@@ -38,7 +38,7 @@ export function ConnectModal({ onClose, ...props }: ConnectModalProps) {
         lineHeight="8"
         fontWeight="semibold"
       >
-        How to connect the demo application to SingleStoreDB?
+        How to connect the demo application to SingleStore?
       </Typography>
       <HStack
         spacing="8"

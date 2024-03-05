@@ -14,7 +14,7 @@ import { Logo } from "@/components/Logo";
 import { FormProps } from "@/components/common/Form";
 import { Page } from "@/components/common/Page";
 import { Typography } from "@/components/common/Typography";
-import { ConnectModal } from "@/components/Connect/ConnectModal";
+import { ConnectHelpModal } from "@/components/Connect/ConnectHelpModal";
 import { ConnectLoader } from "@/components/Connect/ConnectLoader";
 import { Link } from "@/components/common/Link";
 import { ConfigurationForm } from "@/components/Configuration/ConfigurationForm";
@@ -230,7 +230,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
         </Box>
       </Box>
 
-      <ConnectModal
+      <ConnectHelpModal
         isOpen={modal.isOpen}
         onClose={modal.onClose}
       />
