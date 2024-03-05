@@ -221,16 +221,15 @@ export function QuerySection({
     >
       <Flex
         w="full"
-        alignItems="flex-start"
-        justifyContent="center"
-        flexWrap="wrap"
-        gap="12"
-        rowGap="6"
+        display="grid"
+        gridTemplateColumns={{
+          base: "repeat(auto-fit, minmax(1fr, 1fr))",
+          md: "repeat(auto-fit, minmax(16rem, 1fr))"
+        }}
+        gap="6"
       >
         {hasParams && (
           <QueryParams
-            flex="1"
-            w="auto"
             fields={query.params?.fields}
             validationSchema={query.params?.validationSchema}
             formProps={{ id: formId }}
@@ -240,12 +239,12 @@ export function QuerySection({
         )}
 
         <Box
-          flex={{ base: "1 0 100%", md: "1 0 50%" }}
-          maxW={{ base: "full", md: "50%" }}
           display="grid"
-          gridTemplateColumns="repeat(auto-fit, minmax(16rem, 1fr))"
+          gridTemplateColumns={{
+            base: "repeat(auto-fit, minmax(1fr, 1fr))",
+            md: "repeat(auto-fit, minmax(16rem, 1fr))"
+          }}
           gap="6"
-          rowGap="6"
           flexWrap="wrap"
         >
           {Object.entries(state).map(([key, state]) => (
@@ -271,7 +270,10 @@ export function QuerySection({
       <Box
         mt="6"
         display="grid"
-        gridTemplateColumns="repeat(auto-fit, minmax(16rem, 1fr))"
+        gridTemplateColumns={{
+          base: "repeat(auto-fit, minmax(1fr, 1fr))",
+          md: "repeat(auto-fit, minmax(24rem, 1fr))"
+        }}
         gap="6"
       >
         {stateEntires.map(([key, state]) => {

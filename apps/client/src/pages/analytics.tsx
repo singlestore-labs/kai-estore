@@ -18,7 +18,7 @@ export default function Analytics() {
       >
         <Flex
           alignItems="stretch"
-          gap="12"
+          gap="8"
           rowGap="6"
           flexWrap="wrap"
         >
