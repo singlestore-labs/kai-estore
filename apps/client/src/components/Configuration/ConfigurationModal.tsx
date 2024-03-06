@@ -42,7 +42,7 @@ export function ConfigurationModal({ onClose, onSuccess, ...props }: Configurati
   const setData = useCallback(() => {
     setLoaderState((state) => ({
       ...state,
-      title: "Data inserting",
+      title: "Data cloning",
       message: `It will take up to 3 minutes. Do not close the modal.`
     }));
     return api.data.set({ connection: "config", force: true });
