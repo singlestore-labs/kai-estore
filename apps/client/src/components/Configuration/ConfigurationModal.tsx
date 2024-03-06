@@ -12,7 +12,7 @@ import { api } from "@/api";
 
 export type ConfigurationModalProps = ComponentProps<ModalProps, { onSuccess?: () => void }>;
 
-export function ConfigurationModal({ onClose, onSuccess, ...props }: ConfigurationModalProps) {
+export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProps) {
   const formId = useId();
   const [loaderState, setLoaderState] = useState({ title: "", message: "", isOpen: false });
 
@@ -49,9 +49,13 @@ export function ConfigurationModal({ onClose, onSuccess, ...props }: Configurati
   }, []);
 
   const handleSuccess = useCallback(() => {
-    onSuccess?.();
-    resetLoaderState();
-  }, [onSuccess, resetLoaderState]);
+    setLoaderState((state) => ({
+      ...state,
+      title: "Success",
+      message: "The page will be reloaded."
+    }));
+    window.location.reload();
+  }, []);
 
   const handleFormSubmit = useCallback<Defined<ConfigurationFormProps["onSubmit"]>>(
     async (values) => {

@@ -84,7 +84,6 @@ export function QuerySection({
   const [codeBlock, setCodeBlock] = useState("");
   const [_runOnMount, setRunOnMount] = useState(runOnMount);
   const connestionStateValue = connectionState.useValue();
-  const prevIsConnectionExist = useRef(connestionStateValue.isExist);
   const stateEntires = Object.entries(state).filter(([key]) => {
     if (key === "s2" && !connestionStateValue.isExist) return false;
     return true;
@@ -145,11 +144,8 @@ export function QuerySection({
   }, [connestionStateValue.isExist, paramsState.values]);
 
   useEffect(() => {
-    if ((_runOnMount && canRun) || connestionStateValue.isExist !== prevIsConnectionExist.current) {
-      handleRunClick();
-      prevIsConnectionExist.current = connestionStateValue.isExist;
-    }
-  }, [_runOnMount, canRun, handleRunClick, connestionStateValue.isExist]);
+    if (_runOnMount && canRun) handleRunClick();
+  }, [_runOnMount, canRun, handleRunClick]);
 
   useEffect(
     () => () => {

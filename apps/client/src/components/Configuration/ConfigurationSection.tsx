@@ -7,7 +7,6 @@ import { ApplicationParameters } from "@/components/ApplicationParameters";
 import { Box, Button, keyframes, useDisclosure } from "@chakra-ui/react";
 import { Typography } from "@/components/common/Typography";
 import { ConfigurationModal } from "@/components/Configuration/ConfigurationModal";
-import { useCallback } from "react";
 
 export type ConfigurationSectionProps = ComponentProps<SectionProps>;
 
@@ -26,22 +25,25 @@ const pulseAnimation = keyframes({
 });
 
 export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
-  const [_connectionState, setConnectionState] = connectionState.useState();
+  const _connectionState = connectionState.useValue();
   const { onClose: closeModal, ...modal } = useDisclosure();
-
-  const handleUnlockClick = () => {
-    modal.onOpen();
-  };
-
-  const handleConfigurationSuccess = useCallback(() => {
-    setConnectionState((state) => ({ ...state, isExist: true }));
-    closeModal();
-  }, [setConnectionState, closeModal]);
 
   return (
     <ApplicationParameters
       {...props}
       title="SingleStore Parameters"
+      headerProps={{ display: "flex", alignItems: "center" }}
+      headerChildren={
+        _connectionState.isExist && (
+          <Button
+            ml="auto"
+            size="s2.sm"
+            onClick={modal.onOpen}
+          >
+            Change connection
+          </Button>
+        )
+      }
       connection="config"
       position="relative"
       isPlaceholder={!_connectionState.isExist}
@@ -65,7 +67,7 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
           <Typography as="p">Get 100x faster analytics with SingleStore Kai™</Typography>
           <Button
             type="button"
-            onClick={handleUnlockClick}
+            onClick={modal.onOpen}
             variant="solid"
             size="s2.md"
             mb="4"
@@ -81,14 +83,13 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
               ✨
             </Box>
           </Button>
-
-          <ConfigurationModal
-            isOpen={modal.isOpen}
-            onClose={closeModal}
-            onSuccess={handleConfigurationSuccess}
-          />
         </Box>
       )}
+
+      <ConfigurationModal
+        isOpen={modal.isOpen}
+        onClose={closeModal}
+      />
     </ApplicationParameters>
   );
 }

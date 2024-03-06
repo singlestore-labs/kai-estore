@@ -13,6 +13,15 @@ const sizeStyles: Record<string, ChakraProps> = {
     lineHeight: "6",
     py: "2",
     px: "4"
+  },
+
+  "s2.sm": {
+    fontSize: "sm",
+    lineHeight: "1",
+    h: "auto",
+    minH: "auto",
+    py: "2",
+    px: "4"
   }
 };
 
