@@ -1,15 +1,14 @@
 import { useId } from "react";
-import { Box, Button, useDisclosure } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { ComponentProps } from "@/types/common";
 import { ConfigurationForm } from "@/components/Configuration/ConfigurationForm";
-import { ConnectHelpModal } from "@/components/Connect/ConnectHelpModal";
 import { Modal, ModalProps } from "@/components/common/Modal";
 import { Typography } from "@/components/common/Typography";
+import { Link } from "@/components/common/Link";
 
 export type ConfigurationModalProps = ComponentProps<ModalProps>;
 
 export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProps) {
-  const modalHelp = useDisclosure();
   const formId = useId();
 
   return (
@@ -52,13 +51,15 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
             display="flex"
             alignItems="center"
           >
-            <Button
-              variant="link"
-              fontWeight="normal"
-              onClick={modalHelp.onOpen}
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="flex-start"
             >
-              Need help?
-            </Button>
+              <Typography color="s2.gray.600">{`Don't have a workspace?`}</Typography>
+              <Link href="https://www.singlestore.com/cloud-trial/kai">Click to create</Link>
+            </Box>
+
             <Button
               type="submit"
               form={formId}
@@ -70,16 +71,6 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
           </Box>
         </Box>
       </Box>
-
-      <ConnectHelpModal
-        contentProps={{
-          color: "white",
-          bg: "s2.gray.900",
-          ...props.contentProps
-        }}
-        isOpen={modalHelp.isOpen}
-        onClose={modalHelp.onClose}
-      />
     </Modal>
   );
 }
