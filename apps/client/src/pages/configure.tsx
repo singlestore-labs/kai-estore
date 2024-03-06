@@ -18,22 +18,22 @@ const formId = "configuration";
 export default function Configure() {
   const [initialValues, setInitialValues] = useState<ConnectionConfig | undefined>();
   const [isInitialValuesLoading, setIsInitialValuesLoading] = useState(true);
-  const [loaderSate, setLoaderSate] = useState({ title: "", message: "", isOpen: false });
+  const [loaderState, setLoaderState] = useState({ title: "", message: "", isOpen: false });
 
   const handleFormSubmit: FormProps["onSubmit"] = async (values) => {
     try {
       let timeout: NodeJS.Timeout | undefined = undefined;
 
-      setLoaderSate((state) => ({ ...state, title: "Updating", isOpen: true }));
+      setLoaderState((state) => ({ ...state, title: "Updating", isOpen: true }));
 
       await api.connection.update(values, { connection: "config" });
 
       if (WITH_DATA_GENERATION) {
-        setLoaderSate((state) => ({ ...state, title: "Data validation" }));
+        setLoaderState((state) => ({ ...state, title: "Data validation" }));
         const isDataValidRes = await api.data.validate({ connection: "config" });
 
         if (!isDataValidRes.data) {
-          setLoaderSate((state) => ({
+          setLoaderState((state) => ({
             ...state,
             title: "Data inserting",
             message: `It will take a while. Do not close the browser tab.`
@@ -42,14 +42,14 @@ export default function Configure() {
         }
       }
 
-      setLoaderSate((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
+      setLoaderState((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
 
       timeout = setTimeout(() => {
         clearTimeout(timeout);
         window.location.reload();
       }, 2000);
     } catch (error) {
-      setLoaderSate({ title: "", message: "", isOpen: false });
+      setLoaderState({ title: "", message: "", isOpen: false });
     }
   };
 
@@ -57,7 +57,7 @@ export default function Configure() {
     try {
       let timeout: NodeJS.Timeout | undefined = undefined;
 
-      setLoaderSate((state) => ({
+      setLoaderState((state) => ({
         ...state,
         title: "Data reset",
         message: `It will take a while. Do not close the browser tab.`,
@@ -66,14 +66,14 @@ export default function Configure() {
 
       await api.data.reset({ connection: "config" });
 
-      setLoaderSate((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
+      setLoaderState((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
 
       timeout = setTimeout(() => {
         clearTimeout(timeout);
         window.location.reload();
       }, 2000);
     } catch (error) {
-      setLoaderSate({ title: "", message: "", isOpen: false });
+      setLoaderState({ title: "", message: "", isOpen: false });
     }
   };
 
@@ -160,7 +160,7 @@ export default function Configure() {
       </Section>
 
       <ConnectLoader
-        {...loaderSate}
+        {...loaderState}
         variant="dark"
       />
     </Page>

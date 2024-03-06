@@ -23,9 +23,9 @@ export type ApplicationParametersProps = ComponentProps<
 function createParams(info?: DbInfo) {
   return {
     // "Data Size": info?.dbStats?.dataSize ? prettyBytes(info?.dbStats?.dataSize) : "Not ready",
-    "Order Records": info?.orderRecords ?? 0,
-    "Products Number": info?.productsNumber ?? 0,
-    "Ratings Number": info?.ratingsNumber ?? 0
+    "Order Records": info?.orderRecords ?? undefined,
+    "Products Number": info?.productsNumber ?? undefined,
+    "Ratings Number": info?.ratingsNumber ?? undefined
   } as const;
 }
 
@@ -74,7 +74,7 @@ export function ApplicationParameters({
       </Typography>
     );
 
-    if (!value || isLoading || isPlaceholder) {
+    if (typeof value !== "number" || isLoading || isPlaceholder) {
       _value = (
         <Skeleton
           w="20"

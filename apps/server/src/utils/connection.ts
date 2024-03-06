@@ -10,7 +10,7 @@ export function setResponseConnectionConfigHeader(res: Response, config: Connect
 }
 
 export function parseConnectionConfigHeader(req: Request): ConnectionConfig {
-  if (!req.isConnectionConfigRequest) {
+  if (!req.isConnectionConfigRequest && req.url !== "/user") {
     return { mongoURI: "", dbName: "", userId: "", dataSize: "" as DatasetSizes };
   }
 

@@ -21,7 +21,7 @@ export type ConfigurationFormProps = ComponentProps<
 const defaultInitialValues: ConnectionConfig = {
   mongoURI: "",
   dbName: "",
-  dataSize: "s",
+  dataSize: WITH_DATA_GENERATION ? "s" : undefined,
   shouldGenerateData: false
 };
 
@@ -34,7 +34,7 @@ const labelProps: FieldProps["labelProps"] = {
 const formValidationSchema = Yup.object({
   mongoURI: Yup.string().label("Mongo URI").required(),
   dbName: Yup.string().label("Database name").required(),
-  dataSize: Yup.string().label("Dataset size").required(),
+  dataSize: Yup.string().label("Dataset size").optional(),
   shouldGenerateData: Yup.bool()
 });
 

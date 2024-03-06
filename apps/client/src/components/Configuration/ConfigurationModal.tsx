@@ -1,15 +1,71 @@
-import { useId } from "react";
+import { useCallback, useId, useState } from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { ComponentProps } from "@/types/common";
-import { ConfigurationForm } from "@/components/Configuration/ConfigurationForm";
+import { ConfigurationForm, ConfigurationFormProps } from "@/components/Configuration/ConfigurationForm";
+import { ConnectLoader } from "@/components/Connect/ConnectLoader";
+import { ConnectionConfig } from "@/types/api";
+import { Defined } from "@/types/helpers";
+import { Link } from "@/components/common/Link";
 import { Modal, ModalProps } from "@/components/common/Modal";
 import { Typography } from "@/components/common/Typography";
-import { Link } from "@/components/common/Link";
+import { api } from "@/api";
 
-export type ConfigurationModalProps = ComponentProps<ModalProps>;
+export type ConfigurationModalProps = ComponentProps<ModalProps, { onSuccess?: () => void }>;
 
-export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProps) {
+export function ConfigurationModal({ onClose, onSuccess, ...props }: ConfigurationModalProps) {
   const formId = useId();
+  const [loaderState, setLoaderState] = useState({ title: "", message: "", isOpen: false });
+
+  const resetLoaderState = useCallback(() => {
+    setLoaderState({ title: "", message: "", isOpen: false });
+  }, []);
+
+  const handleError = useCallback(
+    (error: unknown) => {
+      console.error(error);
+      resetLoaderState();
+    },
+    [resetLoaderState]
+  );
+
+  const createConnection = useCallback(async (values: ConnectionConfig) => {
+    setLoaderState((state) => ({ ...state, title: "Connection", isOpen: true }));
+    await api.connection.create(values);
+    await api.user.create();
+  }, []);
+
+  const validateData = useCallback(() => {
+    setLoaderState((state) => ({ ...state, title: "Data validation" }));
+    return api.data.validate({ connection: "config" });
+  }, []);
+
+  const setData = useCallback(() => {
+    setLoaderState((state) => ({
+      ...state,
+      title: "Data inserting",
+      message: `It will take up to 3 minutes. Do not close the modal.`
+    }));
+    return api.data.set({ connection: "config", force: true });
+  }, []);
+
+  const handleSuccess = useCallback(() => {
+    onSuccess?.();
+    resetLoaderState();
+  }, [onSuccess, resetLoaderState]);
+
+  const handleFormSubmit = useCallback<Defined<ConfigurationFormProps["onSubmit"]>>(
+    async (values) => {
+      try {
+        await createConnection({ ...values, withCDC: true });
+        const isDataValid = await validateData();
+        if (!isDataValid.data) await setData();
+        handleSuccess();
+      } catch (error) {
+        handleError(error);
+      }
+    },
+    [createConnection, handleSuccess, handleError, setData, validateData]
+  );
 
   return (
     <Modal
@@ -26,6 +82,7 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
         display="flex"
         alignItems="flex-start"
         justifyContent="flex-start"
+        position="relative"
         gap="8"
       >
         <Typography
@@ -45,6 +102,7 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
           <ConfigurationForm
             id={formId}
             variant="dark"
+            onSubmit={handleFormSubmit}
           />
 
           <Box
@@ -71,6 +129,13 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
           </Box>
         </Box>
       </Box>
+
+      <ConnectLoader
+        {...loaderState}
+        position="absolute"
+        variant="dark"
+        inPortal={false}
+      />
     </Modal>
   );
 }

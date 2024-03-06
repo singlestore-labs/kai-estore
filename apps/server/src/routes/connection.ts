@@ -35,7 +35,7 @@ connectionRouter.post("/connection", validateRoute(validationSchema), async (req
       };
     }
 
-    if (!config.shouldGenerateData) {
+    if (!config.withCDC && !config.shouldGenerateData) {
       const { db } = await createDBConnection(config);
       const meta = await db.collection("meta").findOne();
 

@@ -7,6 +7,7 @@ import { ApplicationParameters } from "@/components/ApplicationParameters";
 import { Box, Button, keyframes, useDisclosure } from "@chakra-ui/react";
 import { Typography } from "@/components/common/Typography";
 import { ConfigurationModal } from "@/components/Configuration/ConfigurationModal";
+import { useCallback } from "react";
 
 export type ConfigurationSectionProps = ComponentProps<SectionProps>;
 
@@ -26,13 +27,16 @@ const pulseAnimation = keyframes({
 
 export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
   const [_connectionState, setConnectionState] = connectionState.useState();
-  const modal = useDisclosure();
+  const { onClose: closeModal, ...modal } = useDisclosure();
 
   const handleUnlockClick = () => {
-    console.log("Unlock the power");
     modal.onOpen();
-    // setConnectionState((state) => ({ ...state, isExist: !state.isExist }));
   };
+
+  const handleConfigurationSuccess = useCallback(() => {
+    setConnectionState((state) => ({ ...state, isExist: true }));
+    closeModal();
+  }, [setConnectionState, closeModal]);
 
   return (
     <ApplicationParameters
@@ -80,7 +84,8 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
 
           <ConfigurationModal
             isOpen={modal.isOpen}
-            onClose={modal.onClose}
+            onClose={closeModal}
+            onSuccess={handleConfigurationSuccess}
           />
         </Box>
       )}

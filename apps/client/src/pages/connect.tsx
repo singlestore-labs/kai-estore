@@ -20,11 +20,11 @@ import { Link } from "@/components/common/Link";
 import { ConfigurationForm } from "@/components/Configuration/ConfigurationForm";
 
 export default function Connect({ shouldSetData = false }: { shouldSetData?: boolean }) {
-  const [loaderSate, setLoaderSate] = useState({ title: "", message: "", isOpen: shouldSetData });
+  const [loaderState, setLoaderState] = useState({ title: "", message: "", isOpen: shouldSetData });
   const modal = useDisclosure();
 
   const resetLoaderState = useCallback(() => {
-    setLoaderSate({ title: "", message: "", isOpen: false });
+    setLoaderState({ title: "", message: "", isOpen: false });
   }, []);
 
   const handleError = useCallback(
@@ -36,18 +36,18 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   );
 
   const createConnection = useCallback(async (values: ConnectionConfig) => {
-    setLoaderSate((state) => ({ ...state, title: "Connection", isOpen: true }));
+    setLoaderState((state) => ({ ...state, title: "Connection", isOpen: true }));
     await api.connection.create(values);
     await api.user.create();
   }, []);
 
   const validateData = useCallback(() => {
-    setLoaderSate((state) => ({ ...state, title: "Data validation" }));
+    setLoaderState((state) => ({ ...state, title: "Data validation" }));
     return api.data.validate({ connection: "config" });
   }, []);
 
   const setData = useCallback(() => {
-    setLoaderSate((state) => ({
+    setLoaderState((state) => ({
       ...state,
       title: "Data inserting",
       message: `It will take a while. Do not close the browser tab.`
@@ -56,7 +56,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   }, []);
 
   const handleDataSuccess = useCallback(() => {
-    setLoaderSate((state) => ({
+    setLoaderState((state) => ({
       ...state,
       title: "Success",
       message: "You will be redirected to the product catalog."
@@ -96,7 +96,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     })();
   }, [shouldSetData, setData, handleDataSuccess, handleError]);
 
-  const loader = <ConnectLoader {...loaderSate} />;
+  const loader = <ConnectLoader {...loaderState} />;
 
   if (shouldSetData && WITH_DATA_GENERATION) return loader;
 

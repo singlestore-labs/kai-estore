@@ -5,7 +5,7 @@ function validate(params?: ApiParams) {
   return apiInstance.get<boolean>("/data/validate", { params });
 }
 
-function set(params?: ApiParams) {
+function set(params?: ApiParams<{ force?: boolean }>) {
   return apiInstance.post<boolean>("/data/set", undefined, { params });
 }
 

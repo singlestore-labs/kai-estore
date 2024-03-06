@@ -5,12 +5,40 @@ import { Dataset, DatasetCollectionNames, DatasetSizes, Order, OrderFlat, User }
 import { ConnectionConfig } from "@/types/connection";
 
 import { getDirname } from "./helpers";
+import { createDBConnection } from "@/utils/db";
 
-export async function validateData(db: Db, dataSize?: ConnectionConfig["dataSize"]) {
+export async function validateData(
+  db: Db,
+  dataSize?: ConnectionConfig["dataSize"],
+  withCDC?: ConnectionConfig["withCDC"]
+) {
   try {
     const existedCollectionNames = (await db.listCollections().toArray()).map(({ name }) => name);
+    const meta = (await db.collection("meta").find().toArray())[0] ?? {};
     const requiredCollectionNames = ["categories", "orders", "products", "ratings", "tags", "users"];
     let isDataValid = true;
+
+    if (withCDC) {
+      if (meta.isCDCReady) {
+        return true;
+      }
+
+      const cdcConnection = await createDBConnection();
+
+      const cdcCollections = await Promise.all(
+        requiredCollectionNames.map(async (collection) => {
+          return [collection, await cdcConnection.db.collection(collection).countDocuments()] as const;
+        })
+      );
+
+      for await (const cdcCollection of cdcCollections) {
+        isDataValid = existedCollectionNames.includes(cdcCollection[0]);
+        isDataValid = (await db.collection(cdcCollection[0]).countDocuments()) === cdcCollection[1];
+        if (!isDataValid) break;
+      }
+
+      return isDataValid;
+    }
 
     for await (const requiredCollectionName of requiredCollectionNames) {
       isDataValid = existedCollectionNames.includes(requiredCollectionName);
@@ -19,8 +47,7 @@ export async function validateData(db: Db, dataSize?: ConnectionConfig["dataSize
     }
 
     if (dataSize) {
-      const metaDataSize = (await db.collection("meta").find().toArray())[0]?.dataSize;
-      const isDataSizeValid = metaDataSize === dataSize;
+      const isDataSizeValid = meta.dataSize === dataSize;
       isDataValid = isDataValid && isDataSizeValid;
     }
 

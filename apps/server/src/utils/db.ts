@@ -21,12 +21,8 @@ export async function connectDB(config: DBConfig) {
 }
 
 export function createDBConnection(config?: ConnectionConfig) {
-  if (!config) {
-    throw new Error("Connection config is undefined");
-  }
-
   return connectDB({
-    mongoURI: config.mongoURI || DB_URI,
-    dbName: config.dbName || DB_NAME
+    mongoURI: config?.mongoURI || DB_URI,
+    dbName: config?.dbName || DB_NAME
   });
 }

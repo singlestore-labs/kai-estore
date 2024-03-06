@@ -1,8 +1,9 @@
 export type ConnectionConfig = {
   mongoURI: string;
   dbName: string;
-  dataSize: string;
+  dataSize?: string;
   shouldGenerateData?: boolean;
+  withCDC?: boolean;
 };
 
 export type ApiParams<T extends object = object> = T & { connection?: "config" };
