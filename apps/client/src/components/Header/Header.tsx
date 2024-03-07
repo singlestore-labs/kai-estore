@@ -22,7 +22,7 @@ export function Header(props: HeaderProps) {
       position="relative"
       w="full"
       maxW="full"
-      bg="black"
+      bg="s2.misc.2"
       zIndex="modal"
     >
       <HeaderTopBar />

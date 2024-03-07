@@ -7,6 +7,7 @@ import { ApplicationParameters } from "@/components/ApplicationParameters";
 import { Box, Button, keyframes, useDisclosure } from "@chakra-ui/react";
 import { Typography } from "@/components/common/Typography";
 import { ConfigurationModal } from "@/components/Configuration/ConfigurationModal";
+import { useSearchParams } from "@/hooks/useSearchParams";
 
 export type ConfigurationSectionProps = ComponentProps<SectionProps>;
 
@@ -25,8 +26,9 @@ const pulseAnimation = keyframes({
 });
 
 export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
+  const { paramsObject } = useSearchParams<{ modalOpen?: "1" }>();
   const _connectionState = connectionState.useValue();
-  const { onClose: closeModal, ...modal } = useDisclosure();
+  const { onClose: closeModal, ...modal } = useDisclosure({ defaultIsOpen: paramsObject.modalOpen === "1" });
 
   return (
     <ApplicationParameters

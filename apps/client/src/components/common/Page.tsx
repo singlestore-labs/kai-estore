@@ -6,6 +6,7 @@ import { Header, HeaderProps } from "@/components/Header/Header";
 import { Footer, FooterProps } from "@/components/Footer";
 
 import { Head, HeadProps } from "./Head";
+import { MutableRefObject } from "react";
 
 export type PageProps = ComponentProps<
   BoxProps,
@@ -14,6 +15,7 @@ export type PageProps = ComponentProps<
     headerProps?: Omit<HeaderProps, "children">;
     mainProps?: Omit<BoxProps, "children">;
     footerProps?: Omit<FooterProps, "children">;
+    footerRef?: MutableRefObject<any>;
     withHeader?: boolean;
     withFooter?: boolean;
   }
@@ -25,6 +27,7 @@ export function Page({
   mainProps,
   headerProps,
   footerProps,
+  footerRef,
   withHeader = true,
   withFooter = true,
   ...props
@@ -68,7 +71,12 @@ export function Page({
 
         {_children}
 
-        {withFooter && <Footer {...footerProps} />}
+        {withFooter && (
+          <Footer
+            {...footerProps}
+            ref={footerRef}
+          />
+        )}
       </Box>
     </>
   );

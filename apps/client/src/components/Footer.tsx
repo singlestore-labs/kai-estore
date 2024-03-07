@@ -1,4 +1,4 @@
-import { Box, BoxProps, Container, Flex } from "@chakra-ui/react";
+import { Box, BoxProps, Container, Flex, forwardRef } from "@chakra-ui/react";
 
 import { APP_DESCRIPTION } from "@/constants/common";
 
@@ -10,15 +10,15 @@ import { ComponentProps } from "@/types/common";
 
 export type FooterProps = ComponentProps<BoxProps>;
 
-export function Footer(props: FooterProps) {
+export const Footer = forwardRef<FooterProps, "footer">(({ _before, ...props }, ref) => {
   return (
     <Box
-      {...props}
+      ref={ref}
       as="footer"
       position="relative"
       w="full"
       color="white"
-      bg="black"
+      bg="s2.misc.2"
       py="9"
       zIndex="0"
       _before={{
@@ -29,8 +29,10 @@ export function Footer(props: FooterProps) {
         left: 0,
         w: "full",
         h: "30px",
-        bg: "inherit"
+        bg: "inherit",
+        ..._before
       }}
+      {...props}
     >
       <Container
         size="s2.xl"
@@ -95,4 +97,4 @@ export function Footer(props: FooterProps) {
       </Container>
     </Box>
   );
-}
+});

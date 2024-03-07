@@ -43,6 +43,7 @@ export const s2colors = {
   },
 
   "s2.misc": {
-    1: "#F5F5F5"
+    1: "#F5F5F5",
+    2: "#000000"
   }
 };

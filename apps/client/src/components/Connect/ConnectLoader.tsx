@@ -61,7 +61,7 @@ export function ConnectLoader({
       w="full"
       h="full"
       color="s2.purple.800"
-      bg={variant === "light" ? "white" : "#1b1a21"}
+      bg={variant === "light" ? "white" : "s2.gray.900"}
       transition="visibility 0s, opacity 0.4s ease"
       zIndex="2000"
       {...props}
