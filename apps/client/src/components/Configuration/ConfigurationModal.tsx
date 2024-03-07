@@ -42,8 +42,8 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
   const setData = useCallback(() => {
     setLoaderState((state) => ({
       ...state,
-      title: "Data cloning",
-      message: `It will take up to 3 minutes. Do not close the modal.`
+      title: "CDC Setup",
+      message: `It will take a minute. Do not close the modal.`
     }));
     return api.data.set({ connection: "config", force: true });
   }, []);

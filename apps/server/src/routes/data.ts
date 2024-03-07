@@ -53,7 +53,7 @@ dataRouter.post(
 
         const meta = await db.collection("meta").findOne();
         if (meta) {
-          await db.collection("meta").updateOne({ _id: meta._id }, { $set: { ...meta, isCDCReady: true } });
+          await db.collection("meta").updateOne({ _id: meta._id }, { $set: { ...meta, cdcStatus: "cloning" } });
         }
       } else {
         for await (const collectionName of collectionNames) {

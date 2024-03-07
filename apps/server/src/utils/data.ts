@@ -5,7 +5,6 @@ import { Dataset, DatasetCollectionNames, DatasetSizes, Order, OrderFlat, User }
 import { ConnectionConfig } from "@/types/connection";
 
 import { getDirname } from "./helpers";
-import { createDBConnection } from "@/utils/db";
 
 export async function validateData(
   db: Db,
@@ -19,25 +18,7 @@ export async function validateData(
     let isDataValid = true;
 
     if (withCDC) {
-      if (meta.isCDCReady) {
-        return true;
-      }
-
-      const cdcConnection = await createDBConnection();
-
-      const cdcCollections = await Promise.all(
-        requiredCollectionNames.map(async (collection) => {
-          return [collection, await cdcConnection.db.collection(collection).countDocuments()] as const;
-        })
-      );
-
-      for await (const cdcCollection of cdcCollections) {
-        isDataValid = existedCollectionNames.includes(cdcCollection[0]);
-        isDataValid = (await db.collection(cdcCollection[0]).countDocuments()) === cdcCollection[1];
-        if (!isDataValid) break;
-      }
-
-      return isDataValid;
+      return !!meta.cdcStatus;
     }
 
     for await (const requiredCollectionName of requiredCollectionNames) {

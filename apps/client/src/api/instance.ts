@@ -68,7 +68,7 @@ export function proccessError(error: unknown) {
       if (error.response?.data && "cause" in error.response.data) {
         if (error.response?.data.cause === "CONNECTION_CONFIG") {
           title = "Connection expired";
-          window.location.replace(ROUTES.connect);
+          window.location.replace(ROUTES.root);
         }
       }
     }
