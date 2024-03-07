@@ -118,8 +118,8 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
               flexDirection="column"
               alignItems="flex-start"
             >
-              <Typography color="s2.gray.600">{`Don't have a workspace?`}</Typography>
-              <Link href="https://www.singlestore.com/cloud-trial/kai">Click to create</Link>
+              <Typography color="s2.gray.600">{`Don't have a SingleStore account?`}</Typography>
+              <Link href="https://www.singlestore.com/cloud-trial/kai">Sign up for a free trial</Link>
             </Box>
 
             <Button
