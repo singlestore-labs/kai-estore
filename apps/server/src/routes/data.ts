@@ -6,19 +6,16 @@ import { DatasetCollectionNames } from "@/types/data";
 import { processDatasetFiles, validateData } from "@/utils/data";
 import { processAsChunks } from "@/utils/helpers";
 import { validateRoute } from "@/middlewares/validateRoute";
-import { DB_NAME, DB_URI } from "@/constants/env";
 
 export const dataRouter = express.Router();
 
 dataRouter.get("/data/validate", async (req, res, next) => {
   try {
     const { db, connectionConfig } = req;
-    const isValid = await validateData(db, connectionConfig.dataSize, connectionConfig.withCDC);
-
-    if (!connectionConfig.withCDC && !isValid && !connectionConfig.shouldGenerateData) {
+    if (!connectionConfig.withCDC && !connectionConfig.shouldGenerateData) {
       return res.status(200).send(true);
     }
-
+    const isValid = await validateData(db, connectionConfig.dataSize, connectionConfig.withCDC);
     return res.status(200).send(isValid);
   } catch (error) {
     return next(error);
@@ -47,28 +44,17 @@ dataRouter.post(
 
       await db.dropDatabase();
 
-      if (connectionConfig.withCDC) {
-        await db.command({ createLink: "mongolink", uri: DB_URI, include: `${DB_NAME}.*` });
-        await db.command({ createCollectionsFromSource: "mongolink" });
+      for await (const collectionName of collectionNames) {
+        const collection = db.collection(collectionName);
 
-        const meta = await db.collection("meta").findOne();
-        if (meta) {
-          await db.collection("meta").updateOne({ _id: meta._id }, { $set: { ...meta, cdcStatus: "cloning" } });
-        }
-      } else {
-        for await (const collectionName of collectionNames) {
-          const collection = db.collection(collectionName);
-
-          await processDatasetFiles(collectionName, connectionConfig.dataSize, async (data) => {
-            await processAsChunks(data, async (chunk) => {
-              await collection.insertMany(prepareDates(chunk));
-            });
+        await processDatasetFiles(collectionName, connectionConfig.dataSize, async (data) => {
+          await processAsChunks(data, async (chunk) => {
+            await collection.insertMany(prepareDates(chunk));
           });
-        }
-
-        await db.collection("meta").insertOne({ dataSize: connectionConfig.dataSize });
+        });
       }
 
+      await db.collection("meta").insertOne({ dataSize: connectionConfig.dataSize });
       return res.status(201).json({ message: "Data set" });
     } catch (error) {
       console.error(error);

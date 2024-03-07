@@ -39,13 +39,13 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
     return api.data.validate({ connection: "config" });
   }, []);
 
-  const setData = useCallback(() => {
+  const setupCDC = useCallback(() => {
     setLoaderState((state) => ({
       ...state,
       title: "CDC Setup",
       message: `It will take a minute. Do not close the modal.`
     }));
-    return api.data.set({ connection: "config", force: true });
+    return api.cdc.setup({ connection: "config" });
   }, []);
 
   const handleSuccess = useCallback(() => {
@@ -60,15 +60,15 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
   const handleFormSubmit = useCallback<Defined<ConfigurationFormProps["onSubmit"]>>(
     async (values) => {
       try {
-        await createConnection({ ...values, withCDC: true });
+        await createConnection(values);
         const isDataValid = await validateData();
-        if (!isDataValid.data) await setData();
+        if (!isDataValid.data) await setupCDC();
         handleSuccess();
       } catch (error) {
         handleError(error);
       }
     },
-    [createConnection, handleSuccess, handleError, setData, validateData]
+    [createConnection, handleSuccess, handleError, setupCDC, validateData]
   );
 
   return (
@@ -106,6 +106,8 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
           <ConfigurationForm
             id={formId}
             variant="dark"
+            withDataGeneration={false}
+            initialValues={{ withCDC: true }}
             onSubmit={handleFormSubmit}
           />
 

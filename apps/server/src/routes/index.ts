@@ -14,6 +14,7 @@ import { ratingRouter } from "./rating";
 import { productRouter } from "./product";
 import { orderRouter } from "./order";
 import { configRouter } from "@/routes/config";
+import { cdcRouter } from "@/routes/cdc";
 
 const withConnectionRouter = express.Router();
 withConnectionRouter.use(isConnectionConfigRequest);
@@ -28,7 +29,8 @@ withConnectionRouter.use(dbConnection);
   ratingRouter,
   productRouter,
   orderRouter,
-  infoRouter
+  infoRouter,
+  cdcRouter
 ].forEach((route) => withConnectionRouter.use(route));
 
 export const apiRouter = express.Router();

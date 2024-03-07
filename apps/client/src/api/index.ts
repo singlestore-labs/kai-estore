@@ -7,6 +7,7 @@ import { product } from "./product";
 import { order } from "./order";
 import { rating } from "./rating";
 import { info } from "./info";
+import { cdc } from "./cdc";
 
 export const api = {
   connection,
@@ -17,5 +18,6 @@ export const api = {
   product,
   order,
   rating,
-  info
+  info,
+  cdc
 };

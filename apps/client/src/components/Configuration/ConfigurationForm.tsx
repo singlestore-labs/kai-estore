@@ -4,7 +4,6 @@ import * as Yup from "yup";
 
 import { ComponentProps } from "@/types/common";
 import { ConnectionConfig } from "@/types/api";
-import { WITH_DATA_GENERATION } from "@/constants/env";
 import { Form, FormProps } from "../common/Form";
 import { Field, FieldProps } from "../common/Field";
 
@@ -13,16 +12,18 @@ export type ConfigurationFormProps = ComponentProps<
   {
     children?: ReactNode;
     variant?: "light" | "dark";
-    initialValues?: ConnectionConfig;
+    initialValues?: Partial<ConnectionConfig>;
     isDisabled?: boolean;
+    withDataGeneration?: boolean;
   }
 >;
 
 const defaultInitialValues: ConnectionConfig = {
   mongoURI: "",
-  dbName: "",
-  dataSize: WITH_DATA_GENERATION ? "s" : undefined,
-  shouldGenerateData: false
+  dbName: "kai_estore",
+  dataSize: "s",
+  shouldGenerateData: false,
+  withCDC: false
 };
 
 const labelProps: FieldProps["labelProps"] = {
@@ -33,9 +34,10 @@ const labelProps: FieldProps["labelProps"] = {
 
 const formValidationSchema = Yup.object({
   mongoURI: Yup.string().label("Mongo URI").required(),
-  dbName: Yup.string().label("Database name").required(),
-  dataSize: Yup.string().label("Dataset size").optional(),
-  shouldGenerateData: Yup.bool()
+  dbName: Yup.string().label("Database name").optional(),
+  dataSize: Yup.string().label("Dataset size"),
+  shouldGenerateData: Yup.bool(),
+  withCDC: Yup.bool()
 });
 
 export function ConfigurationForm({
@@ -43,6 +45,7 @@ export function ConfigurationForm({
   variant = "light",
   initialValues,
   isDisabled = false,
+  withDataGeneration = false,
   onSubmit,
   ...props
 }: ConfigurationFormProps) {
@@ -81,7 +84,7 @@ export function ConfigurationForm({
             isDisabled={isDisabled}
           />
 
-          {WITH_DATA_GENERATION && (
+          {withDataGeneration && (
             <Field
               element="checkbox"
               controlProps={{ children: "Generate data", isChecked: formik.values.shouldGenerateData }}
