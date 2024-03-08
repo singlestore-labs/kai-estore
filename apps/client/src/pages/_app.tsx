@@ -12,6 +12,7 @@ import "@fontsource/inconsolata/400.css";
 import { theme } from "@/theme";
 import { initializeRecoilState } from "@/state";
 import { ToastContainer } from "@/utils/toast";
+import { SocketController } from "@/events/io";
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
@@ -25,6 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
         <ToastContainer />
+        <SocketController />
       </ChakraProvider>
     </RecoilRoot>
   );

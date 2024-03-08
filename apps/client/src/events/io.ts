@@ -1,13 +1,12 @@
 import { useEffect } from "react";
-// import { io as socketIo } from "socket.io-client";
+import { io as socketIo } from "socket.io-client";
 
 import { RecommProduct, WithDuration } from "@/types/api";
-// import { SOCKET_URL } from "@/constants/env";
+import { SOCKET_URL } from "@/constants/env";
 import { proccessError } from "@/api/instance";
 import { requestEvents } from "./request";
 
-// const io = socketIo(SOCKET_URL, { withCredentials: true });
-const io: any = {};
+const io = socketIo(SOCKET_URL, { reconnectionDelay: 5000 });
 
 export const ioEvents = {
   recomm: {

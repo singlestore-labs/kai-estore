@@ -106,8 +106,8 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
           <ConfigurationForm
             id={formId}
             variant="dark"
-            withDataGeneration={false}
             initialValues={{ withCDC: true }}
+            withDataGeneration={false}
             onSubmit={handleFormSubmit}
           />
 
