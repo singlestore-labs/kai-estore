@@ -16,7 +16,8 @@ import { apiRequestToken } from "@/api/instance";
 import { QueryParams, QueryParamsProps } from "./QueryParams";
 import { Loader } from "@/components/common/Loader";
 import { SERVER_URL } from "@/constants/env";
-import { connectionState } from "@/state/connection";
+import { useIsConnectionExist } from "@/state/connection";
+import { cdcState, useCDCStatus } from "@/state/cdc";
 
 type QueryRequest = (params: Record<string, any>, config?: AxiosRequestConfig) => any;
 
@@ -83,9 +84,10 @@ export function QuerySection({
   const [paramsState, setParamsState] = useState({ values: {}, isValid: false });
   const [codeBlock, setCodeBlock] = useState("");
   const [_runOnMount, setRunOnMount] = useState(runOnMount);
-  const connestionStateValue = connectionState.useValue();
+  const isConnectionExist = useIsConnectionExist();
+  const cdcStatus = useCDCStatus();
   const stateEntires = Object.entries(state).filter(([key]) => {
-    if (key === "s2" && !connestionStateValue.isExist) return false;
+    if (key === "s2" && (!isConnectionExist || cdcStatus !== "ready")) return false;
     return true;
   });
   const formId = useId();
@@ -95,12 +97,12 @@ export function QuerySection({
   const isRunButtonDisabled = isLoading || (hasParams && !paramsState.isValid);
   const requestTokenRef = useRef<Record<string, ReturnType<typeof apiRequestToken>>>();
 
-  const runQueryRef = useRef(async (isConnectionExist?: boolean, params?: typeof paramsState.values) => {
+  const runQueryRef = useRef(async (isS2Ready?: boolean, params?: typeof paramsState.values) => {
     let timeouts: Record<string, NodeJS.Timeout | undefined> = {};
 
     await Promise.all(
       connectionKeys.map(async (key) => {
-        if (key === "s2" && !isConnectionExist) return;
+        if (key === "s2" && !isS2Ready) return;
         timeouts[key] = setTimeout(
           () => setState((state) => ({ ...state, [key]: { ...state[key], isLoading: true } })),
           800
@@ -139,9 +141,9 @@ export function QuerySection({
   }, []);
 
   const handleRunClick = useCallback(() => {
-    runQueryRef.current(connestionStateValue.isExist, paramsState.values);
+    runQueryRef.current(isConnectionExist && cdcStatus === "ready", paramsState.values);
     setRunOnMount(false);
-  }, [connestionStateValue.isExist, paramsState.values]);
+  }, [isConnectionExist, cdcStatus, paramsState.values]);
 
   useEffect(() => {
     if (_runOnMount && canRun) handleRunClick();

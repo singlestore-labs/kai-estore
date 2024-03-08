@@ -1,5 +1,6 @@
 import { createState } from "@/utils/state";
 import { cookies } from "@/utils/cookies";
+import { selector, useRecoilValue } from "recoil";
 
 export type ConnectionState = { isExist: boolean };
 
@@ -19,3 +20,12 @@ export const connectionState = createState<ConnectionState>(
     }
   }
 );
+
+const isConnectionExist = selector({
+  key: connectionState.createKey("isExist"),
+  get: ({ get }) => get(connectionState.valueSelector).isExist
+});
+
+export function useIsConnectionExist() {
+  return useRecoilValue(isConnectionExist);
+}

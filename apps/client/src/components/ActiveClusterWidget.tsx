@@ -1,7 +1,7 @@
 import { Link } from "@/components/common/Link";
 import { Typography } from "@/components/common/Typography";
 import { ROUTES } from "@/constants/routes";
-import { connectionState } from "@/state/connection";
+import { useIsConnectionExist } from "@/state/connection";
 import { ComponentProps } from "@/types/common";
 import { Box, BoxProps, keyframes } from "@chakra-ui/react";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
@@ -57,7 +57,7 @@ const checkOverlap = (...elements: (HTMLElement | undefined)[]) => {
 export function ActiveClusterWidget({ hideOnRef, ...props }: ActiveClusterWidgetProps) {
   const rootRef = useRef<HTMLDivElement>();
   const _hideOnRef = useRef(hideOnRef);
-  const connectionStateValue = connectionState.useValue();
+  const isConnectionExist = useIsConnectionExist();
   const [isIn, setIsIn] = useState(true);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export function ActiveClusterWidget({ hideOnRef, ...props }: ActiveClusterWidget
       ref={rootRef}
     >
       <Typography fontWeight="medium">Demo application is running on a MongoDB® Atlas M30 cluster.</Typography>
-      {!connectionStateValue.isExist ? (
+      {!isConnectionExist ? (
         <Link
           href={`${ROUTES.analytics}?modalOpen=1`}
           chakra={{

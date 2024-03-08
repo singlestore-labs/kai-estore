@@ -1,3 +1,4 @@
+import { IS_DEV } from "@/constants/env";
 import { SocketEventsHandler } from "@/services/socket";
 import { CDC } from "@/types/data";
 import { parseConnectionConfigHeader } from "@/utils/connection";
@@ -40,7 +41,7 @@ export const cdcSocketEventsHandler: SocketEventsHandler = (socket) => {
 
           const areEqual = areDbCollectionsEqual(...collectionsCount.map((db) => db.map((i) => i[1])));
 
-          console.log(`socket: ${socket.id}`, "cdc.interval");
+          if (IS_DEV) console.log(`socket: ${socket.id}`, "cdc.interval");
 
           if (areEqual) {
             clearInterval(interval);

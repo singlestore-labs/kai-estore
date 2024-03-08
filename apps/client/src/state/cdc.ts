@@ -1,6 +1,7 @@
 import { createState } from "@/utils/state";
 import { api } from "@/api";
 import { CDC } from "@/types/api";
+import { selector, useRecoilValue } from "recoil";
 
 export type CDCState = CDC;
 
@@ -19,3 +20,12 @@ export const cdcState = createState<CDCState>(
     }
   }
 );
+
+const cdcStatus = selector({
+  key: cdcState.createKey("status"),
+  get: ({ get }) => get(cdcState.valueSelector).status
+});
+
+export function useCDCStatus() {
+  return useRecoilValue(cdcStatus);
+}

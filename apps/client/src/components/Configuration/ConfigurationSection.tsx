@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ComponentProps } from "@/types/common";
 
-import { connectionState } from "@/state/connection";
+import { useIsConnectionExist } from "@/state/connection";
 
 import { ApplicationParameters } from "@/components/ApplicationParameters";
 import { Box, Button, keyframes, useDisclosure } from "@chakra-ui/react";
@@ -31,14 +31,14 @@ const pulseAnimation = keyframes({
 
 export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
   const { paramsObject } = useSearchParams<{ modalOpen?: "1" }>();
-  const _connectionState = connectionState.useValue();
+  const isConnectionExist = useIsConnectionExist();
   const [_cdcState, setCDCState] = cdcState.useState();
   const { onClose: closeModal, ...modal } = useDisclosure({ defaultIsOpen: paramsObject.modalOpen === "1" });
   const isCDCSubscribedRef = useRef(false);
   const rootRef = useRef<any>(null);
 
   useEffect(() => {
-    if (isCDCSubscribedRef.current) return;
+    if (isCDCSubscribedRef.current || _cdcState.status === "ready") return;
     ioEvents.cdc.emit();
     isCDCSubscribedRef.current = true;
     const remove = ioEvents.cdc.onData((data) => {
@@ -59,7 +59,7 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
       ioEvents.cdc.off();
       isCDCSubscribedRef.current = false;
     };
-  }, [setCDCState]);
+  }, [setCDCState, _cdcState.status]);
 
   return (
     <ApplicationParameters
@@ -69,7 +69,7 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
       headerProps={{ display: "flex", alignItems: "center" }}
       headerChildren={
         <>
-          {_connectionState.isExist && (
+          {isConnectionExist && (
             <Button
               ml="auto"
               size="s2.sm"
@@ -82,9 +82,9 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
       }
       bodyProps={{ position: "initial" }}
       connection="config"
-      isPlaceholder={!_connectionState.isExist}
+      isPlaceholder={!isConnectionExist}
     >
-      {!_connectionState.isExist && (
+      {!isConnectionExist && (
         <Box
           position="absolute"
           top={0}
