@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { AppProps } from "next/app";
+import Script from "next/script";
 import { RecoilEnv, RecoilRoot } from "recoil";
 import { ChakraProvider } from "@chakra-ui/react";
 
@@ -24,6 +25,10 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot initializeState={initializeState}>
       <ChakraProvider theme={theme}>
+        <Script
+          src="lib/intercom.js"
+          strategy="lazyOnload"
+        />
         <Component {...pageProps} />
         <ToastContainer />
         <SocketController />
