@@ -34,6 +34,8 @@ export function ApplicationParameters({
   title = "Application Parameters",
   connection,
   isPlaceholder = false,
+  containerProps,
+  bodyProps,
   ...props
 }: ApplicationParametersProps) {
   const [params, setParams] = useState<ReturnType<typeof createParams>>(() => createParams());
@@ -116,8 +118,8 @@ export function ApplicationParameters({
     <Section
       variant="3.solid"
       title={title}
-      extraChildren={children}
-      containerProps={{ display: "flex", flexDirection: "column", h: "full" }}
+      {...props}
+      containerProps={{ display: "flex", flexDirection: "column", h: "full", ...containerProps }}
       bodyProps={{
         flex: "1",
         display: "flex",
@@ -128,11 +130,12 @@ export function ApplicationParameters({
         borderTop: "1px",
         borderColor: "s2.gray.700",
         py: "4",
-        px: "7"
+        px: "7",
+        ...bodyProps
       }}
-      {...props}
     >
       {content}
+      {children}
     </Section>
   );
 }

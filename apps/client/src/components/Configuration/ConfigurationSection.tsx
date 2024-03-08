@@ -8,6 +8,10 @@ import { Box, Button, keyframes, useDisclosure } from "@chakra-ui/react";
 import { Typography } from "@/components/common/Typography";
 import { ConfigurationModal } from "@/components/Configuration/ConfigurationModal";
 import { useSearchParams } from "@/hooks/useSearchParams";
+import { cdcState } from "@/state/cdc";
+import { Loader } from "@/components/common/Loader";
+import { useEffect, useRef } from "react";
+import { ioEvents } from "@/events/io";
 
 export type ConfigurationSectionProps = ComponentProps<SectionProps>;
 
@@ -28,7 +32,21 @@ const pulseAnimation = keyframes({
 export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
   const { paramsObject } = useSearchParams<{ modalOpen?: "1" }>();
   const _connectionState = connectionState.useValue();
+  const [_cdcState, setCDCState] = cdcState.useState();
   const { onClose: closeModal, ...modal } = useDisclosure({ defaultIsOpen: paramsObject.modalOpen === "1" });
+  const isCDCSubscribedRef = useRef(false);
+
+  useEffect(() => {
+    if (isCDCSubscribedRef.current) return;
+    ioEvents.cdc.emit();
+    isCDCSubscribedRef.current = true;
+    const remove = ioEvents.cdc.onData(setCDCState);
+    return () => {
+      remove();
+      ioEvents.cdc.off();
+      isCDCSubscribedRef.current = false;
+    };
+  }, [setCDCState]);
 
   return (
     <ApplicationParameters
@@ -36,18 +54,20 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
       title="SingleStore Parameters"
       headerProps={{ display: "flex", alignItems: "center" }}
       headerChildren={
-        _connectionState.isExist && (
-          <Button
-            ml="auto"
-            size="s2.sm"
-            onClick={modal.onOpen}
-          >
-            Change connection
-          </Button>
-        )
+        <>
+          {_connectionState.isExist && (
+            <Button
+              ml="auto"
+              size="s2.sm"
+              onClick={modal.onOpen}
+            >
+              Change connection
+            </Button>
+          )}
+        </>
       }
+      bodyProps={{ position: "initial" }}
       connection="config"
-      position="relative"
       isPlaceholder={!_connectionState.isExist}
     >
       {!_connectionState.isExist && (
@@ -85,6 +105,29 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
               ✨
             </Box>
           </Button>
+        </Box>
+      )}
+
+      {_cdcState.status === "cloning" && (
+        <Box
+          flex="1 0 100%"
+          display="flex"
+          alignItems="center"
+          gap="2"
+          pb="1"
+        >
+          <Box
+            position="relative"
+            flex="0 0 20px"
+          >
+            <Loader
+              overlayProps={{ bg: "transparent" }}
+              circleWrapperProps={{ w: "full" }}
+              isOpen
+            />
+          </Box>
+
+          <Typography color="white">Data cloning</Typography>
         </Box>
       )}
 

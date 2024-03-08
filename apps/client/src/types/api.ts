@@ -84,3 +84,5 @@ export type DbInfo = {
 };
 
 export type WithDuration<T = any> = [result: T, ms: number, value: number, unit: string];
+
+export type CDC = { status: "cloning" | "ready" };

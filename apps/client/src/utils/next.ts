@@ -10,6 +10,7 @@ import { tagsState } from "@/state/tags";
 import { apiInstance } from "@/api/instance";
 import { api } from "@/api";
 import { connectionState } from "@/state/connection";
+import { cdcState } from "@/state/cdc";
 
 export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = {}) => {
   return (async (context) => {
@@ -61,7 +62,8 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
         [productPricesState.name, () => productPricesState.getValue()],
         [productRatingsState.name, () => productRatingsState.getValue()],
         [tagsState.name, () => tagsState.getValue()],
-        [connectionState.name, () => connectionState.getValue({ isExist: !!req.cookies.connectionConfig })]
+        [connectionState.name, () => connectionState.getValue({ isExist: !!req.cookies.connectionConfig })],
+        [cdcState.name, () => cdcState.getValue({ connection: "config" })]
       ];
 
       await Promise.all(

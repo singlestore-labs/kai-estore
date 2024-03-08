@@ -15,6 +15,7 @@ import { userOrdersState } from "./userOrders";
 import { userRatingsState } from "./userRatings";
 import { userRecommProductsState } from "./userRecommProducts";
 import { connectionState } from "./connection";
+import { cdcState } from "./cdc";
 
 type States = typeof states;
 export type RootState = { [K in keyof States]: States[K] };
@@ -33,7 +34,8 @@ const states = {
   userOrdersState,
   userRatingsState,
   userRecommProductsState,
-  connectionState
+  connectionState,
+  cdcState
 };
 
 const stateEntries = objectEntries(states);
