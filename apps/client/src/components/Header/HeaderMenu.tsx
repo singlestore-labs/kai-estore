@@ -1,7 +1,7 @@
 import { Box, HStack, StackProps } from "@chakra-ui/react";
 
 import { ROUTES } from "@/constants/routes";
-import { IS_SINGLE_DB, WITH_DATA_GENERATION } from "@/constants/env";
+// import { IS_SINGLE_DB } from "@/constants/env";
 
 import { Link } from "@/components/common/Link";
 import { ComponentProps } from "@/types/common";
@@ -11,8 +11,8 @@ export type HeaderMenuProps = ComponentProps<StackProps>;
 
 const links = Object.entries({
   [ROUTES.root]: { text: "Catalog" },
-  [ROUTES.analytics]: { text: "Analytics", withAttraction: true },
-  ...(!IS_SINGLE_DB && WITH_DATA_GENERATION ? { [ROUTES.configure]: { text: "Configure" } } : {})
+  [ROUTES.analytics]: { text: "Analytics", withAttraction: true }
+  // ...(!IS_SINGLE_DB && { [ROUTES.configure]: { text: "Configure" } })
 });
 
 export function HeaderMenu({ ...props }: HeaderMenuProps) {

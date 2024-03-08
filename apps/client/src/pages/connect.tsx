@@ -5,7 +5,7 @@ import { Image } from "@chakra-ui/next-js";
 
 import { ROUTES } from "@/constants/routes";
 import { COOKIE_KEYS } from "@/constants/cookie";
-import { WITH_DATA_GENERATION, IS_SINGLE_DB } from "@/constants/env";
+import { IS_SINGLE_DB } from "@/constants/env";
 import { ConnectionConfig } from "@/types/api";
 import { Defined } from "@/types/helpers";
 import { api } from "@/api";
@@ -69,12 +69,8 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     async (values) => {
       try {
         await createConnection(values);
-
-        if (WITH_DATA_GENERATION) {
-          const isDataValid = await validateData();
-          if (!isDataValid.data) await setData();
-        }
-
+        const isDataValid = await validateData();
+        if (!isDataValid.data) await setData();
         handleDataSuccess();
       } catch (error) {
         handleError(error);
@@ -84,7 +80,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   );
 
   useEffect(() => {
-    if (!shouldSetData || !WITH_DATA_GENERATION) return;
+    if (!shouldSetData) return;
 
     (async () => {
       try {
@@ -98,7 +94,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
 
   const loader = <ConnectLoader {...loaderState} />;
 
-  if (shouldSetData && WITH_DATA_GENERATION) return loader;
+  if (shouldSetData) return loader;
 
   return (
     <Page
@@ -169,6 +165,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
             <ConfigurationForm
               onSubmit={handleFormSubmit}
               formProps={{ maxW: "30rem", mt: "8" }}
+              withDataGeneration
             >
               <Button
                 type="submit"
@@ -260,12 +257,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       apiInstance.defaults.headers.cookie = userSetCookie;
       context.res.setHeader("set-cookie", userSetCookie ?? "");
 
-      if (WITH_DATA_GENERATION) {
-        const isDataValidRes = await api.data.validate({ connection: "config" });
-
-        if (!isDataValidRes.data) {
-          return { props: { shouldSetData: true } };
-        }
+      const isDataValidRes = await api.data.validate({ connection: "config" });
+      if (!isDataValidRes.data) {
+        return { props: { shouldSetData: true } };
       }
 
       return {

@@ -53,6 +53,7 @@ connectionRouter.post("/connection", validateRoute(validationSchema), async (req
 
 connectionRouter.get("/connection", connectionConfig, async (req, res, next) => {
   try {
+    if (!req.isConnectionConfigRequest) return res.status(200).send();
     return res.status(200).json(req.connectionConfig);
   } catch (error) {
     return next(error);

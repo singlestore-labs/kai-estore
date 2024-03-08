@@ -17,7 +17,6 @@ import { configRouter } from "@/routes/config";
 import { cdcRouter } from "@/routes/cdc";
 
 const withConnectionRouter = express.Router();
-withConnectionRouter.use(isConnectionConfigRequest);
 withConnectionRouter.use(connectionConfig);
 withConnectionRouter.use(dbConnection);
 
@@ -34,4 +33,5 @@ withConnectionRouter.use(dbConnection);
 ].forEach((route) => withConnectionRouter.use(route));
 
 export const apiRouter = express.Router();
+apiRouter.use(isConnectionConfigRequest);
 [configRouter, connectionRouter, withConnectionRouter].forEach((route) => apiRouter.use(route));
