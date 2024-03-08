@@ -31,14 +31,14 @@ export const cdcSocketEventsHandler: SocketEventsHandler = (socket) => {
           const collectionsCount = await Promise.all(
             [db, sourceDB].map((db) => {
               return Promise.all(
-                requiredCollectionNames.map((collection) => {
-                  return db.collection(collection).countDocuments();
+                requiredCollectionNames.map(async (collection) => {
+                  return [collection, await db.collection(collection).countDocuments()] as const;
                 })
               );
             })
           );
 
-          const areEqual = areDbCollectionsEqual(...collectionsCount);
+          const areEqual = areDbCollectionsEqual(...collectionsCount.map((db) => db.map((i) => i[1])));
 
           console.log(`socket: ${socket.id}`, "cdc.interval");
 
@@ -46,7 +46,9 @@ export const cdcSocketEventsHandler: SocketEventsHandler = (socket) => {
             clearInterval(interval);
             const updatedCDC: CDC = { ...cdc, status: "ready" };
             await db.collection<CDC>("cdc").updateOne({ _id: cdc._id }, { $set: updatedCDC });
-            socket.emit("cdc.data", updatedCDC);
+            socket.emit("cdc.data", { cdc: updatedCDC, count: Object.fromEntries(collectionsCount[0]) });
+          } else {
+            socket.emit("cdc.data", { cdc, count: Object.fromEntries(collectionsCount[0]) });
           }
         }, 5000);
 

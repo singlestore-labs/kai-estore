@@ -1,17 +1,17 @@
+import { useEffect, useRef } from "react";
 import { ComponentProps } from "@/types/common";
 
 import { connectionState } from "@/state/connection";
 
-import { SectionProps } from "../common/Section";
 import { ApplicationParameters } from "@/components/ApplicationParameters";
 import { Box, Button, keyframes, useDisclosure } from "@chakra-ui/react";
-import { Typography } from "@/components/common/Typography";
 import { ConfigurationModal } from "@/components/Configuration/ConfigurationModal";
-import { useSearchParams } from "@/hooks/useSearchParams";
-import { cdcState } from "@/state/cdc";
 import { Loader } from "@/components/common/Loader";
-import { useEffect, useRef } from "react";
+import { SectionProps } from "@/components/common/Section";
+import { Typography } from "@/components/common/Typography";
+import { cdcState } from "@/state/cdc";
 import { ioEvents } from "@/events/io";
+import { useSearchParams } from "@/hooks/useSearchParams";
 
 export type ConfigurationSectionProps = ComponentProps<SectionProps>;
 
@@ -35,12 +35,25 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
   const [_cdcState, setCDCState] = cdcState.useState();
   const { onClose: closeModal, ...modal } = useDisclosure({ defaultIsOpen: paramsObject.modalOpen === "1" });
   const isCDCSubscribedRef = useRef(false);
+  const rootRef = useRef<any>(null);
 
   useEffect(() => {
     if (isCDCSubscribedRef.current) return;
     ioEvents.cdc.emit();
     isCDCSubscribedRef.current = true;
-    const remove = ioEvents.cdc.onData(setCDCState);
+    const remove = ioEvents.cdc.onData((data) => {
+      if (!data) return;
+      if ("count" in data) {
+        setCDCState(data.cdc);
+        rootRef.current.setParams({
+          ordersNumber: data.count.orders,
+          productsNumber: data.count.products,
+          ratingsNumber: data.count.ratings
+        });
+      } else {
+        setCDCState(data);
+      }
+    });
     return () => {
       remove();
       ioEvents.cdc.off();
@@ -51,6 +64,7 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
   return (
     <ApplicationParameters
       {...props}
+      ref={rootRef}
       title="SingleStore Parameters"
       headerProps={{ display: "flex", alignItems: "center" }}
       headerChildren={

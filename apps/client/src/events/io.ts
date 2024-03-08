@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { io as socketIo, Socket } from "socket.io-client";
 
-import { CDC, RecommProduct, WithDuration } from "@/types/api";
+import { CDC, DbInfo, RecommProduct, WithDuration } from "@/types/api";
 import { SOCKET_URL } from "@/constants/env";
 import { proccessError } from "@/api/instance";
 import { cookies } from "@/utils/cookies";
@@ -47,7 +47,23 @@ export const ioEvents = {
       io.emit("cdc.off");
     },
 
-    onData: (callback: (data: CDC) => void) => {
+    onData: (
+      callback: (
+        data:
+          | CDC
+          | {
+              cdc: CDC;
+              count: {
+                categories: number;
+                orders: number;
+                products: number;
+                ratings: number;
+                tags: number;
+                users: number;
+              };
+            }
+      ) => void
+    ) => {
       io.on("cdc.data", callback);
       return () => io.off("cdc.data", callback);
     },

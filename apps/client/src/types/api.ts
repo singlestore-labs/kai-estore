@@ -78,7 +78,7 @@ export type DbInfo = {
     totalSize: number;
     views: number;
   };
-  orderRecords: number;
+  ordersNumber: number;
   productsNumber: number;
   ratingsNumber: number;
 };

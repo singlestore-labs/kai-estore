@@ -42,8 +42,7 @@ export function proccessError(error: unknown) {
 
     if (error instanceof AxiosError) {
       title = error.message;
-
-      console.log(error);
+      console.error(error);
 
       if (error.response?.data && "error" in error.response.data) {
         title = error.response?.data.error;
