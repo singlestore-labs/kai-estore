@@ -35,7 +35,7 @@ export function HeaderTopBar({ ...props }: HeaderTopBarProps) {
             Unleash the Power of Your Real-Time Analytics with SingleStoreDB
           </Typography>
           <Link
-            href="https://www.singlestore.com/"
+            href="https://www.singlestore.com/cloud-trial/kai"
             chakra={{
               fontSize: "xs",
               fontWeight: "semibold",

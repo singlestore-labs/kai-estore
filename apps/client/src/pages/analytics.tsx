@@ -6,6 +6,7 @@ import { QueryListSection } from "@/components/Query/QueryListSection";
 import { ApplicationParameters } from "@/components/ApplicationParameters";
 
 import { getDefaultServerSideProps } from "@/utils/next";
+import { ConfigurationSection } from "@/components/Configuration/ConfigurationSection";
 
 export default function Analytics() {
   return (
@@ -17,20 +18,17 @@ export default function Analytics() {
         mt="6"
       >
         <Flex
+          display="grid"
           alignItems="stretch"
-          gap="12"
+          gridTemplateColumns={{
+            base: "repeat(auto-fit, minmax(1fr, 1fr))",
+            md: "repeat(auto-fit, minmax(16rem, 1fr))"
+          }}
           rowGap="6"
-          flexWrap="wrap"
+          gap="8"
         >
-          <ApplicationParameters
-            title="SingleStore Parameters"
-            flex="1 0 24rem"
-            connection="config"
-          />
-          <ApplicationParameters
-            title="MongoDB® Atlas Parameters"
-            flex="1 0 24rem"
-          />
+          <ConfigurationSection />
+          <ApplicationParameters title="MongoDB® Atlas M30 Parameters" />
         </Flex>
       </Section>
 

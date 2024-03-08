@@ -11,6 +11,7 @@ export type ConnectLoaderProps = ComponentProps<BoxProps> & {
   message?: ReactNode;
   isOpen?: boolean;
   variant?: "light" | "dark";
+  inPortal?: boolean;
 };
 
 const circleAnimation = keyframes({
@@ -28,6 +29,7 @@ export function ConnectLoader({
   message,
   variant = "light",
   isOpen = false,
+  inPortal = true,
   ...props
 }: ConnectLoaderProps) {
   const [_isOpen, setIsOpen] = useState(isOpen);
@@ -51,68 +53,68 @@ export function ConnectLoader({
     };
   }, [isOpen, delay, clear]);
 
-  return (
-    <Portal>
+  const content = (
+    <Box
+      position="fixed"
+      top="0"
+      left="0"
+      w="full"
+      h="full"
+      color="s2.purple.800"
+      bg={variant === "light" ? "white" : "s2.gray.900"}
+      transition="visibility 0s, opacity 0.4s ease"
+      zIndex="2000"
+      {...props}
+      __css={{
+        ...(_isOpen ? { visibility: "visible", opacity: "1" } : { visibility: "hidden", opacity: "0" }),
+        ...props.__css
+      }}
+      as="span"
+    >
       <Box
-        position="fixed"
-        top="0"
-        left="0"
-        w="full"
-        h="full"
-        color="s2.purple.800"
-        bg={variant === "light" ? "white" : "#1b1a21"}
-        transition="visibility 0s, opacity 0.4s ease"
-        zIndex="2000"
-        {...props}
-        __css={{
-          ...(_isOpen ? { visibility: "visible", opacity: "1" } : { visibility: "hidden", opacity: "0" }),
-          ...props.__css
-        }}
         as="span"
+        position="absolute"
+        top="50%"
+        left="50%"
+        h="auto"
+        transform="translate(-50%, -50%)"
+        zIndex="1"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
       >
         <Box
-          as="span"
-          position="absolute"
-          top="50%"
-          left="50%"
+          as={SingleStoreSpinner}
+          w="clamp(64px, 6.11vw, 96px)"
           h="auto"
-          transform="translate(-50%, -50%)"
-          zIndex="1"
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Box
-            as={SingleStoreSpinner}
-            w="clamp(64px, 6.11vw, 96px)"
-            h="auto"
-            animation={`${circleAnimation} 1s infinite linear`}
-          />
+          animation={`${circleAnimation} 1s infinite linear`}
+        />
 
+        <Typography
+          as="p"
+          fontSize="xl"
+          lineHeight="7"
+          color={variant === "light" ? "black" : "white"}
+          fontWeight="semibold"
+          textAlign="center"
+          mt="8"
+        >
+          {title}
+        </Typography>
+        {message && (
           <Typography
             as="p"
-            fontSize="xl"
-            lineHeight="7"
             color={variant === "light" ? "black" : "white"}
-            fontWeight="semibold"
             textAlign="center"
-            mt="8"
+            mt="4"
           >
-            {title}
+            {message}
           </Typography>
-          {message && (
-            <Typography
-              as="p"
-              color={variant === "light" ? "black" : "white"}
-              textAlign="center"
-              mt="4"
-            >
-              {message}
-            </Typography>
-          )}
-        </Box>
+        )}
       </Box>
-    </Portal>
+    </Box>
   );
+
+  return inPortal ? <Portal>{content}</Portal> : content;
 }

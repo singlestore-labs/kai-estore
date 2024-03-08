@@ -1,13 +1,22 @@
 import fs from "fs";
 import { Db, ObjectId } from "mongodb";
 
-import { Dataset, DatasetCollectionNames, DatasetSizes, Order, OrderFlat, User } from "@/types/data";
+import { CDC, Dataset, DatasetCollectionNames, DatasetSizes, Meta, Order, OrderFlat, User } from "@/types/data";
 import { ConnectionConfig } from "@/types/connection";
 
 import { getDirname } from "./helpers";
 
-export async function validateData(db: Db, dataSize?: ConnectionConfig["dataSize"]) {
+export async function validateData(
+  db: Db,
+  dataSize?: ConnectionConfig["dataSize"],
+  withCDC?: ConnectionConfig["withCDC"]
+) {
   try {
+    if (withCDC) {
+      const cdc = (await db.collection<CDC>("cdc").findOne()) || undefined;
+      return !!cdc?.status;
+    }
+
     const existedCollectionNames = (await db.listCollections().toArray()).map(({ name }) => name);
     const requiredCollectionNames = ["categories", "orders", "products", "ratings", "tags", "users"];
     let isDataValid = true;
@@ -19,8 +28,8 @@ export async function validateData(db: Db, dataSize?: ConnectionConfig["dataSize
     }
 
     if (dataSize) {
-      const metaDataSize = (await db.collection("meta").find().toArray())[0]?.dataSize;
-      const isDataSizeValid = metaDataSize === dataSize;
+      const meta = (await db.collection<Meta>("meta").findOne()) || undefined;
+      const isDataSizeValid = meta?.dataSize === dataSize;
       isDataValid = isDataValid && isDataSizeValid;
     }
 

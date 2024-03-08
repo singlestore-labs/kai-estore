@@ -5,7 +5,7 @@ import { Image } from "@chakra-ui/next-js";
 
 import { ROUTES } from "@/constants/routes";
 import { COOKIE_KEYS } from "@/constants/cookie";
-import { WITH_DATA_GENERATION, IS_SINGLE_DB } from "@/constants/env";
+import { IS_SINGLE_DB } from "@/constants/env";
 import { ConnectionConfig } from "@/types/api";
 import { Defined } from "@/types/helpers";
 import { api } from "@/api";
@@ -14,17 +14,17 @@ import { Logo } from "@/components/Logo";
 import { FormProps } from "@/components/common/Form";
 import { Page } from "@/components/common/Page";
 import { Typography } from "@/components/common/Typography";
-import { ConnectModal } from "@/components/Connect/ConnectModal";
+import { ConnectHelpModal } from "@/components/Connect/ConnectHelpModal";
 import { ConnectLoader } from "@/components/Connect/ConnectLoader";
 import { Link } from "@/components/common/Link";
-import { ConfigurationForm } from "@/components/ConfigurationForm";
+import { ConfigurationForm } from "@/components/Configuration/ConfigurationForm";
 
 export default function Connect({ shouldSetData = false }: { shouldSetData?: boolean }) {
-  const [loaderSate, setLoaderSate] = useState({ title: "", message: "", isOpen: shouldSetData });
+  const [loaderState, setLoaderState] = useState({ title: "", message: "", isOpen: shouldSetData });
   const modal = useDisclosure();
 
   const resetLoaderState = useCallback(() => {
-    setLoaderSate({ title: "", message: "", isOpen: false });
+    setLoaderState({ title: "", message: "", isOpen: false });
   }, []);
 
   const handleError = useCallback(
@@ -36,18 +36,18 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   );
 
   const createConnection = useCallback(async (values: ConnectionConfig) => {
-    setLoaderSate((state) => ({ ...state, title: "Connection", isOpen: true }));
+    setLoaderState((state) => ({ ...state, title: "Connection", isOpen: true }));
     await api.connection.create(values);
     await api.user.create();
   }, []);
 
   const validateData = useCallback(() => {
-    setLoaderSate((state) => ({ ...state, title: "Data validation" }));
+    setLoaderState((state) => ({ ...state, title: "Data validation" }));
     return api.data.validate({ connection: "config" });
   }, []);
 
   const setData = useCallback(() => {
-    setLoaderSate((state) => ({
+    setLoaderState((state) => ({
       ...state,
       title: "Data inserting",
       message: `It will take a while. Do not close the browser tab.`
@@ -56,7 +56,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   }, []);
 
   const handleDataSuccess = useCallback(() => {
-    setLoaderSate((state) => ({
+    setLoaderState((state) => ({
       ...state,
       title: "Success",
       message: "You will be redirected to the product catalog."
@@ -69,12 +69,8 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     async (values) => {
       try {
         await createConnection(values);
-
-        if (WITH_DATA_GENERATION) {
-          const isDataValid = await validateData();
-          if (!isDataValid.data) await setData();
-        }
-
+        const isDataValid = await validateData();
+        if (!isDataValid.data) await setData();
         handleDataSuccess();
       } catch (error) {
         handleError(error);
@@ -84,7 +80,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
   );
 
   useEffect(() => {
-    if (!shouldSetData || !WITH_DATA_GENERATION) return;
+    if (!shouldSetData) return;
 
     (async () => {
       try {
@@ -96,9 +92,9 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
     })();
   }, [shouldSetData, setData, handleDataSuccess, handleError]);
 
-  const loader = <ConnectLoader {...loaderSate} />;
+  const loader = <ConnectLoader {...loaderState} />;
 
-  if (shouldSetData && WITH_DATA_GENERATION) return loader;
+  if (shouldSetData) return loader;
 
   return (
     <Page
@@ -169,6 +165,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
             <ConfigurationForm
               onSubmit={handleFormSubmit}
               formProps={{ maxW: "30rem", mt: "8" }}
+              withDataGeneration
             >
               <Button
                 type="submit"
@@ -230,7 +227,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
         </Box>
       </Box>
 
-      <ConnectModal
+      <ConnectHelpModal
         isOpen={modal.isOpen}
         onClose={modal.onClose}
       />
@@ -260,12 +257,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       apiInstance.defaults.headers.cookie = userSetCookie;
       context.res.setHeader("set-cookie", userSetCookie ?? "");
 
-      if (WITH_DATA_GENERATION) {
-        const isDataValidRes = await api.data.validate({ connection: "config" });
-
-        if (!isDataValidRes.data) {
-          return { props: { shouldSetData: true } };
-        }
+      const isDataValidRes = await api.data.validate({ connection: "config" });
+      if (!isDataValidRes.data) {
+        return { props: { shouldSetData: true } };
       }
 
       return {

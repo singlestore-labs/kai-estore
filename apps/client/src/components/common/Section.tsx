@@ -13,6 +13,7 @@ export type SectionVariants = "1" | "2" | "3" | "3.solid";
 export type SectionProps = ComponentProps<
   BoxProps,
   {
+    extraChildren?: ReactNode;
     title?: TypographyProps["children"];
     titleProps?: Omit<TypographyProps, "children">;
     description?: TypographyProps["children"];
@@ -119,6 +120,7 @@ export const Section = forwardRef<SectionProps, "section">(
   (
     {
       children,
+      extraChildren,
       title,
       titleProps,
       description,
@@ -191,6 +193,7 @@ export const Section = forwardRef<SectionProps, "section">(
             {children}
           </Box>
         </Container>
+        {extraChildren}
       </Box>
     );
   }

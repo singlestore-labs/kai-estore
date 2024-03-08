@@ -9,7 +9,8 @@ import { productRatingsState } from "@/state/productRatings";
 import { tagsState } from "@/state/tags";
 import { apiInstance } from "@/api/instance";
 import { api } from "@/api";
-import { WITH_DATA_GENERATION } from "@/constants/env";
+import { connectionState } from "@/state/connection";
+import { cdcState } from "@/state/cdc";
 
 export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = {}) => {
   return (async (context) => {
@@ -30,39 +31,39 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
       const props = { rootState: {} as RootStateValues };
 
       const hasConnectionConfig = COOKIE_KEYS.connectionConfig in req.cookies;
-      let shouldRedirectToConnect = !hasConnectionConfig;
+      // const shouldRedirectToConnect = !hasConnectionConfig;
 
       if (hasConnectionConfig) {
         apiInstance.defaults.headers["x-connection-config"] = req.cookies.connectionConfig as string;
 
-        if (WITH_DATA_GENERATION) {
-          try {
-            shouldRedirectToConnect = !(await api.data.validate({ connection: "config" })).data;
-          } catch (error) {
-            shouldRedirectToConnect = true;
-          }
-        }
+        // try {
+        //   shouldRedirectToConnect = !(await api.data.validate({ connection: "config" })).data;
+        // } catch (error) {
+        //   shouldRedirectToConnect = true;
+        // }
       }
 
-      if (shouldRedirectToConnect) {
-        res.setHeader(
-          "Set-Cookie",
-          `${COOKIE_KEYS.connectionConfig}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
-        );
+      // if (shouldRedirectToConnect) {
+      //   res.setHeader(
+      //     "Set-Cookie",
+      //     `${COOKIE_KEYS.connectionConfig}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+      //   );
 
-        return {
-          redirect: {
-            destination: ROUTES.connect,
-            permanent: false
-          }
-        };
-      }
+      //   return {
+      //     redirect: {
+      //       destination: ROUTES.connect,
+      //       permanent: false
+      //     }
+      //   };
+      // }
 
       const stateSetters: [string, () => any][] = [
         [categoriesState.name, () => categoriesState.getValue()],
         [productPricesState.name, () => productPricesState.getValue()],
         [productRatingsState.name, () => productRatingsState.getValue()],
-        [tagsState.name, () => tagsState.getValue()]
+        [tagsState.name, () => tagsState.getValue()],
+        [connectionState.name, () => connectionState.getValue({ isExist: !!req.cookies.connectionConfig })],
+        [cdcState.name, () => cdcState.getValue({ connection: "config" })]
       ];
 
       await Promise.all(

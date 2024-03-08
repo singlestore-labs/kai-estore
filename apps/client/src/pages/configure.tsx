@@ -3,14 +3,14 @@ import { Box, Button } from "@chakra-ui/react";
 
 import { ConnectionConfig } from "@/types/api";
 import { ROUTES } from "@/constants/routes";
-import { WITH_DATA_GENERATION, IS_SINGLE_DB } from "@/constants/env";
+import { IS_SINGLE_DB } from "@/constants/env";
 import { api } from "@/api";
 import { getDefaultServerSideProps } from "@/utils/next";
 import { Page } from "@/components/common/Page";
 import { Section } from "@/components/common/Section";
 import { Typography } from "@/components/common/Typography";
 import { FormProps } from "@/components/common/Form";
-import { ConfigurationForm } from "@/components/ConfigurationForm";
+import { ConfigurationForm } from "@/components/Configuration/ConfigurationForm";
 import { ConnectLoader } from "@/components/Connect/ConnectLoader";
 
 const formId = "configuration";
@@ -18,38 +18,34 @@ const formId = "configuration";
 export default function Configure() {
   const [initialValues, setInitialValues] = useState<ConnectionConfig | undefined>();
   const [isInitialValuesLoading, setIsInitialValuesLoading] = useState(true);
-  const [loaderSate, setLoaderSate] = useState({ title: "", message: "", isOpen: false });
+  const [loaderState, setLoaderState] = useState({ title: "", message: "", isOpen: false });
 
   const handleFormSubmit: FormProps["onSubmit"] = async (values) => {
     try {
       let timeout: NodeJS.Timeout | undefined = undefined;
 
-      setLoaderSate((state) => ({ ...state, title: "Updating", isOpen: true }));
-
+      setLoaderState((state) => ({ ...state, title: "Updating", isOpen: true }));
       await api.connection.update(values, { connection: "config" });
+      setLoaderState((state) => ({ ...state, title: "Data validation" }));
+      const isDataValidRes = await api.data.validate({ connection: "config" });
 
-      if (WITH_DATA_GENERATION) {
-        setLoaderSate((state) => ({ ...state, title: "Data validation" }));
-        const isDataValidRes = await api.data.validate({ connection: "config" });
-
-        if (!isDataValidRes.data) {
-          setLoaderSate((state) => ({
-            ...state,
-            title: "Data inserting",
-            message: `It will take a while. Do not close the browser tab.`
-          }));
-          await api.data.set({ connection: "config" });
-        }
+      if (!isDataValidRes.data) {
+        setLoaderState((state) => ({
+          ...state,
+          title: "Data inserting",
+          message: `It will take a while. Do not close the browser tab.`
+        }));
+        await api.data.set({ connection: "config" });
       }
 
-      setLoaderSate((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
+      setLoaderState((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
 
       timeout = setTimeout(() => {
         clearTimeout(timeout);
         window.location.reload();
       }, 2000);
     } catch (error) {
-      setLoaderSate({ title: "", message: "", isOpen: false });
+      setLoaderState({ title: "", message: "", isOpen: false });
     }
   };
 
@@ -57,7 +53,7 @@ export default function Configure() {
     try {
       let timeout: NodeJS.Timeout | undefined = undefined;
 
-      setLoaderSate((state) => ({
+      setLoaderState((state) => ({
         ...state,
         title: "Data reset",
         message: `It will take a while. Do not close the browser tab.`,
@@ -66,14 +62,14 @@ export default function Configure() {
 
       await api.data.reset({ connection: "config" });
 
-      setLoaderSate((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
+      setLoaderState((state) => ({ ...state, title: "Success", message: "The page will be reloaded." }));
 
       timeout = setTimeout(() => {
         clearTimeout(timeout);
         window.location.reload();
       }, 2000);
     } catch (error) {
-      setLoaderSate({ title: "", message: "", isOpen: false });
+      setLoaderState({ title: "", message: "", isOpen: false });
     }
   };
 
@@ -123,6 +119,7 @@ export default function Configure() {
                   initialValues={initialValues}
                   onSubmit={handleFormSubmit}
                   isDisabled={isInitialValuesLoading}
+                  withDataGeneration
                 />
                 <Box
                   display="flex"
@@ -139,19 +136,17 @@ export default function Configure() {
                   >
                     Save configuration
                   </Button>
-                  {WITH_DATA_GENERATION && (
-                    <Button
-                      type="button"
-                      variant="solid"
-                      bg="red.500"
-                      _hover={{ bg: "red.600" }}
-                      _active={{ bg: "red.700" }}
-                      onClick={handleResetClick}
-                      isDisabled={isInitialValuesLoading}
-                    >
-                      Reset data
-                    </Button>
-                  )}
+                  <Button
+                    type="button"
+                    variant="solid"
+                    bg="red.500"
+                    _hover={{ bg: "red.600" }}
+                    _active={{ bg: "red.700" }}
+                    onClick={handleResetClick}
+                    isDisabled={isInitialValuesLoading}
+                  >
+                    Reset data
+                  </Button>
                 </Box>
               </Box>
             </Box>
@@ -160,7 +155,7 @@ export default function Configure() {
       </Section>
 
       <ConnectLoader
-        {...loaderSate}
+        {...loaderState}
         variant="dark"
       />
     </Page>

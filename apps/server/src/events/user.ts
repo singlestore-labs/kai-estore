@@ -7,7 +7,7 @@ import { withDuration } from "@/utils/helpers";
 export const userSocketEventsHandler: SocketEventsHandler = (socket) => {
   socket.on("recomm", async () => {
     try {
-      const connectionConfig = parseConnectionConfigHeader(socket.request.headers.cookie);
+      const connectionConfig = parseConnectionConfigHeader(socket.request.headers);
       const { db, client } = await createDBConnection(connectionConfig);
       socket.emit("recomm.loading", true);
       const data = await withDuration(() => getUserRecommProductsQuery(db, connectionConfig.userId));

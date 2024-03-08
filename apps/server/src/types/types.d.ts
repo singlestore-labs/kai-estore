@@ -6,6 +6,7 @@ export {};
 declare global {
   namespace Express {
     export interface Request {
+      isConnectionConfigRequest: boolean;
       connectionConfig: ConnectionConfig;
       dbClient: MongoClient;
       db: Db;

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { AppProps } from "next/app";
+import Script from "next/script";
 import { RecoilEnv, RecoilRoot } from "recoil";
 import { ChakraProvider } from "@chakra-ui/react";
 
@@ -12,6 +13,7 @@ import "@fontsource/inconsolata/400.css";
 import { theme } from "@/theme";
 import { initializeRecoilState } from "@/state";
 import { ToastContainer } from "@/utils/toast";
+import { SocketController } from "@/events/io";
 
 RecoilEnv.RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED = false;
 
@@ -23,8 +25,13 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot initializeState={initializeState}>
       <ChakraProvider theme={theme}>
+        <Script
+          src="lib/intercom.js"
+          strategy="lazyOnload"
+        />
         <Component {...pageProps} />
         <ToastContainer />
+        <SocketController />
       </ChakraProvider>
     </RecoilRoot>
   );

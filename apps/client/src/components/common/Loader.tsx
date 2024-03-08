@@ -9,6 +9,8 @@ export type LoaderProps = ComponentProps<
     delay?: number;
     isOpen?: boolean;
     isDark?: boolean;
+    overlayProps?: BoxProps;
+    circleWrapperProps?: BoxProps;
   }
 >;
 
@@ -37,7 +39,14 @@ const circleAnimation = keyframes({
   }
 });
 
-export function Loader({ delay = 300, isOpen = false, isDark = false, ...props }: LoaderProps) {
+export function Loader({
+  delay = 300,
+  isOpen = false,
+  isDark = false,
+  overlayProps,
+  circleWrapperProps,
+  ...props
+}: LoaderProps) {
   const [_isOpen, setIsOpen] = useState(isOpen);
   const prevTimeoutRef = useRef<NodeJS.Timeout>();
 
@@ -86,6 +95,7 @@ export function Loader({ delay = 300, isOpen = false, isDark = false, ...props }
         w="full"
         h="full"
         bg={isDark ? "s2.gray.900" : "whiteAlpha.500"}
+        {...overlayProps}
       />
 
       <Box
@@ -98,7 +108,8 @@ export function Loader({ delay = 300, isOpen = false, isDark = false, ...props }
         maxW="16"
         transform="translate(-50%, -50%)"
         zIndex="1"
-        _after={{ content: "''", display: "block", w: "full", pt: "100%" }}
+        {...circleWrapperProps}
+        _after={{ content: "''", display: "block", w: "full", pt: "100%", ...circleWrapperProps?._after }}
       >
         <Circle
           color="currentcolor"

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 
 import { ConnectionConfig } from "@/types/connection";
 import { decrypt, encrypt } from "./crypto";
@@ -8,8 +8,8 @@ export function setResponseConnectionConfigHeader(res: Response, config: Connect
   res.setHeader("x-connection-config", encrypt(config));
 }
 
-export function parseConnectionConfigHeader(req: Request): ConnectionConfig {
-  const connectionConfig = req.headers["x-connection-config"] as string | undefined;
+export function parseConnectionConfigHeader(headers: Record<any, any>): ConnectionConfig {
+  const connectionConfig = headers["x-connection-config"];
 
   if (!connectionConfig) {
     throw new Error("Connection config header is undefined", { cause: "CONNECTION_CONFIG" });

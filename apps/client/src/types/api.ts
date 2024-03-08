@@ -1,8 +1,9 @@
 export type ConnectionConfig = {
   mongoURI: string;
   dbName: string;
-  dataSize: string;
+  dataSize?: string;
   shouldGenerateData?: boolean;
+  withCDC?: boolean;
 };
 
 export type ApiParams<T extends object = object> = T & { connection?: "config" };
@@ -77,9 +78,11 @@ export type DbInfo = {
     totalSize: number;
     views: number;
   };
-  orderRecords: number;
+  ordersNumber: number;
   productsNumber: number;
   ratingsNumber: number;
 };
 
 export type WithDuration<T = any> = [result: T, ms: number, value: number, unit: string];
+
+export type CDC = { status: "cloning" | "ready" };

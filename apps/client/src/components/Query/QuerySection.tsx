@@ -16,6 +16,8 @@ import { apiRequestToken } from "@/api/instance";
 import { QueryParams, QueryParamsProps } from "./QueryParams";
 import { Loader } from "@/components/common/Loader";
 import { SERVER_URL } from "@/constants/env";
+import { useIsConnectionExist } from "@/state/connection";
+import { cdcState, useCDCStatus } from "@/state/cdc";
 
 type QueryRequest = (params: Record<string, any>, config?: AxiosRequestConfig) => any;
 
@@ -82,21 +84,25 @@ export function QuerySection({
   const [paramsState, setParamsState] = useState({ values: {}, isValid: false });
   const [codeBlock, setCodeBlock] = useState("");
   const [_runOnMount, setRunOnMount] = useState(runOnMount);
-  const stateEntires = Object.entries(state);
-
+  const isConnectionExist = useIsConnectionExist();
+  const cdcStatus = useCDCStatus();
+  const stateEntires = Object.entries(state).filter(([key]) => {
+    if (key === "s2" && (!isConnectionExist || cdcStatus !== "ready")) return false;
+    return true;
+  });
   const formId = useId();
   const statCardSubtitle = "Query Time";
   const hasParams = !!Object.keys(query.params?.fields ?? {}).length;
   const isLoading = stateEntires.some(([, { isLoading }]) => isLoading);
   const isRunButtonDisabled = isLoading || (hasParams && !paramsState.isValid);
-
   const requestTokenRef = useRef<Record<string, ReturnType<typeof apiRequestToken>>>();
 
-  const runQueryRef = useRef(async (params?: typeof paramsState.values) => {
+  const runQueryRef = useRef(async (isS2Ready?: boolean, params?: typeof paramsState.values) => {
     let timeouts: Record<string, NodeJS.Timeout | undefined> = {};
 
     await Promise.all(
       connectionKeys.map(async (key) => {
+        if (key === "s2" && !isS2Ready) return;
         timeouts[key] = setTimeout(
           () => setState((state) => ({ ...state, [key]: { ...state[key], isLoading: true } })),
           800
@@ -104,7 +110,7 @@ export function QuerySection({
 
         requestTokenRef.current = { ...requestTokenRef.current, [key]: apiRequestToken() };
 
-        const [data, ms, value, unit] = (
+        const [data, ms = 0, value = 0, unit = "ms"] = (
           await query.request(
             { ...params, connection: key === "s2" ? "config" : undefined },
             { cancelToken: requestTokenRef.current?.[key].token }
@@ -135,19 +141,17 @@ export function QuerySection({
   }, []);
 
   const handleRunClick = useCallback(() => {
-    runQueryRef.current(paramsState.values);
+    runQueryRef.current(isConnectionExist && cdcStatus === "ready", paramsState.values);
     setRunOnMount(false);
-  }, [paramsState.values]);
+  }, [isConnectionExist, cdcStatus, paramsState.values]);
 
   useEffect(() => {
-    if (_runOnMount && canRun) {
-      handleRunClick();
-    }
+    if (_runOnMount && canRun) handleRunClick();
   }, [_runOnMount, canRun, handleRunClick]);
 
   useEffect(
     () => () => {
-      connectionKeys.forEach((key) => requestTokenRef.current?.[key].cancel());
+      connectionKeys.forEach((key) => requestTokenRef.current?.[key]?.cancel());
     },
     []
   );
@@ -221,16 +225,15 @@ export function QuerySection({
     >
       <Flex
         w="full"
-        alignItems="flex-start"
-        justifyContent="center"
-        flexWrap="wrap"
-        gap="12"
-        rowGap="6"
+        display="grid"
+        gridTemplateColumns={{
+          base: "repeat(auto-fit, minmax(1fr, 1fr))",
+          md: "repeat(auto-fit, minmax(16rem, 1fr))"
+        }}
+        gap="6"
       >
         {hasParams && (
           <QueryParams
-            flex="1"
-            w="auto"
             fields={query.params?.fields}
             validationSchema={query.params?.validationSchema}
             formProps={{ id: formId }}
@@ -240,15 +243,15 @@ export function QuerySection({
         )}
 
         <Box
-          flex={{ base: "1 0 100%", md: "1 0 50%" }}
-          maxW={{ base: "full", md: "50%" }}
           display="grid"
-          gridTemplateColumns="repeat(auto-fit, minmax(16rem, 1fr))"
+          gridTemplateColumns={{
+            base: "repeat(auto-fit, minmax(1fr, 1fr))",
+            md: "repeat(auto-fit, minmax(16rem, 1fr))"
+          }}
           gap="6"
-          rowGap="6"
           flexWrap="wrap"
         >
-          {Object.entries(state).map(([key, state]) => (
+          {stateEntires.map(([key, state]) => (
             <StatCard
               key={key}
               title={state.title}
@@ -271,7 +274,10 @@ export function QuerySection({
       <Box
         mt="6"
         display="grid"
-        gridTemplateColumns="repeat(auto-fit, minmax(16rem, 1fr))"
+        gridTemplateColumns={{
+          base: "repeat(auto-fit, minmax(1fr, 1fr))",
+          md: "repeat(auto-fit, minmax(24rem, 1fr))"
+        }}
         gap="6"
       >
         {stateEntires.map(([key, state]) => {

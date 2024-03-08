@@ -46,3 +46,7 @@ export type Dataset = {
 export type DatasetSizes = "s" | "m" | "l";
 
 export type DatasetCollectionNames = keyof Dataset;
+
+export type CDC = { status: "cloning" | "ready" };
+
+export type Meta = { dataSize?: DatasetSizes };

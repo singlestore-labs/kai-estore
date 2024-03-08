@@ -1,13 +1,17 @@
 import { useEffect } from "react";
-// import { io as socketIo } from "socket.io-client";
+import { io as socketIo, Socket } from "socket.io-client";
 
-import { RecommProduct, WithDuration } from "@/types/api";
-// import { SOCKET_URL } from "@/constants/env";
+import { CDC, DbInfo, RecommProduct, WithDuration } from "@/types/api";
+import { SOCKET_URL } from "@/constants/env";
 import { proccessError } from "@/api/instance";
-import { requestEvents } from "./request";
+import { cookies } from "@/utils/cookies";
 
-// const io = socketIo(SOCKET_URL, { withCredentials: true });
-const io: any = {};
+declare global {
+  var io: Socket | undefined;
+}
+
+const io = global.io ?? socketIo(SOCKET_URL, { reconnectionDelay: 5000 });
+if (process.env.NODE_ENV === "development") global.io = io;
 
 export const ioEvents = {
   recomm: {
@@ -29,36 +33,56 @@ export const ioEvents = {
       io.on("recomm.error", callback);
       return () => io.off("recomm.error", callback);
     }
+  },
+
+  cdc: {
+    emit: () => {
+      const connectionConfig = cookies.get("connectionConfig");
+      io.emit("cdc", {
+        headers: { "x-connection-config": connectionConfig }
+      });
+    },
+
+    off: () => {
+      io.emit("cdc.off");
+    },
+
+    onData: (
+      callback: (
+        data:
+          | CDC
+          | {
+              cdc: CDC;
+              count: {
+                categories: number;
+                orders: number;
+                products: number;
+                ratings: number;
+                tags: number;
+                users: number;
+              };
+            }
+      ) => void
+    ) => {
+      io.on("cdc.data", callback);
+      return () => io.off("cdc.data", callback);
+    },
+
+    onError: (callback: (data: unknown) => void) => {
+      io.on("cdc.error", callback);
+      return () => io.off("cdc.error", callback);
+    }
   }
 };
 
 export function SocketController() {
   useEffect(() => {
-    const listenerRemovers: (typeof io.off)[] = [];
+    const listeners: (typeof io.off)[] = [];
 
-    listenerRemovers.push(
-      ioEvents.recomm.onLoading(() => {
-        requestEvents.emit({
-          title: "Get recommendations",
-          isLoading: true
-        });
-      })
-    );
-
-    listenerRemovers.push(
-      ioEvents.recomm.onData((data) => {
-        requestEvents.emit({
-          title: "Get recommendations",
-          data,
-          isLoading: false
-        });
-      })
-    );
-
-    listenerRemovers.push(ioEvents.recomm.onError(proccessError));
+    listeners.push(ioEvents.cdc.onError(proccessError));
 
     return () => {
-      listenerRemovers.forEach((listener) => listener?.());
+      listeners.forEach((off) => off?.());
     };
   }, []);
 

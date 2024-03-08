@@ -2,6 +2,7 @@ import { MongoClient } from "mongodb";
 
 import { DBConfig } from "@/types/db";
 import { ConnectionConfig } from "@/types/connection";
+import { DB_NAME, DB_URI } from "@/constants/env";
 
 export async function connectDB(config: DBConfig) {
   if (!config.mongoURI) {
@@ -20,19 +21,8 @@ export async function connectDB(config: DBConfig) {
 }
 
 export function createDBConnection(config?: ConnectionConfig) {
-  if (!config) {
-    throw new Error("Connection config is undefined");
-  }
-
-  const { mongoURI, dbName } = config;
-
-  if (!mongoURI) {
-    throw new Error("Mongo URI is undefined");
-  }
-
-  if (!dbName) {
-    throw new Error("Database name is undefined");
-  }
-
-  return connectDB({ mongoURI, dbName });
+  return connectDB({
+    mongoURI: config?.mongoURI || DB_URI,
+    dbName: config?.dbName || DB_NAME
+  });
 }

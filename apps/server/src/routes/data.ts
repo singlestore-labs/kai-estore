@@ -11,13 +11,11 @@ export const dataRouter = express.Router();
 
 dataRouter.get("/data/validate", async (req, res, next) => {
   try {
-    const { dbClient, db, connectionConfig } = req;
-    const isValid = await validateData(db, connectionConfig.dataSize);
-
-    if (!isValid && !connectionConfig.shouldGenerateData) {
+    const { db, connectionConfig } = req;
+    if (!connectionConfig.withCDC && !connectionConfig.shouldGenerateData) {
       return res.status(200).send(true);
     }
-
+    const isValid = await validateData(db, connectionConfig.dataSize, connectionConfig.withCDC);
     return res.status(200).send(isValid);
   } catch (error) {
     return next(error);
@@ -29,7 +27,7 @@ dataRouter.post(
   validateRoute(zod.object({ query: zod.object({ force: zod.string().optional() }) })),
   async (req, res, next) => {
     try {
-      const { dbClient, db, connectionConfig, query } = req;
+      const { db, connectionConfig, query } = req;
       const isForced = query.force === "true" || query.force;
       const collectionNames: DatasetCollectionNames[] = [
         "users",
@@ -40,7 +38,7 @@ dataRouter.post(
         "orders"
       ];
 
-      if (!isForced && (await validateData(db, connectionConfig.dataSize))) {
+      if (!isForced && (await validateData(db, connectionConfig.dataSize, connectionConfig.withCDC))) {
         return res.status(200).json({ message: "Data already exists" });
       }
 
@@ -57,7 +55,6 @@ dataRouter.post(
       }
 
       await db.collection("meta").insertOne({ dataSize: connectionConfig.dataSize });
-
       return res.status(201).json({ message: "Data set" });
     } catch (error) {
       console.error(error);
