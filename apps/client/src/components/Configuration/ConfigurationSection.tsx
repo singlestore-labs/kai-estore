@@ -38,7 +38,7 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
   const rootRef = useRef<any>(null);
 
   useEffect(() => {
-    if (isCDCSubscribedRef.current || _cdcState.status === "ready") return;
+    if (!isConnectionExist || isCDCSubscribedRef.current || _cdcState.status === "ready") return;
     ioEvents.cdc.emit();
     isCDCSubscribedRef.current = true;
     const remove = ioEvents.cdc.onData((data) => {
@@ -59,7 +59,7 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
       ioEvents.cdc.off();
       isCDCSubscribedRef.current = false;
     };
-  }, [setCDCState, _cdcState.status]);
+  }, [isConnectionExist, setCDCState, _cdcState.status]);
 
   return (
     <ApplicationParameters
