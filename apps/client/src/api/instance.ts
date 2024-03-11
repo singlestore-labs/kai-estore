@@ -46,6 +46,11 @@ export function proccessError(error: unknown) {
 
       if (error.response?.data && "error" in error.response.data) {
         title = error.response?.data.error;
+
+        if (title.toLowerCase() === "authentication failed") {
+          cookies.remove("connectionConfig");
+          setTimeout(() => global.window.location.reload(), 3000);
+        }
       }
 
       if (error.response?.status === 401) {
