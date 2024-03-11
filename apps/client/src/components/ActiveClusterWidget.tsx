@@ -10,13 +10,13 @@ export type ActiveClusterWidgetProps = ComponentProps<BoxProps, { hideOnRef?: Mu
 
 const animationIn = keyframes({
   "0%": {
-    transform: "translate(0, 50%)",
+    transform: "translate(50%, 50%)",
     opacity: 0,
     visibility: "hidden"
   },
 
   "100%": {
-    transform: "translate(0, 0)",
+    transform: "translate(50%, 0)",
     opacity: 1,
     visibility: "visible"
   }
@@ -24,12 +24,12 @@ const animationIn = keyframes({
 
 const animationOut = keyframes({
   "0%": {
-    transform: "translate(0, 0)",
+    transform: "translate(50%, 0)",
     opacity: 1,
     visibility: "visible"
   },
   "100%": {
-    transform: "translate(0, 50%)",
+    transform: "translate(50%, 50%)",
     opacity: 0,
     visibility: "hidden"
   }
@@ -72,7 +72,7 @@ export function ActiveClusterWidget({ hideOnRef, ...props }: ActiveClusterWidget
     <Box
       position="fixed"
       bottom="4"
-      right="4"
+      right="50%"
       color="white"
       bg="s2.misc.2"
       px="4"
@@ -82,8 +82,7 @@ export function ActiveClusterWidget({ hideOnRef, ...props }: ActiveClusterWidget
       animation={`${isIn ? animationIn : animationOut} 0.4s ease-out forwards`}
       display="flex"
       flexDirection="column"
-      w="full"
-      maxW="16.4rem"
+      maxW="calc(100%-96px)"
       textAlign="center"
       gap="2"
       fontSize="xs"
