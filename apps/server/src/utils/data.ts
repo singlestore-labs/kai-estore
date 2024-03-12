@@ -5,6 +5,7 @@ import { CDC, Dataset, DatasetCollectionNames, DatasetSizes, Meta, Order, OrderF
 import { ConnectionConfig } from "@/types/connection";
 
 import { getDirname } from "./helpers";
+import { REQUIRED_COLLECTION_NAMES } from "@/constants/db";
 
 export async function validateData(
   db: Db,
@@ -18,12 +19,11 @@ export async function validateData(
     }
 
     const existedCollectionNames = (await db.listCollections().toArray()).map(({ name }) => name);
-    const requiredCollectionNames = ["categories", "orders", "products", "ratings", "tags", "users"];
     let isDataValid = true;
 
-    for await (const requiredCollectionName of requiredCollectionNames) {
-      isDataValid = existedCollectionNames.includes(requiredCollectionName);
-      isDataValid = Boolean(await db.collection(requiredCollectionName).countDocuments());
+    for await (const collectionName of REQUIRED_COLLECTION_NAMES) {
+      isDataValid = existedCollectionNames.includes(collectionName);
+      isDataValid = Boolean(await db.collection(collectionName).countDocuments());
       if (!isDataValid) break;
     }
 

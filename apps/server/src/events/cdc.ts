@@ -33,7 +33,9 @@ export const cdcSocketEventsHandler: SocketEventsHandler = (socket) => {
           if (isReady) {
             clearInterval(interval);
             const updatedCDC: CDC = { ...cdc, status: "ready" };
-            await db.collection<CDC>("cdc").updateOne({ _id: cdc._id }, { status: updatedCDC.status });
+            await db
+              .collection<CDC>("cdc")
+              .updateOne({ _id: cdc._id }, { $set: { status: updatedCDC.status } });
             socket.emit("cdc.data", { cdc: updatedCDC, count: Object.fromEntries(collectionsCount[0]) });
           } else {
             socket.emit("cdc.data", { cdc, count: Object.fromEntries(collectionsCount[0]) });

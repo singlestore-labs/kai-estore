@@ -1,13 +1,13 @@
+import { REQUIRED_COLLECTION_NAMES } from "@/constants/db";
 import { createDBConnection } from "@/utils/db";
 import { Db } from "mongodb";
 
 export async function cdcDataInfo(db: Db) {
-  const requiredCollectionNames = ["categories", "orders", "products", "ratings", "tags", "users"];
   const { db: sourceDB } = await createDBConnection();
   const collectionsCount = await Promise.all(
     [db, sourceDB].map((db) => {
       return Promise.all(
-        requiredCollectionNames.map(async (collection) => {
+        REQUIRED_COLLECTION_NAMES.map(async (collection) => {
           return [collection, await db.collection(collection).countDocuments()] as const;
         })
       );
