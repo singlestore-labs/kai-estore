@@ -103,10 +103,15 @@ export function QuerySection({
     await Promise.all(
       connectionKeys.map(async (key) => {
         if (key === "s2" && !isS2Ready) return;
-        timeouts[key] = setTimeout(
-          () => setState((state) => ({ ...state, [key]: { ...state[key], isLoading: true } })),
-          800
-        );
+
+        setState((state) => ({ ...state, [key]: defaultConnectionStates[key] }));
+
+        timeouts[key] = setTimeout(() => {
+          setState((state) => ({
+            ...state,
+            [key]: { ...state[key], isLoading: true }
+          }));
+        }, 800);
 
         requestTokenRef.current = { ...requestTokenRef.current, [key]: apiRequestToken() };
 
