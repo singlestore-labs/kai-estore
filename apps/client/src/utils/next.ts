@@ -1,6 +1,5 @@
 import { GetServerSideProps } from "next";
 
-import { ROUTES } from "@/constants/routes";
 import { COOKIE_KEYS } from "@/constants/cookie";
 import { RootStateValues } from "@/state";
 import { categoriesState } from "@/state/categories";
@@ -8,14 +7,13 @@ import { productPricesState } from "@/state/productPrices";
 import { productRatingsState } from "@/state/productRatings";
 import { tagsState } from "@/state/tags";
 import { apiInstance } from "@/api/instance";
-import { api } from "@/api";
 import { connectionState } from "@/state/connection";
 import { cdcState } from "@/state/cdc";
 
 export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = {}) => {
   return (async (context) => {
     try {
-      const { req, res } = context;
+      const { req } = context;
 
       if (redirect) {
         return {

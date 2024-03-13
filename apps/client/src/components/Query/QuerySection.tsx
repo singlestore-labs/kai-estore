@@ -17,7 +17,7 @@ import { QueryParams, QueryParamsProps } from "./QueryParams";
 import { Loader } from "@/components/common/Loader";
 import { SERVER_URL } from "@/constants/env";
 import { useIsConnectionExist } from "@/state/connection";
-import { cdcState, useCDCStatus } from "@/state/cdc";
+import { useCDCStatus } from "@/state/cdc";
 
 type QueryRequest = (params: Record<string, any>, config?: AxiosRequestConfig) => any;
 

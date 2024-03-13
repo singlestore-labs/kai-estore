@@ -1,5 +1,5 @@
 import { useCallback, useId, useState } from "react";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { ComponentProps } from "@/types/common";
 import { ConfigurationForm, ConfigurationFormProps } from "@/components/Configuration/ConfigurationForm";
 import { ConnectLoader } from "@/components/Connect/ConnectLoader";
@@ -9,12 +9,14 @@ import { Link } from "@/components/common/Link";
 import { Modal, ModalProps } from "@/components/common/Modal";
 import { Typography } from "@/components/common/Typography";
 import { api } from "@/api";
+import { ConnectHelpModal } from "@/components/Connect/ConnectHelpModal";
 
 export type ConfigurationModalProps = ComponentProps<ModalProps, { onSuccess?: () => void }>;
 
 export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProps) {
   const formId = useId();
   const [loaderState, setLoaderState] = useState({ title: "", message: "", isOpen: false });
+  const helpModal = useDisclosure();
 
   const resetLoaderState = useCallback(() => {
     setLoaderState({ title: "", message: "", isOpen: false });
@@ -43,7 +45,7 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
     setLoaderState((state) => ({
       ...state,
       title: "CDC Setup",
-      message: `It will take a minute. Do not close the modal.`
+      message: `It will take a few seconds. Do not close the modal.`
     }));
     return api.cdc.setup({ connection: "config" });
   }, []);
@@ -120,8 +122,29 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
               flexDirection="column"
               alignItems="flex-start"
             >
-              <Typography color="s2.gray.600">{`Don't have a SingleStore account?`}</Typography>
-              <Link href="https://www.singlestore.com/cloud-trial/kai">Sign up for a free trial</Link>
+              <Typography>{`Don't have a SingleStore account?`}</Typography>
+              <Link
+                href="https://www.singlestore.com/cloud-trial/kai"
+                chakra={{ color: "s2.purple.600" }}
+              >
+                Sign up for a free trial
+              </Link>
+
+              <Button
+                type="button"
+                onClick={helpModal.onOpen}
+                bg="none"
+                fontSize="inherit"
+                fontWeight="normal"
+                h="auto"
+                minH="initial"
+                color="s2.gray.600"
+                mt="4"
+                p="0"
+                _hover={{ bg: "none", color: "white", textDecoration: "underline" }}
+              >
+                How to connect?
+              </Button>
             </Box>
 
             <Button
@@ -141,6 +164,12 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
         position="absolute"
         variant="dark"
         inPortal={false}
+      />
+
+      <ConnectHelpModal
+        isOpen={helpModal.isOpen}
+        onClose={helpModal.onClose}
+        contentProps={{ color: "white", bg: "s2.gray.900" }}
       />
     </Modal>
   );

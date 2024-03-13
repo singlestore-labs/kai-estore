@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { io as socketIo, Socket } from "socket.io-client";
 
-import { CDC, DbInfo, RecommProduct, WithDuration } from "@/types/api";
+import { CDC, RecommProduct, WithDuration } from "@/types/api";
 import { SOCKET_URL } from "@/constants/env";
 import { proccessError } from "@/api/instance";
 import { cookies } from "@/utils/cookies";

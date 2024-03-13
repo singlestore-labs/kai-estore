@@ -52,6 +52,7 @@ export const buttonTheme = defineStyleConfig({
         "bg": "s2.purple.800",
         "borderRadius": "full",
         "p": "3",
+        "transition": "0.2s ease",
         ...sizeStyles[size],
 
         "[fill]": {
@@ -61,6 +62,8 @@ export const buttonTheme = defineStyleConfig({
         "_hover": {
           textDecoration: "none",
           bg: "s2.purple.800",
+          filter: "auto",
+          brightness: "110%",
 
           _disabled
         },
