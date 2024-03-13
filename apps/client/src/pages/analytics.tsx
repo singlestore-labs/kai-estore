@@ -7,6 +7,7 @@ import { ApplicationParameters } from "@/components/ApplicationParameters";
 
 import { getDefaultServerSideProps } from "@/utils/next";
 import { ConfigurationSection } from "@/components/Configuration/ConfigurationSection";
+import { CDCController } from "@/components/CDCController";
 
 export default function Analytics() {
   return (
@@ -33,6 +34,8 @@ export default function Analytics() {
       </Section>
 
       <QueryListSection mt="12" />
+
+      <CDCController />
     </Page>
   );
 }

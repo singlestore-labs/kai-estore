@@ -60,8 +60,7 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
         [productPricesState.name, () => productPricesState.getValue()],
         [productRatingsState.name, () => productRatingsState.getValue()],
         [tagsState.name, () => tagsState.getValue()],
-        [connectionState.name, () => connectionState.getValue({ isExist: !!req.cookies.connectionConfig })],
-        [cdcState.name, () => cdcState.getValue({ connection: "config" })]
+        [connectionState.name, () => connectionState.getValue({ isExist: !!req.cookies.connectionConfig })]
       ];
 
       await Promise.all(

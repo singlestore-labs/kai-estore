@@ -7,7 +7,7 @@ export type CDCState = CDC;
 
 export const cdcState = createState<CDCState>(
   "cdcState",
-  { status: "ready" },
+  { status: "pending" },
   {
     valueGetter: (defaultValue) => {
       return async (...args: Parameters<(typeof api.cdc)["get"]>) => {
