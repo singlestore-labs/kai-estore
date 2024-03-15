@@ -66,9 +66,9 @@ export function InputCheckboxAccordion({
   }
 
   const checkboxes = useMemo(() => {
-    return options.map((option) => (
+    return options.map((option, i) => (
       <Checkbox
-        key={option.value}
+        key={`${option.value}${i}`}
         value={option.value}
       >
         {option.label}

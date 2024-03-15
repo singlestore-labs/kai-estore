@@ -22,7 +22,8 @@ const productRatingsStateOptions = selector({
   key: productRatingsState.createKey("options"),
   get: ({ get }) => {
     const ratings = get(productRatingsState.valueSelector);
-    return ratings?.map((rating) => ({ label: `${rating} stars`, value: `${rating}` })).reverse() || [];
+    if (!Array.isArray(ratings)) return [];
+    return ratings.map((rating) => ({ label: `${rating} stars`, value: `${rating}` })).reverse() || [];
   }
 });
 
