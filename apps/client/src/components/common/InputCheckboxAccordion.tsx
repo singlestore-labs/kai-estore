@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Accordion,
   AccordionButton,
@@ -29,7 +29,7 @@ export type InputCheckboxAccordionProps = ComponentProps<
     options: InputCheckboxAccordionOption[];
     value?: InputCheckboxAccordionOption["value"][];
     defaultValue?: CheckboxGroupProps["defaultValue"];
-    isCollapsed?: number;
+    isCollapsed?: boolean;
     onChange?: CheckboxGroupProps["onChange"];
   }
 >;
@@ -39,12 +39,20 @@ export function InputCheckboxAccordion({
   options,
   value,
   defaultValue,
-  isCollapsed: initialIsCollapsed = 0,
+  isCollapsed: initialIsCollapsed = true,
   onChange,
   ...props
 }: InputCheckboxAccordionProps) {
   const [checkedNumber, setCheckedNumber] = useState(defaultValue?.length ?? 0);
-  const [isCollapsed, setIsCollapsed] = useState(initialIsCollapsed);
+  const [isCollapsed, setIsCollapsed] = useState(initialIsCollapsed || !options.length);
+  const prevOptionsLength = useRef(options.length);
+
+  useEffect(() => {
+    if (isCollapsed && options.length && prevOptionsLength.current !== options.length) {
+      prevOptionsLength.current = options.length;
+      setIsCollapsed(false);
+    }
+  }, [isCollapsed, options.length]);
 
   const handleChange: Defined<CheckboxGroupProps["onChange"]> = (value) => {
     setCheckedNumber(value.length);
@@ -80,13 +88,13 @@ export function InputCheckboxAccordion({
     <Accordion
       allowToggle
       {...props}
-      defaultIndex={[isCollapsed]}
+      index={isCollapsed ? 1 : 0}
     >
       <AccordionItem>
         <h4>
           <AccordionButton
             justifyContent="space-between"
-            onClick={() => setIsCollapsed((int) => (int === 0 ? 1 : 0))}
+            onClick={() => setIsCollapsed((i) => !i)}
           >
             {_title}
             <AccordionIcon />

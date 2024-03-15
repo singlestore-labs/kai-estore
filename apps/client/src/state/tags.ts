@@ -13,7 +13,7 @@ export const tagsState = createState<TagsState>(
     valueGetter: (defaultValue) => {
       return async (...args: Parameters<(typeof api.tag)["getMany"]>) => {
         try {
-          const value = defaultValue;
+          const value = { ...defaultValue };
           const tagsData = (await api.tag.getMany(...args)).data;
 
           for (const tag of tagsData) {

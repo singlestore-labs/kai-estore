@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useCallback, useMemo, useRef } from "react";
+import { Fragment, ReactNode, useCallback, useMemo } from "react";
 
 import { UrlParams } from "@/types/common";
 
@@ -15,7 +15,6 @@ export type SearchParamsControllerProps = {
 export function SearchParamsController({ children, paramName, wait = 0 }: SearchParamsControllerProps) {
   const { paramsObject, setParams } = useSearchParams<Pick<UrlParams, typeof paramName>>();
 
-  const childrenRef = useRef(children);
   const paramValue = paramsObject[paramName];
 
   const value = useMemo(() => {
@@ -35,8 +34,5 @@ export function SearchParamsController({ children, paramName, wait = 0 }: Search
     [setParamsDebounce]
   );
 
-  return useMemo(
-    () => <Fragment>{childrenRef.current({ value, onChange: handleChange })}</Fragment>,
-    [value, handleChange]
-  );
+  return <Fragment>{children({ value, onChange: handleChange })}</Fragment>;
 }

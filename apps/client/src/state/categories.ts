@@ -13,7 +13,7 @@ export const categoriesState = createState<CategoriesState>(
     valueGetter: (defaultValue) => {
       return async (...args: Parameters<(typeof api.category)["getMany"]>) => {
         try {
-          const value = defaultValue;
+          const value = { ...defaultValue };
           const categoriesData = (await api.category.getMany(...args)).data;
 
           for (const category of categoriesData) {
@@ -22,6 +22,7 @@ export const categoriesState = createState<CategoriesState>(
 
           return value;
         } catch (error) {
+          console.log(error);
           return defaultValue;
         }
       };

@@ -5,6 +5,7 @@ import { ProductList, ProductListProps } from "./ProductList";
 
 import { trendingProductsState } from "@/state/trendingProducts";
 import { apiRequestToken } from "@/api/instance";
+import { productsState } from "@/state/products";
 
 export type ProductListTrendingProps = ComponentProps<
   Omit<ProductListProps, "children" | "products" | "skeletonWrapperProps">
@@ -12,9 +13,12 @@ export type ProductListTrendingProps = ComponentProps<
 
 export function ProductListTrending({ ...props }: ProductListTrendingProps) {
   const [state, setState] = trendingProductsState.useState();
+  const { products } = productsState.useValue();
   const requestTokenRef = useRef<ReturnType<typeof apiRequestToken>>();
 
   useEffect(() => {
+    if (!products.length) return;
+
     (async () => {
       try {
         requestTokenRef.current = apiRequestToken();
@@ -26,7 +30,7 @@ export function ProductListTrending({ ...props }: ProductListTrendingProps) {
         setState((i) => ({ ...i, products: [], isLoading: false }));
       }
     })();
-  }, [setState]);
+  }, [setState, products.length]);
 
   useEffect(
     () => () => {
