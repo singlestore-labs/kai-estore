@@ -44,7 +44,7 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
   const setupCDC = useCallback(() => {
     setLoaderState((state) => ({
       ...state,
-      title: "CDC Setup",
+      title: "CDC Setup in progress",
       message: `It will take a few seconds. Do not close the modal.`
     }));
     return api.cdc.setup({ connection: "config" });

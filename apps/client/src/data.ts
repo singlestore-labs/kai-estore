@@ -9,7 +9,7 @@ export const defaultProductImage = "/assets/images/DefaultProduct.png";
 export const welcomeTabs = [
   {
     title: "Welcome to the SingleStore Kai™ eStore!",
-    text: `Step into our demo retail store that supports millions of simulated customers with real-time analytics and transactions on SingleStoreDB.`,
+    text: `Step into our demo retail store that supports millions of simulated customers with real-time analytics and transactions.`,
     id: "98",
     createdAt: "",
     updatedAt: "",
@@ -17,23 +17,15 @@ export const welcomeTabs = [
   },
   {
     title: "Shop Like a Customer",
-    text: `Browse or filter items in the catalog, and see how fast each database responds.`,
+    text: `Browse or filter items in the catalog, and see how fast each database performs in the analytics tab.`,
     id: "95",
     createdAt: "",
     updatedAt: "",
     image: "/assets/gifs/Welcome-2.gif"
   },
   {
-    title: "Get Real-Time Recommendations",
-    text: `Rate or buy products to see how your recommendations change in real time.`,
-    id: "81",
-    createdAt: "",
-    updatedAt: "",
-    image: "/assets/gifs/Welcome-3.gif"
-  },
-  {
     title: "Put Speed to the Test",
-    text: `Review database performance and run sample queries on the Analytics page.`,
+    text: `Compare database performance and run sample queries on the Analytics page.`,
     id: "17",
     createdAt: "",
     updatedAt: "",

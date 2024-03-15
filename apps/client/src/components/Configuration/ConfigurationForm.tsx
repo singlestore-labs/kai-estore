@@ -62,7 +62,7 @@ export function ConfigurationForm({
             type="password"
             name="mongoURI"
             label="Connection String"
-            message="To connect to a database instance using the MongoDB® API, provide the connection string to the client after replacing the username and password."
+            message="Make sure you include the username and password in the connection string."
             placeholder="mongodb://user:password@host"
             value={formik.values.mongoURI}
             error={formik.touched.mongoURI && (formik.errors.mongoURI as string)}
@@ -75,10 +75,12 @@ export function ConfigurationForm({
           <Field
             name="dbName"
             label="Database"
+            message="Provide the name of the database to replicate data from MongoDB."
             placeholder="eStore"
             value={formik.values.dbName}
             error={formik.touched.dbName && (formik.errors.dbName as string)}
             labelProps={labelProps}
+            messageProps={{ color: "inherit" }}
             controlProps={{ variant: variant === "light" ? "filled" : "outline" }}
             onChange={formik.handleChange}
             isDisabled={isDisabled}

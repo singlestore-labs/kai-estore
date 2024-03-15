@@ -21,7 +21,7 @@ const steps = [
   {
     image: "/assets/images/copy-connection-string.png",
     title: "3. Copy the MongoDB® Connection String URI",
-    description: `Ensure the IP address you will connect to the workspace group has been added to the inbound connection list. Note: You can reset a workspace group's password under the "Access" tab.`
+    description: `Ensure your IP address has been added to the inbound connection list under "Firewall" tab.`
   }
 ];
 
@@ -38,7 +38,7 @@ export function ConnectHelpModal({ onClose, ...props }: ConnectHelpModalProps) {
         lineHeight="8"
         fontWeight="semibold"
       >
-        How to connect the demo application to SingleStore?
+        How to connect the Kai eStore application to SingleStore?
       </Typography>
       <HStack
         spacing="8"

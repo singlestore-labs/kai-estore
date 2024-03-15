@@ -14,7 +14,7 @@ export function ProductSectionFeatured({ ...props }: ProductSectionRecommProps) 
 
   const title = isTrending ? "Trending Now" : "Recommended For You";
   const tooltipText = isTrending
-    ? "'Trending Now' is a collection of our best selling items"
+    ? "Trending now is a collection of best selling items calculated in real-time"
     : "Recommendations are created in real-time based on your purchase history and star rating";
 
   return (

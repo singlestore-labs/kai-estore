@@ -65,7 +65,7 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
     <ApplicationParameters
       {...props}
       ref={rootRef}
-      title="SingleStore Parameters"
+      title="SingleStore Data"
       headerProps={{ display: "flex", alignItems: "center" }}
       headerChildren={
         <>
@@ -141,7 +141,7 @@ export function ConfigurationSection({ ...props }: ConfigurationSectionProps) {
             />
           </Box>
 
-          <Typography color="white">Data cloning</Typography>
+          <Typography color="white">Data replication in progress from MongoDB Atlas</Typography>
         </Box>
       )}
 

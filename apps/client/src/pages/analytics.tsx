@@ -15,7 +15,7 @@ export default function Analytics() {
       <Section
         variant="2"
         title="Data"
-        description={`SingleStore Kai™ allows you to perform large scale aggregate queries in milliseconds empowering you to deliver real-time data to your customers.`}
+        description={`SingleStore Kai™ also allows you to perform vector and text , filter, aggregates, and point-reads/inserts.`}
         mt="6"
       >
         <Flex
@@ -29,7 +29,7 @@ export default function Analytics() {
           gap="8"
         >
           <ConfigurationSection />
-          <ApplicationParameters title="MongoDB® Atlas M30 Parameters" />
+          <ApplicationParameters title="MongoDB® Atlas M30 Data" />
         </Flex>
       </Section>
 
