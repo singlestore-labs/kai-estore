@@ -15,25 +15,28 @@ export async function connectDB(config: DBConfig) {
     throw new Error("Database name is undefined");
   }
 
-  const client = new MongoClient(config.mongoURI, {
-    tls: true,
-    socketTimeoutMS: 300000,
-    connectTimeoutMS: 300000,
-    maxPoolSize: 10000,
-    maxConnecting: 10000
-  });
-
+  const client = new MongoClient(config.mongoURI);
   await client.connect();
-
   const db = client.db(config.dbName);
 
-  return { client, db };
+  return { client, db } as const;
 }
 
-export function createDBConnection(config?: ConnectionConfig) {
-  if (config?.mongoURI && config?.dbName) {
-    return connectDB({ mongoURI: config.mongoURI, dbName: config.dbName });
+export async function createDBConnection(config?: ConnectionConfig) {
+  let retries = 0;
+
+  function connect() {
+    try {
+      if (!config?.mongoURI || !config.dbName) return sourceDBConnection;
+      return connectDB({ mongoURI: config.mongoURI, dbName: config.dbName });
+    } catch (error) {
+      console.error(error);
+      if (retries < 5) {
+        retries++;
+        return connect();
+      }
+    }
   }
 
-  return sourceDBConnection;
+  return connect();
 }
