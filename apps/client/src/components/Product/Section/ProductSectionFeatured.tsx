@@ -9,7 +9,7 @@ import { ProductListTrending } from "../List/ProductListTrending";
 
 export type ProductSectionRecommProps = ComponentProps<SectionProps>;
 
-export function ProductSectionRecomm({ ...props }: ProductSectionRecommProps) {
+export function ProductSectionFeatured({ ...props }: ProductSectionRecommProps) {
   const isTrending = true;
 
   const title = isTrending ? "Trending Now" : "Recommended For You";

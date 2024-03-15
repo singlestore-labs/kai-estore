@@ -74,12 +74,14 @@ export function CatalogProducts({ ...props }: CatalogProductsProps) {
   );
 
   useEffect(() => {
-    if (changedParam || shouldGetProdcuts.current) {
+    if ((changedParam || shouldGetProdcuts.current) && categories.length && tags.length) {
       fetchProductsDebounced();
       prevParamsObject.current = paramsObject;
       shouldGetProdcuts.current = false;
+    } else if (!categories.length || !tags.length) {
+      startLoading();
     }
-  }, [changedParam, paramsObject, fetchProductsDebounced]);
+  }, [changedParam, paramsObject, fetchProductsDebounced, categories.length, tags.length, startLoading]);
 
   useEffect(
     () => () => {

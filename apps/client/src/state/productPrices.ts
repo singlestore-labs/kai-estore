@@ -30,8 +30,11 @@ const productPricesStateRanges = selector({
 
     return ([min, ...Array.from({ length: (max - min) / offset }), max] as number[]).reduce(
       (ranges, price, i) => {
-        const prev = ranges[i - 1]?.[1] ?? price - offset;
-        const current = price ?? prev + offset;
+        let prev = ranges[i - 1]?.[1] ?? price - offset;
+        let current = price ?? prev + offset;
+
+        if (!Number.isInteger(prev)) prev = 0;
+        if (!Number.isInteger(current)) current = 0;
 
         if (prev === max) return ranges;
 

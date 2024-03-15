@@ -56,10 +56,10 @@ export const getDefaultServerSideProps = ({ redirect }: { redirect?: string } = 
       // }
 
       const stateSetters: [string, () => any][] = [
-        [categoriesState.name, () => categoriesState.getValue()],
-        [productPricesState.name, () => productPricesState.getValue()],
-        [productRatingsState.name, () => productRatingsState.getValue()],
-        [tagsState.name, () => tagsState.getValue()],
+        // [categoriesState.name, () => categoriesState.getValue()],
+        // [productPricesState.name, () => productPricesState.getValue()],
+        // [productRatingsState.name, () => productRatingsState.getValue()],
+        // [tagsState.name, () => tagsState.getValue()],
         [connectionState.name, () => connectionState.getValue({ isExist: !!req.cookies.connectionConfig })]
       ];
 

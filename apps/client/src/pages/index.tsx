@@ -1,5 +1,5 @@
 import { Page } from "@/components/common/Page";
-import { ProductSectionRecomm } from "@/components/Product/Section/ProductSectionRecomm";
+import { ProductSectionFeatured } from "@/components/Product/Section/ProductSectionFeatured";
 import { Catalog } from "@/components/Catalog/Catalog";
 import { ProductModal } from "@/components/Product/ProductModal";
 import { WelcomeModal } from "@/components/WelcomeModal";
@@ -12,7 +12,7 @@ export default function Main() {
 
   return (
     <Page footerRef={footerRef}>
-      <ProductSectionRecomm />
+      <ProductSectionFeatured />
       <Catalog />
       <ProductModal />
       <WelcomeModal />
