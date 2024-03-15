@@ -43,6 +43,8 @@ export function CatalogProducts({ ...props }: CatalogProductsProps) {
   const shouldGetProdcuts = useRef(!products.length);
   const requestTokenRef = useRef<ReturnType<typeof apiRequestToken>>();
 
+  const [areCategoriesExist, areTagsExit] = [categories, tags].map((i) => !!Object.keys(i).length);
+
   const changedParam = useMemo(() => {
     const param = Object.keys(pick(diff(prevParamsObject.current, paramsObject), catalogParams))[0];
     return param as CatalogParamKeys;
@@ -74,14 +76,14 @@ export function CatalogProducts({ ...props }: CatalogProductsProps) {
   );
 
   useEffect(() => {
-    if ((changedParam || shouldGetProdcuts.current) && categories.length && tags.length) {
+    if ((changedParam || shouldGetProdcuts.current) && areCategoriesExist && areTagsExit) {
       fetchProductsDebounced();
       prevParamsObject.current = paramsObject;
       shouldGetProdcuts.current = false;
-    } else if (!categories.length || !tags.length) {
+    } else if (!areCategoriesExist || !areTagsExit) {
       startLoading();
     }
-  }, [changedParam, paramsObject, fetchProductsDebounced, categories.length, tags.length, startLoading]);
+  }, [changedParam, paramsObject, fetchProductsDebounced, areCategoriesExist, areTagsExit, startLoading]);
 
   useEffect(
     () => () => {

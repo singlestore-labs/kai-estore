@@ -17,7 +17,10 @@ export function ProductListTrending({ ...props }: ProductListTrendingProps) {
   const requestTokenRef = useRef<ReturnType<typeof apiRequestToken>>();
 
   useEffect(() => {
-    if (!products.length) return;
+    if (!products.length) {
+      setState((i) => ({ ...i, isLoading: true }));
+      return;
+    }
 
     (async () => {
       try {
