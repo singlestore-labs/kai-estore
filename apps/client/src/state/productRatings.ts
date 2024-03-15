@@ -21,9 +21,8 @@ export const productRatingsState = createState<ProductRatingsState>("productRati
 const productRatingsStateOptions = selector({
   key: productRatingsState.createKey("options"),
   get: ({ get }) => {
-    return get(productRatingsState.valueSelector)
-      .map((rating) => ({ label: `${rating} stars`, value: `${rating}` }))
-      .reverse();
+    const ratings = get(productRatingsState.valueSelector);
+    return ratings?.map((rating) => ({ label: `${rating} stars`, value: `${rating}` })).reverse() || [];
   }
 });
 
