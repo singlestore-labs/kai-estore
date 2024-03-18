@@ -86,10 +86,7 @@ export function QuerySection({
   const [_runOnMount, setRunOnMount] = useState(runOnMount);
   const isConnectionExist = useIsConnectionExist();
   const cdcStatus = useCDCStatus();
-  const stateEntires = Object.entries(state).filter(([key]) => {
-    if (key === "s2" && (!isConnectionExist || cdcStatus !== "ready")) return false;
-    return true;
-  });
+  const stateEntires = Object.entries(state);
   const formId = useId();
   const statCardSubtitle = "Query Time";
   const hasParams = !!Object.keys(query.params?.fields ?? {}).length;
