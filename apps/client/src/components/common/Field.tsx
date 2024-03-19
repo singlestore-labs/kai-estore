@@ -1,5 +1,6 @@
 import { ComponentType, forwardRef, memo, useId } from "react";
 import {
+  Box,
   Checkbox,
   CheckboxProps,
   FormControl,
@@ -54,6 +55,7 @@ const componentsByElement: Record<FieldElements, ComponentType<any>> = {
 const FieldComponent = forwardRef<HTMLDivElement, FieldProps>(
   (
     {
+      children,
       element = "input",
       type,
       id,
@@ -137,17 +139,20 @@ const FieldComponent = forwardRef<HTMLDivElement, FieldProps>(
       >
         {_label}
 
-        <Component
-          {...controlProps}
-          type={type}
-          id={_id}
-          name={name}
-          value={value}
-          placeholder={placeholder}
-          onChange={onChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-        />
+        <Box position="relative">
+          <Component
+            {...controlProps}
+            type={type}
+            id={_id}
+            name={name}
+            value={value}
+            placeholder={placeholder}
+            onChange={onChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          />
+          {children}
+        </Box>
 
         {_message}
         {_error}
