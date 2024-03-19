@@ -1,4 +1,4 @@
-import { useCallback, useId, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { ComponentProps } from "@/types/common";
 import { ConfigurationForm, ConfigurationFormProps } from "@/components/Configuration/ConfigurationForm";
@@ -17,6 +17,9 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
   const formId = useId();
   const [loaderState, setLoaderState] = useState({ title: "", message: "", isOpen: false });
   const helpModal = useDisclosure();
+  const [initialFromValues, setInitialFromValues] = useState<ConfigurationFormProps["initialValues"]>({
+    withCDC: true
+  });
 
   const resetLoaderState = useCallback(() => {
     setLoaderState({ title: "", message: "", isOpen: false });
@@ -73,6 +76,17 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
     [createConnection, handleSuccess, handleError, setupCDC, validateData]
   );
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await api.connection.get({ connection: "config" });
+        setInitialFromValues((i) => ({ ...i, ...response.data, shouldGenerateData: false, withCDC: true }));
+      } catch (error) {
+        setInitialFromValues(undefined);
+      }
+    })();
+  }, []);
+
   return (
     <Modal
       size="s2.md"
@@ -108,7 +122,7 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
           <ConfigurationForm
             id={formId}
             variant="dark"
-            initialValues={{ withCDC: true }}
+            initialValues={initialFromValues}
             withDataGeneration={false}
             onSubmit={handleFormSubmit}
           />
