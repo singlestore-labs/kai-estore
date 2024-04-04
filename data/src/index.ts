@@ -35,7 +35,7 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
-const datasetPath = `${getDirname(import.meta.url)}/dataset.json`;
+const datasetPath = `${getDirname(import.meta.url)}/dataset-embeddings.json`;
 const dataset: Dataset = JSON.parse(fs.readFileSync(datasetPath, "utf-8"));
 const datasetUniqueValues = getUniqueFieldValues(dataset.products);
 
@@ -86,6 +86,8 @@ function generateProducts(categories: Category[], tags: Tag[], length = 1): Prod
       tagIds: product.tags.map((name) => tags.find((tag) => tag.name === name)?.id ?? "")
     });
   });
+
+  return uniqueProducts;
 
   return generateDuplicates(uniqueProducts, length, (object) => {
     return generateDates({ ...object, id: generateId(), price: generatePrice() });

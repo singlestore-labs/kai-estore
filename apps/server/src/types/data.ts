@@ -43,7 +43,7 @@ export type Dataset = {
   ratings: Rating[];
 };
 
-export type DatasetSizes = "s" | "m" | "l";
+export type DatasetSizes = "s" | "m" | "l" | "vectors";
 
 export type DatasetCollectionNames = keyof Dataset;
 

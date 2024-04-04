@@ -133,7 +133,8 @@ export function ConfigurationForm({
                   { label: "Select size", value: "" },
                   { label: "Small", value: "s" },
                   { label: "Medium", value: "m" },
-                  { label: "Large", value: "l" }
+                  { label: "Large", value: "l" },
+                  { label: "Vectors", value: "vectors" }
                 ],
                 variant: variant === "light" ? "filled" : "outline"
               }}
