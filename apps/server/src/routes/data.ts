@@ -45,10 +45,23 @@ dataRouter.post(
       await db.dropDatabase();
 
       for await (const collectionName of collectionNames) {
+        if (connectionConfig.dataSize === "vectors" && collectionName === "products") {
+          await db.createCollection(collectionName, {
+            columns: [{ id: "v", type: "LONGBLOB NOT NULL" }]
+          } as any);
+        }
+
         const collection = db.collection(collectionName);
 
         await processDatasetFiles(collectionName, connectionConfig.dataSize, async (data) => {
           await processAsChunks(data, async (chunk) => {
+            if (connectionConfig.dataSize === "vectors" && collectionName === "products") {
+              chunk = chunk.map((i) => {
+                const float32 = new Float32Array((i as any).v);
+                const v = Buffer.from(new Uint8Array(float32.buffer));
+                return { ...i, v };
+              });
+            }
             await collection.insertMany(prepareDates(chunk));
           });
         });
