@@ -82,7 +82,7 @@ export function ConfigurationModal({ onClose, ...props }: ConfigurationModalProp
         const response = await api.connection.get({ connection: "config" });
         setInitialFromValues((i) => ({ ...i, ...response.data, shouldGenerateData: false, withCDC: true }));
       } catch (error) {
-        setInitialFromValues(undefined);
+        setInitialFromValues({ withCDC: true });
       }
     })();
   }, []);

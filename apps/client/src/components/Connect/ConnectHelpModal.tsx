@@ -1,4 +1,4 @@
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, HStack, Textarea } from "@chakra-ui/react";
 import Image from "next/image";
 
 import { ComponentProps } from "@/types/common";
@@ -21,7 +21,15 @@ const steps = [
   {
     image: "/assets/images/copy-connection-string.png",
     title: "3. Copy the MongoDB® Connection String URI",
-    description: `Ensure your IP address has been added to the inbound connection list under "Firewall" tab.`
+    description: (
+      <div>
+        {`Ensure that the following IP addresses have been added to the inbound connection list under "Firewall" tab:`}
+        <Textarea
+          value={`52.41.36.82/32\n54.191.253.12/32\n44.226.122.3/32`}
+          mt={2}
+        />
+      </div>
+    )
   }
 ];
 
