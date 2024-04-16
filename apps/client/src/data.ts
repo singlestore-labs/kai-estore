@@ -60,7 +60,7 @@ export const queriesList: Query[] = [
         from: {
           element: "input",
           label: "From",
-          value: dateFns.format(dateFns.subDays(new Date(), 90), "yyyy/MM/dd"),
+          value: dateFns.format(new Date(2023, 0, 1), "yyyy/MM/dd"),
           placeholder: "Start date yyyy/mm/dd"
         },
         number: {
