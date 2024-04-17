@@ -81,7 +81,12 @@ export function QuerySection({
   ...props
 }: QuerySectionProps) {
   const [state, setState] = useState<Record<string, State>>(defaultConnectionStates);
-  const [paramsState, setParamsState] = useState({ values: {}, isValid: false });
+  const [paramsState, setParamsState] = useState(() => {
+    const values = Object.entries(query.params?.fields ?? {}).reduce((values, [key, field]) => {
+      return { ...values, [key]: field.value ?? "" };
+    }, {});
+    return { values, isValid: false };
+  });
   const [codeBlock, setCodeBlock] = useState("");
   const [_runOnMount, setRunOnMount] = useState(runOnMount);
   const isConnectionExist = useIsConnectionExist();
