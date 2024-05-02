@@ -1,4 +1,4 @@
-// import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Flex } from "@chakra-ui/react";
 
 import { ComponentProps } from "@/types/common";
@@ -13,16 +13,16 @@ import { useCDCStatus } from "@/state/cdc";
 export type QueryListSectionProps = ComponentProps<SectionProps>;
 
 export function QueryListSection({ ...props }: QueryListSectionProps) {
-  // const [activeQueryIndex, setActiveQueryIndex] = useState(0);
+  const [activeQueryIndex, setActiveQueryIndex] = useState(0);
   const cdcStatus = useCDCStatus();
-  // const prevCDCStatusRef = useRef(cdcStatus);
+  const prevCDCStatusRef = useRef(cdcStatus);
 
-  // useEffect(() => {
-  //   if (cdcStatus !== prevCDCStatusRef.current) {
-  //     setActiveQueryIndex(0);
-  //     prevCDCStatusRef.current = cdcStatus;
-  //   }
-  // }, [cdcStatus]);
+  useEffect(() => {
+    if (cdcStatus !== prevCDCStatusRef.current) {
+      setActiveQueryIndex(0);
+      prevCDCStatusRef.current = cdcStatus;
+    }
+  }, [cdcStatus]);
 
   return (
     <Section
@@ -41,10 +41,10 @@ export function QueryListSection({ ...props }: QueryListSectionProps) {
             key={query.title}
             query={query}
             runOnMount
-            // canRun={i === activeQueryIndex}
-            // afterRun={() => {
-            //   setActiveQueryIndex((i) => i + 1);
-            // }}
+            canRun={i === activeQueryIndex}
+            afterRun={() => {
+              setActiveQueryIndex((i) => i + 1);
+            }}
           />
         ))}
       </Flex>

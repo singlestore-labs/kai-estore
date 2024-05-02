@@ -29,7 +29,7 @@ export default function Analytics() {
           gap="8"
         >
           <ConfigurationSection />
-          <ApplicationParameters title="MongoDB® Atlas M40 Data" />
+          <ApplicationParameters title="MongoDB® Atlas M30 Data" />
         </Flex>
       </Section>
 

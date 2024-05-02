@@ -76,7 +76,7 @@ const connectionKeys = Object.keys(defaultConnectionStates);
 export function QuerySection({
   query,
   runOnMount = true,
-  canRun = true,
+  canRun = false,
   afterRun,
   ...props
 }: QuerySectionProps) {
