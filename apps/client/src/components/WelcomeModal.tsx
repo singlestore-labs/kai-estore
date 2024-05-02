@@ -113,7 +113,11 @@ export function WelcomeModal({ ...props }: WelcomeModalProps) {
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Logo variant="s2.small" />
+                <Logo
+                  w={8}
+                  h={8}
+                  variant="s2.small"
+                />
                 <CloseButton onClick={handleClose} />
               </Flex>
 

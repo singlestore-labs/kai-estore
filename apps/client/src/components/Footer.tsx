@@ -57,7 +57,11 @@ export const Footer = forwardRef<FooterProps, "footer">(({ _before, ...props }, 
             href="https://www.singlestore.com/"
             chakra={{ mt: "6" }}
           >
-            <Logo variant="s2" />
+            <Logo
+              display="block"
+              variant="s2"
+              w="9rem"
+            />
           </Link>
         </Flex>
 

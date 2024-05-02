@@ -107,7 +107,7 @@ export function DbSourcesSection({ ...props }: DbSourcesSectionProps) {
           <DbSourceCard
             name="s2"
             title="SingleStore"
-            logo="s2.small.24"
+            logo="s2.small"
             primaryColor="s2.purple.300"
             secondaryColor="s2.purple.800"
             {...state}

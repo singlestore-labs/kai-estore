@@ -1,9 +1,7 @@
 import { Box, BoxProps } from "@chakra-ui/react";
 
 import SingleStoreLogo from "@/assets/SingleStoreLogo.svg";
-import SingleStoreKaieStoreLogo from "@/assets/SingleStoreKaieStoreLogo.svg";
 import SingleStoreLogoSmall from "@/assets/SingleStoreLogoSmall.svg";
-import SingleStoreLogoSmall24 from "@/assets/SingleStoreLogoSmall24.svg";
 import { ComponentProps } from "@/types/common";
 
 export type LogoProps = ComponentProps<
@@ -16,12 +14,10 @@ export type LogoProps = ComponentProps<
 
 const variantsLogo = {
   "s2": SingleStoreLogo,
-  "s2.eStore": SingleStoreKaieStoreLogo,
-  "s2.small": SingleStoreLogoSmall,
-  "s2.small.24": SingleStoreLogoSmall24
+  "s2.small": SingleStoreLogoSmall
 } as const;
 
-export function Logo({ variant = "s2.eStore", sourceProps, color, ...props }: LogoProps) {
+export function Logo({ variant = "s2", sourceProps, color, ...props }: LogoProps) {
   const Logo = variantsLogo[variant];
 
   return (

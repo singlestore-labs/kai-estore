@@ -32,7 +32,7 @@ export function HeaderTopBar({ ...props }: HeaderTopBarProps) {
             lineHeight="4"
             fontWeight="semibold"
           >
-            Unleash the Power of Your Real-Time Analytics with SingleStoreDB
+            Unleash the Power of Your Real-Time Analytics with SingleStore
           </Typography>
           <Link
             href="https://www.singlestore.com/cloud-trial/kai"

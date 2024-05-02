@@ -46,6 +46,8 @@ export function DbSourceCard({
       _logo = (
         <Logo
           variant={logo}
+          w={6}
+          h={6}
           color="currentcolor"
           mr="2"
         />

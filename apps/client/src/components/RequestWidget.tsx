@@ -117,7 +117,9 @@ export function RequestWidget({ ...props }: RequestWidgetProps) {
           borderColor="s2.gray.700"
         >
           <Logo
-            variant={"s2.small.24"}
+            variant={"s2.small"}
+            w={6}
+            h={6}
             mr="2"
           />
           <Typography

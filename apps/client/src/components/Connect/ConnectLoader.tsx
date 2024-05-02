@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect, ReactNode } from "react";
 import { Box, BoxProps, Portal, keyframes } from "@chakra-ui/react";
 
 import { ComponentProps } from "@/types/common";
-import SingleStoreSpinner from "@/assets/SingleStoreSpinner.svg";
+import SingleStoreLogoSmall from "@/assets/SingleStoreLogoSmall.svg";
 import { Typography } from "@/components/common/Typography";
 
 export type ConnectLoaderProps = ComponentProps<BoxProps> & {
@@ -85,9 +85,10 @@ export function ConnectLoader({
         justifyContent="center"
       >
         <Box
-          as={SingleStoreSpinner}
+          as={SingleStoreLogoSmall}
           w="clamp(64px, 6.11vw, 96px)"
           h="auto"
+          color={variant === "light" ? "black" : "white"}
           animation={`${circleAnimation} 1s infinite linear`}
         />
 
