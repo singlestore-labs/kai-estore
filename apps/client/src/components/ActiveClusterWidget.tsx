@@ -89,7 +89,7 @@ export function ActiveClusterWidget({ hideOnRef, ...props }: ActiveClusterWidget
       {...props}
       ref={rootRef}
     >
-      <Typography fontWeight="medium">Demo application is running on a MongoDB® Atlas M40 cluster.</Typography>
+      <Typography fontWeight="medium">Demo application is running on a MongoDB® Atlas M30 cluster.</Typography>
       {!isConnectionExist ? (
         <Link
           href={`${ROUTES.analytics}?modalOpen=1`}
