@@ -93,12 +93,12 @@ export default function Configure() {
       <Section
         variant="2"
         title="Setting Up Your Application"
-        description={`Connect to a SingleStoreDB Workspace to see how we power transaction and analytics. If you have any questions or run into issues, please file a ticket on the GitHub repo, or report it on our forum.`}
+        description={`Connect to a SingleStore Workspace to see how we power transaction and analytics. If you have any questions or run into issues, please file a ticket on the GitHub repo, or report it on our forum.`}
         mt="6"
       >
         <Section
           variant="3"
-          title="Connect to SingleStoreDB"
+          title="Connect to SingleStore"
         >
           {!isInitialValuesLoading && (
             <Box

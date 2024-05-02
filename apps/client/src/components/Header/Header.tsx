@@ -44,12 +44,35 @@ export function Header(props: HeaderProps) {
           >
             <Link
               href={ROUTES.root}
-              chakra={{ flex: "1 0 auto" }}
+              chakra={{ flex: "1 0 auto", _hover: { textDecoration: "none" } }}
             >
-              <Logo
+              <Box
                 display="flex"
-                maxW="384px"
-              />
+                alignItems="center"
+                gap={2}
+              >
+                <Logo
+                  display="flex"
+                  w="12rem"
+                />
+                <Box
+                  as="span"
+                  fontSize="1.6rem"
+                  display="flex"
+                  flexWrap="nowrap"
+                  alignItems="center"
+                  gap={1}
+                >
+                  <Box as="span">Kai™</Box>
+                  <Box
+                    as="span"
+                    fontSize="0.75em"
+                  >
+                    |
+                  </Box>
+                  <Box as="span">eStore</Box>
+                </Box>
+              </Box>
             </Link>
             <HeaderMenu />
             <Flex

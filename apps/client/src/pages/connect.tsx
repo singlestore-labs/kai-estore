@@ -124,15 +124,35 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
           zIndex={2}
           backdropFilter="blur(2px)"
         >
-          <Logo
-            variant="s2.eStore"
+          <Box
             display="flex"
-            maxW="480px"
-          />
+            alignItems="center"
+            gap={4}
+          >
+            <Logo display="flex" />
+            <Typography
+              as="span"
+              fontSize="2.7rem"
+              display="flex"
+              flexWrap="nowrap"
+              alignItems="center"
+              gap={2}
+            >
+              <Box as="span">Kai™</Box>
+              <Box
+                as="span"
+                fontSize="0.75em"
+              >
+                |
+              </Box>
+              <Box as="span">eStore</Box>
+            </Typography>
+          </Box>
+
           <Typography
             as="p"
             fontSize="xl"
-            mt="5"
+            mt="8"
           >
             Watch{" "}
             <Typography
@@ -141,7 +161,7 @@ export default function Connect({ shouldSetData = false }: { shouldSetData?: boo
               color="s2.purple.800"
               textDecoration="underline"
             >
-              <Link href="https://portal.singlestore.com/">SingleStoreDB</Link>
+              <Link href="https://portal.singlestore.com/">SingleStore</Link>
             </Typography>{" "}
             serve a mix of transactions and aggregates in a retail experience based on a user’s purchases and
             product ratings.
