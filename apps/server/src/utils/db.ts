@@ -22,7 +22,7 @@ export async function connectDB(config: DBConfig) {
   return { client, db } as const;
 }
 
-export async function createDBConnection(config?: ConnectionConfig) {
+export async function createDBConnection(config?: ConnectionConfig): ReturnType<typeof connectDB> {
   let retries = 0;
 
   function connect() {
@@ -38,5 +38,5 @@ export async function createDBConnection(config?: ConnectionConfig) {
     }
   }
 
-  return connect();
+  return connect() as ReturnType<typeof connectDB>;
 }
