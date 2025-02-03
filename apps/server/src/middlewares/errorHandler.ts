@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import { ZodError } from "zod";
 
 export const errorHandler: ErrorRequestHandler = async (error, req, res, next) => {
+  console.error(error);
+
   if (error.status === 401 || error instanceof jwt.TokenExpiredError) {
     return res.status(401).json({ error: error.message });
   }
