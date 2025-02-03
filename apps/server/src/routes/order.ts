@@ -10,19 +10,19 @@ orderRouter.post(
   "/order",
   validateRoute(zod.object({ body: zod.object({ productIds: zod.array(zod.string()) }) })),
   async (req, res, next) => {
+    const {
+      db,
+      dbClient,
+      connectionConfig: { userId }
+    } = req;
     try {
-      const {
-        db,
-        dbClient,
-        connectionConfig: { userId }
-      } = req;
-
       const body: { productIds: string[] } = req.body;
       const flatOrders = createFlatOrders(userId, body.productIds);
       await db.collection("orders").insertMany(flatOrders);
-
+      await dbClient.close();
       return res.status(201).send(flatOrders);
     } catch (error) {
+      await dbClient.close();
       return next(error);
     }
   }

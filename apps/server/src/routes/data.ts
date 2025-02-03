@@ -10,14 +10,16 @@ import { validateRoute } from "@/middlewares/validateRoute";
 export const dataRouter = express.Router();
 
 dataRouter.get("/data/validate", async (req, res, next) => {
+  const { db, dbClient, connectionConfig } = req;
   try {
-    const { db, connectionConfig } = req;
     if (!connectionConfig.withCDC && !connectionConfig.shouldGenerateData) {
       return res.status(200).send(true);
     }
     const isValid = await validateData(db, connectionConfig.dataSize, connectionConfig.withCDC);
+    await dbClient.close();
     return res.status(200).send(isValid);
   } catch (error) {
+    await dbClient.close();
     return next(error);
   }
 });
@@ -26,8 +28,8 @@ dataRouter.post(
   "/data/set",
   validateRoute(zod.object({ query: zod.object({ force: zod.string().optional() }) })),
   async (req, res, next) => {
+    const { db, dbClient, connectionConfig, query } = req;
     try {
-      const { db, connectionConfig, query } = req;
       const isForced = query.force === "true" || query.force;
       const collectionNames: DatasetCollectionNames[] = [
         "users",
@@ -68,8 +70,10 @@ dataRouter.post(
       }
 
       await db.collection("meta").insertOne({ dataSize: connectionConfig.dataSize });
+      await dbClient.close();
       return res.status(201).json({ message: "Data set" });
     } catch (error) {
+      await dbClient.close();
       console.error(error);
       return next(error);
     }

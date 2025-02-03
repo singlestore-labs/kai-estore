@@ -19,8 +19,8 @@ ratingRouter.post(
     })
   ),
   async (req, res, next) => {
+    const { dbClient, db, connectionConfig } = req;
     try {
-      const { dbClient, db, connectionConfig } = req;
       const body: Pick<Rating, "productId" | "value"> = req.body;
       const createdAt: Rating["createdAt"] = new Date().toString();
 
@@ -41,8 +41,10 @@ ratingRouter.post(
       const productVotes = productRatings.map(({ value }) => value);
       const newProductRating = Math.round(calcAverage(productVotes));
 
-      db.collection("products").updateOne({ id: body.productId }, { $set: { rating: newProductRating } });
+      await db.collection("products").updateOne({ id: body.productId }, { $set: { rating: newProductRating } });
+      await dbClient.close();
     } catch (error) {
+      await dbClient.close();
       return next(error);
     }
   }
